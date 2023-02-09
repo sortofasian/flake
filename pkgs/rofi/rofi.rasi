@@ -1,0 +1,97 @@
+configuration {
+    terminal: "alacritty";
+    modes: [ drun, calc, emoji ];
+    scroll-method: 0;
+    drun-match-fields: [ name, generic, exec ];
+    drun-display-format: "{name}";
+}
+
+* {
+    foreground: #a9b1d6;
+    background: #24283b;
+
+    dark: #1a1b26;
+    black: #414868;
+    lightblack: #565f89;
+
+    red: #f7768e;
+    lightred: #f78fa3;
+
+    green: #9ece6a;
+    lightgreen: #a8cf7e;
+
+    yellow: #e0af68;
+    lightyellow: #e0b97e;
+
+    blue: #7dcfff;
+    lightblue: #96d9ff;
+
+    magenta: #bb9af7;
+    lightmagenta: #cab2f7;
+
+    cyan: #2ac3de;
+    lightcyan: #57cade;
+
+    white: #cfc9c2;
+    lightwhite: #ffffff;
+
+}
+
+
+window {
+    font: "Sans 12";
+    padding: 10px;
+    border:  2px;
+    border-radius: 10px;
+    border-color: @foreground;
+    background-color: @background;
+    children: [ inputbar, listview, message ];
+}
+error-message {
+    padding: 10px;
+}
+
+inputbar {
+    padding: 8px 10px;
+    margin: 0px 0px 10px;
+    border-radius: 8px;
+    background-color: @dark;
+    color: @lightred;
+    prompt: "";
+    children: [ entry ];
+    font: "Mono 12";
+}
+entry {
+    placeholder: "";
+    font:  inherit;
+    color: inherit;
+}
+
+listview {
+    border: 0px;
+    background-color: @background;
+    dynamic: false;
+    lines: 10;
+    columns: 10;
+}
+scrollbar { handle-width: 0px; }
+
+element {
+    padding: 3px;
+    border-radius: 4px;
+    background-color: #ffffff00;
+    color: @foreground;
+    font:inherit;
+}
+element-text,element-icon,element-index {
+    background-color: inherit;
+    text-color:       inherit;
+    highlight: bold;
+    horizontal-align: 0.5;
+}
+
+message {
+    border: 0px;
+    background-color: @background;
+    font: "Sans 8";
+}

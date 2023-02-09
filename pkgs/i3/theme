@@ -1,0 +1,24 @@
+gaps inner 30
+
+font pango:sans 10
+title_align center
+for_window [all] title_window_icon padding 10
+for_window [all] border normal 0
+
+bar {
+    status_command i3status
+}
+
+set $focused    #f7adbbd9
+set $unfocused  #24283bd9
+set $text_dark  #414868
+set $text_light #c0caf5
+set $urgent     #db4b4b
+set $indicator  #bb9af7
+
+client.focused          $focused   $focused   $text_dark  $indicator $focused
+client.urgent           $urgent    $urgent    $text_dark  $text_dark $urgent
+client.focused_inactive $unfocused $unfocused $text_light $indicator $unfocused
+client.unfocused        $unfocused $unfocused $text_light $indicator $unfocused
+client.placeholder      $unfocused $unfocused $text_light $indicator $unfocused
+client.background       $focused
