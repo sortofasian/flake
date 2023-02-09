@@ -19,6 +19,10 @@ noremap <Space> <NOP>
 noremap <Backspace> <NOP>
 let g:mapleader=" "
 
+map <Leader>c "+y
+map <Leader>v "+p
+
+
 noremap <Leader>s :w<CR>
 
 nnoremap <Leader>t :new<CR>:terminal<CR><C-w>J:res 10<CR>
@@ -36,7 +40,7 @@ nnoremap <Leader>wl <C-w>L
 
 nnoremap <Leader>q :q<CR>
 nnoremap <Leader>n :new<CR>
-nnoremap <Leader>c :noh<CR>
+nnoremap <Leader><Esc> :noh<CR>
 
 nnoremap <Leader>b :lua require('telescope.builtin').buffers()<CR>
 nnoremap <Leader>f :lua require('telescope').extensions.file_browser.file_browser()<CR>

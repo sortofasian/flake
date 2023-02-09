@@ -43,9 +43,10 @@ in symlinkJoin {
     name = "neovim";
     paths = [ neovim pkgs.neovide ];
 
-    tools = lib.strings.makeBinPath (with pkgs; [
+    nvimpath = lib.strings.makeBinPath (with pkgs; [
         nil taplo clang-tools rust-analyzer 
         java-language-server sumneko-lua-language-server
+        ripgrep fd wl-clipboard xclip
     ] ++ (with pkgs.nodePackages; [
         pyright vim-language-server bash-language-server
         vscode-langservers-extracted dockerfile-language-server-nodejs
@@ -59,7 +60,7 @@ in symlinkJoin {
 
     buildInputs = [ makeWrapper ];
     postBuild = ''
-        wrapProgram $out/bin/nvim --suffix PATH : $tools
+        wrapProgram $out/bin/nvim --suffix PATH : $nvimpath
         wrapProgram $out/bin/neovide --set NEOVIDE_MULTIGRID true
     '';
 }
