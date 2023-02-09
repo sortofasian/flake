@@ -46,8 +46,10 @@ in symlinkJoin {
     nvimpath = lib.strings.makeBinPath (with pkgs; [
         nil taplo clang-tools rust-analyzer 
         java-language-server sumneko-lua-language-server
-        ripgrep fd wl-clipboard xclip
-    ] ++ (with pkgs.nodePackages; [
+        ripgrep fd
+    ] ++ (if pkgs.stdenv.isLinux
+        then [ wl-clipboard xclip ] else []) 
+    ++ (with pkgs.nodePackages; [
         pyright vim-language-server bash-language-server
         vscode-langservers-extracted dockerfile-language-server-nodejs
         yaml-language-server svelte-language-server typescript-language-server
