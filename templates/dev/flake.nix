@@ -1,6 +1,6 @@
 {
     inputs.fu.url = "github:numtide/flake-utils";
-    inputs.flake.url = "path:/etc/nixos";
+    inputs.flake.url = "github:sortofasian/flake";
 
     outputs = { self, nixpkgs, flake, fu }:
     fu.lib.eachDefaultSystem (system: let
