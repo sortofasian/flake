@@ -1,4 +1,5 @@
-{ system ? builtins.currentSystem, pkgs ? import <nixpkgs> { inherit system; } }:
+{ pkgs }:
 {
     symlinkJoin = pkgs.callPackage ./symlinkJoin.nix {};
 }
+

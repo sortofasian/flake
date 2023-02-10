@@ -48,7 +48,7 @@ in symlinkJoin {
         java-language-server sumneko-lua-language-server
         ripgrep fd
     ] ++ (if pkgs.stdenv.isLinux
-        then [ wl-clipboard xclip ] else []) 
+        then [ xclip ] else []) 
     ++ (with pkgs.nodePackages; [
         pyright vim-language-server bash-language-server
         vscode-langservers-extracted dockerfile-language-server-nodejs

@@ -6,13 +6,11 @@
 
         darwin.url = "github:lnl7/nix-darwin";
         darwin.inputs.nixpkgs.follows = "nixpkgs-darwin";
-        
-        lib.url = "path:lib";
 
         hyprland.url = "github:hyprwm/Hyprland";
     };
 
-    outputs = { self, lib, nixpkgs-unstable, nixpkgs-stable, darwin, hyprland, ... } :
+    outputs = { self, nixpkgs-unstable, nixpkgs-stable, darwin, hyprland, ... } :
 
     let
         overlays = {pkgs, stable, ...}: { nixpkgs.overlays = [
@@ -46,7 +44,8 @@
             };
         };
 
-        inherit lib;
+        lib = import ./lib;
+
         templates.dev = {
             path = ./templates/dev;
             description = "Flake for use with `nix shell`";
