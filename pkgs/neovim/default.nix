@@ -36,7 +36,7 @@ let
             luasnip nvim-cmp cmp-path cmp-emoji cmp_luasnip
             cmp-nvim-lsp lspkind-nvim rust-tools-nvim
 
-            gitsigns-nvim
+            gitsigns-nvim lualine-nvim lualine-lsp-progress
         ];
     });
 in symlinkJoin {
