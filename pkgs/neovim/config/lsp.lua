@@ -4,7 +4,7 @@ local capabilities = cmplsp.default_capabilities()
 
 vim.keymap.set('n', '<Backspace>', vim.lsp.buf.format)
 vim.keymap.set('n', '<Leader><Leader>', function()
-    for _=1,2 do vim.lsp.buf.hover() end
+    for _ = 1, 2 do vim.lsp.buf.hover() end
 end)
 
 local servers = {
@@ -16,19 +16,21 @@ local servers = {
 }
 
 local override = function(server)
-    if server == 'java_language_server' then
-        lspconfig[server].setup {
+    local java = 'java_language_server'
+    if server == java then
+        lspconfig[java].setup {
             capabilities = capabilities,
             cmd = { 'java-language-server' },
-            root_dir = lspconfig.util.root_pattern(vim.fn.getcwd())
+            root_dir = function(_) return vim.fn.getcwd() end
         }
         return true
     end
+
     return false
 end
 
 for _, server in ipairs(servers) do
-    if not override(servers) then
-        lspconfig[server].setup {capabilities = capabilities}
+    if (not override(server)) then
+        lspconfig[server].setup { capabilities = capabilities }
     end
 end

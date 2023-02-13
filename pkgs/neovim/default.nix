@@ -44,7 +44,7 @@ in symlinkJoin {
     paths = [ neovim pkgs.neovide ];
 
     nvimpath = lib.strings.makeBinPath (with pkgs; [
-        nil taplo clang-tools rust-analyzer 
+        nil taplo clang-tools rust-analyzer
         java-language-server sumneko-lua-language-server
         ripgrep fd
     ] ++ (if pkgs.stdenv.isLinux

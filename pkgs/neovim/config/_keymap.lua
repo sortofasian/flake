@@ -1,7 +1,7 @@
 vim.g.mapleader = ' '
 
 vim.keymap.set('v', '<Leader>c', '"+y')
-vim.keymap.set('v', '<Leader>v', '"+p')
+vim.keymap.set('n', '<Leader>v', '"+p')
 
 vim.keymap.set({'n', 'v'}, '<Leader>s', ':w<CR>')
 vim.keymap.set({'n', 'v'}, '<Leader><Esc>', ':noh<CR>')

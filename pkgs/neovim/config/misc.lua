@@ -14,6 +14,13 @@ require("transparent").setup({
 })
 
 
+require('lualine').setup({
+    sections = { lualine_c = {
+        'lsp_progress'
+    }}
+})
+
+
 local alpha = require('alpha')
 require('alpha.term')
 alpha.setup({
