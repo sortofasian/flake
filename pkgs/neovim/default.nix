@@ -37,6 +37,7 @@ let
             cmp-nvim-lsp lspkind-nvim rust-tools-nvim
 
             gitsigns-nvim lualine-nvim lualine-lsp-progress
+            nvim-colorizer-lua
         ];
     });
 in symlinkJoin {

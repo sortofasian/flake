@@ -3,6 +3,19 @@ require('nvim-treesitter.configs').setup {
 }
 
 
+require('colorizer').setup {
+    user_default_options = {
+        RGB=true,
+        RRGGBB=true,
+        RRGGBBAA=true,
+        rgb_fn=true,
+        hsl=true,
+        tailwind=true,
+        mode="foreground"
+    }
+}
+
+
 local gitsigns = require('gitsigns')
 gitsigns.setup { signcolumn = true }
 

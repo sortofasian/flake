@@ -7,7 +7,7 @@ vim.keymap.set({'n', 'v'}, '<Leader>s', ':w<CR>')
 vim.keymap.set({'n', 'v'}, '<Leader><Esc>', ':noh<CR>')
 
 vim.keymap.set('t', '<C-t>', '<C-\\><C-n>')
-vim.keymap.set('n', '<Leader>t', '<Leader>n<CR>:terminal<CR>')
+vim.keymap.set('n', '<Leader>t', ':new<CR>:terminal<CR><C-w>J:res 10<CR>')
 
 vim.keymap.set('n', '<Leader>h', '<C-w>h')
 vim.keymap.set('n', '<Leader>j', '<C-w>j')
