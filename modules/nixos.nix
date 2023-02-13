@@ -35,15 +35,15 @@
     services.journald.extraConfig = "SystemMaxUse=500M";
 
     environment.sessionVariables = {
-        WINEPREFIX    = "$XDG_DATA_HOME/wine";
+        WINEPREFIX    = "$\{XDG_DATA_HOME}/wine";
         #XAUTHORITY    = "$XDG_RUNTIME_DIR/.Xauthority"; issue with lightdm
-        XCOMPOSECACHE = "$XDG_CACHE_HOME/X11/xcompose";
-        XCOMPOSEFILE  = "$XDG_RUNTIME_DIR/X11/xcompose";
-        ERRFILE       = "$XDG_CACHE_HOME/X11/xsession-errors";
+        XCOMPOSECACHE = "$\{XDG_CACHE_HOME}/X11/xcompose";
+        XCOMPOSEFILE  = "$\{XDG_RUNTIME_DIR}/X11/xcompose";
+        ERRFILE       = "$\{XDG_CACHE_HOME}/X11/xsession-errors";
 
         __GL_SHADER_DISK_CACHE      = "1";
-        CUDA_CACHE_PATH             = "$XDG_CACHE_HOME/nv";
-        __GL_SHADER_DISK_CACHE_PATH = "$XDG_CACHE_HOME/nvidia";
+        CUDA_CACHE_PATH             = "$\{XDG_CACHE_HOME}/nv";
+        __GL_SHADER_DISK_CACHE_PATH = "$\{XDG_CACHE_HOME}/nvidia";
 
     };
 
@@ -88,6 +88,8 @@
     };
 
     services = {
+        clamav.daemon.enable = true;
+        clamav.updater.enable = true;
         gnome.gnome-keyring.enable = true;
     };
 }
