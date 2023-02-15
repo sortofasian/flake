@@ -2,11 +2,12 @@
 let
     prisma-language-server = pkgs.nodePackages."@prisma/language-server";
     tailwindcss-language-server = pkgs.nodePackages."@tailwindcss/language-server";
-
     omnisharp-roslyn = pkgs.callPackage ./omnisharp-roslyn  {};
     inherit (pkgs.callPackage ./cssmodules-lsp {}) cssmodules-language-server;
 
-    nvim-transparent = pkgs.vimUtils.buildVimPlugin {
+    inherit (pkgs.vimUtils) buildVimPlugin;
+
+    nvim-transparent = buildVimPlugin {
         name = "nvim-transparent";
         src = pkgs.fetchFromGitHub {
             owner = "xiyaowong";
@@ -30,7 +31,7 @@ let
         configure.packages.neovimPlugins.start = with pkgs.vimPlugins; [
             plenary-nvim
 
-            alpha-nvim tokyonight-nvim nvim-transparent neoformat 
+            alpha-nvim tokyonight-nvim neoformat
             nvim-lspconfig nvim-treesitter.withAllGrammars
 
             telescope-nvim telescope-fzf-native-nvim
@@ -39,8 +40,10 @@ let
             luasnip nvim-cmp cmp-path cmp-emoji cmp_luasnip
             cmp-nvim-lsp lspkind-nvim rust-tools-nvim
 
-            gitsigns-nvim lualine-nvim lualine-lsp-progress
-            nvim-colorizer-lua
+            gitsigns-nvim lualine-nvim lsp-status-nvim
+            nvim-colorizer-lua trouble-nvim nvim-web-devicons
+        ] ++ [
+            nvim-transparent
         ];
     });
 in symlinkJoin {
@@ -52,7 +55,7 @@ in symlinkJoin {
         java-language-server sumneko-lua-language-server
         ripgrep fd
     ] ++ (if pkgs.stdenv.isLinux
-        then [ xclip ] else []) 
+        then [ xclip ] else [])
     ++ (with pkgs.nodePackages; [
         pyright vim-language-server bash-language-server
         vscode-langservers-extracted dockerfile-language-server-nodejs

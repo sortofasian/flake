@@ -80,12 +80,14 @@ let finalPackage = buildDotnetModule rec {
 
         mkdir -p $out/bin
         echo "${''
+            #!/usr/bin/env bash
+
             base_dir=$out
             omnisharp_dir=''\\''\${base_dir}/lib/omnisharp-roslyn
             omnisharp_cmd=''\\''\${omnisharp_dir}/OmniSharp.exe
             mono_cmd=mono
 
-            \"''\\''\${mono_cmd}\" \"''\\''\${omnisharp_cmd}\" \"$@\"
+            \"''\\''\${mono_cmd}\" \"''\\''\${omnisharp_cmd}\" \"\$@\"
         ''}" > $out/bin/OmniSharp
         chmod 755 $out/bin/OmniSharp
     '';

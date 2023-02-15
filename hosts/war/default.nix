@@ -5,7 +5,7 @@
     imports = [ ./settings.nix ];
 
     users.users.charlie.shell = pkgs.fish;
-    users.users.charlie.packages = with pkgs; [omnisharp-roslyn];
+    #users.users.charlie.packages = with pkgs; [];
 
     homebrew.casks = [
         "utm"

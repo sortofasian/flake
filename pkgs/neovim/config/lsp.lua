@@ -7,6 +7,16 @@ vim.keymap.set('n', '<Leader><Leader>', function()
     for _ = 1, 2 do vim.lsp.buf.hover() end
 end)
 
+vim.keymap.set('n', '<Leader>e', function()
+    for _ = 1, 2 do vim.diagnostic.open_float() end
+end)
+vim.diagnostic.config {
+    virtual_text = false,
+    update_in_insert = true,
+    severity_sort = true,
+    float = {source = 'if_many'}
+}
+
 local servers = {
     'rust_analyzer', 'java_language_server',
     'svelte', 'nil_ls', 'clangd', 'bashls', 'eslint',
@@ -29,8 +39,6 @@ local override = function(server)
         lspconfig[server].setup {
             capabilities = capabilities,
             cmd = { 'OmniSharp', '--languageserver', '--hostPID', tostring(vim.fn.getpid()) }
---'mono', '--assembly-loader=strict', 
---'/Users/charlie/Source/omnisharp-roslyn/artifacts/publish/OmniSharp.Stdio.Driver/mono/OmniSharp.exe'
         }
         return true
     end

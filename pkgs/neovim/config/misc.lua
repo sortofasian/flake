@@ -5,13 +5,13 @@ require('nvim-treesitter.configs').setup {
 
 require('colorizer').setup {
     user_default_options = {
-        RGB=true,
-        RRGGBB=true,
-        RRGGBBAA=true,
-        rgb_fn=true,
-        hsl=true,
-        tailwind=true,
-        mode="foreground"
+        RGB = true,
+        RRGGBB = true,
+        RRGGBBAA = true,
+        rgb_fn = true,
+        hsl = true,
+        tailwind = true,
+        mode = "foreground"
     }
 }
 
@@ -27,21 +27,18 @@ require("transparent").setup({
 })
 
 
-require('lualine').setup({
-    sections = { lualine_c = {
-        'lsp_progress'
-    }}
+require('trouble').setup({
 })
 
 
 local alpha = require('alpha')
 require('alpha.term')
 alpha.setup({
-    opts={margin=44},
+    opts = { margin = 44 },
     layout = {
-        {type='padding', val=5},
+        { type = 'padding', val = 5 },
         {
-            type='text',
+            type = 'text',
             val = {
                 "███╗   ██╗ ███████╗ ██████╗  ██╗   ██╗ ██╗ ███╗   ███╗",
                 "████╗  ██║ ██╔════╝██╔═══██╗ ██║   ██║ ██║ ████╗ ████║",
@@ -50,7 +47,7 @@ alpha.setup({
                 "██║ ╚████║ ███████╗╚██████╔╝  ╚████╔╝  ██║ ██║ ╚═╝ ██║",
                 "╚═╝  ╚═══╝ ╚══════╝ ╚═════╝    ╚═══╝   ╚═╝ ╚═╝     ╚═╝"
             },
-            opts={position='center'}
+            opts = { position = 'center' }
         }
     }
 })

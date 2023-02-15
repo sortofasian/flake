@@ -4,6 +4,7 @@ set mouse= scrolloff=3 confirm
 set tabstop=4 shiftwidth=0 softtabstop=-1 expandtab smarttab autoindent shiftround
 set incsearch ignorecase smartcase
 set undofile hidden
+set signcolumn=yes
 
 filetype plugin indent on
 
