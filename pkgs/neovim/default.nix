@@ -2,7 +2,10 @@
 let
     prisma-language-server = pkgs.nodePackages."@prisma/language-server";
     tailwindcss-language-server = pkgs.nodePackages."@tailwindcss/language-server";
+
+    omnisharp-roslyn = pkgs.callPackage ./omnisharp-roslyn  {};
     inherit (pkgs.callPackage ./cssmodules-lsp {}) cssmodules-language-server;
+
     nvim-transparent = pkgs.vimUtils.buildVimPlugin {
         name = "nvim-transparent";
         src = pkgs.fetchFromGitHub {
@@ -45,7 +48,7 @@ in symlinkJoin {
     paths = [ neovim pkgs.neovide ];
 
     nvimpath = lib.strings.makeBinPath (with pkgs; [
-        nil taplo clang-tools rust-analyzer omnisharp-roslyn
+        nil taplo clang-tools rust-analyzer
         java-language-server sumneko-lua-language-server
         ripgrep fd
     ] ++ (if pkgs.stdenv.isLinux
@@ -57,7 +60,7 @@ in symlinkJoin {
     ]) ++ ( with stable; [
         haskell-language-server
     ]) ++ [
-        tailwindcss-language-server
+        tailwindcss-language-server omnisharp-roslyn
         prisma-language-server cssmodules-language-server
     ]);
 

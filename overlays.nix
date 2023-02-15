@@ -21,5 +21,4 @@ in {
     alacritty = call pkgs/alacritty.nix;
     proton-ge = call pkgs/proton-ge.nix;
     lug-helper = call pkgs/lug-helper.nix;
-    omnisharp-roslyn = call pkgs/omnisharp-roslyn;
 })

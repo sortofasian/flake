@@ -74,32 +74,21 @@ let finalPackage = buildDotnetModule rec {
       --set-rpath $(patchelf --print-rpath ${sdk_6_0}/dotnet) \
       $out/lib/omnisharp-roslyn/OmniSharp
   '' + ''
-    cp ${bundle}/lib/dotnet/SQLitePCLRaw.bundle_green/*.dll $out/lib/omnisharp-roslyn/
-    cp ${core}/lib/dotnet/SQLitePCLRaw.core/*.dll $out/lib/omnisharp-roslyn/
-    cp ${provider}/lib/dotnet/SQLitePCLRaw.provider.e_sqlite3/*.dll $out/lib/omnisharp-roslyn/
+        cp ${bundle}/lib/dotnet/SQLitePCLRaw.bundle_green/*.dll $out/lib/omnisharp-roslyn/
+        cp ${core}/lib/dotnet/SQLitePCLRaw.core/*.dll $out/lib/omnisharp-roslyn/
+        cp ${provider}/lib/dotnet/SQLitePCLRaw.provider.e_sqlite3/*.dll $out/lib/omnisharp-roslyn/
 
-    mkdir -p $out/bin
-    cp ${writeShellScript "run" ''
-        base_dir="$(cd "$(dirname "$0")" && pwd -P)/.."
-        omnisharp_dir=''\${base_dir}/lib/omnisharp-roslyn
+        mkdir -p $out/bin
+        echo "${''
+            base_dir=$out
+            omnisharp_dir=''\\''\${base_dir}/lib/omnisharp-roslyn
+            omnisharp_cmd=''\\''\${omnisharp_dir}/OmniSharp.exe
+            mono_cmd=mono
 
-        mono_cmd=mono
-        omnisharp_cmd=''\${omnisharp_dir}/OmniSharp.exe
-
-        no_omnisharp=false
-
-        if [ "$1" = "--no-omnisharp" ]; then
-            shift
-            no_omnisharp=true
-        fi
-
-        if [ "$no_omnisharp" = true ]; then
-            "''\${mono_cmd}" "$@"
-        else
-            "''\${mono_cmd}" "''\${omnisharp_cmd}" "$@"
-        fi
-    ''} $out/bin/OmniSharp
-  '';
+            \"''\\''\${mono_cmd}\" \"''\\''\${omnisharp_cmd}\" \"$@\"
+        ''}" > $out/bin/OmniSharp
+        chmod 755 $out/bin/OmniSharp
+    '';
 
   meta = with lib; {
     description = "OmniSharp based on roslyn workspaces";
