@@ -5,6 +5,7 @@
     imports = [ ./settings.nix ];
 
     users.users.charlie.shell = pkgs.fish;
+#   users.users.charlie.packages = with pkgs; [];
 
     homebrew.casks = [
         "utm"
@@ -12,6 +13,7 @@
         "firefox"
         "neovide"
         "obsidian"
+        "unity-hub"
     ];
 
     #homebrew.masApps = { mas no longer maintained? https://github.com/mas-cli/mas/issues/486

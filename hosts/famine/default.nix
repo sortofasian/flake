@@ -36,6 +36,7 @@
         blender
         obsidian
         lug-helper
+        unityhub
 
         # idk what i needed these for?
         # using it for closing steam now ig

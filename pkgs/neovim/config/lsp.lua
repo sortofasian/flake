@@ -9,19 +9,28 @@ end)
 
 local servers = {
     'rust_analyzer', 'java_language_server',
-    'hls', 'html', 'cssls', 'taplo', 'vimls',
     'svelte', 'nil_ls', 'clangd', 'bashls', 'eslint',
+    'hls', 'html', 'cssls', 'taplo', 'vimls', 'omnisharp',
     'jsonls', 'yamlls', 'pyright', 'dockerls', 'prismals',
     'tsserver', 'sumneko_lua', 'tailwindcss', 'cssmodules_ls'
 }
 
 local override = function(server)
-    local java = 'java_language_server'
-    if server == java then
-        lspconfig[java].setup {
+    if server == 'java_language_server' then
+        lspconfig[server].setup {
             capabilities = capabilities,
             cmd = { 'java-language-server' },
             root_dir = function(_) return vim.fn.getcwd() end
+        }
+        return true
+    end
+
+    if server == 'omnisharp' then
+        lspconfig[server].setup {
+            capabilities = capabilities,
+            cmd = { 'OmniSharp', '--languageserver', '--hostPID', tostring(vim.fn.getpid()) }
+--'mono', '--assembly-loader=strict', 
+--'/Users/charlie/Source/omnisharp-roslyn/artifacts/publish/OmniSharp.Stdio.Driver/mono/OmniSharp.exe'
         }
         return true
     end

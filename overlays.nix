@@ -12,13 +12,14 @@
         ) args
     );
 in {
+    i3 = call pkgs/i3;
+    rofi = call pkgs/rofi;
+    dunst = call pkgs/dunst;
+    neovim = call pkgs/neovim;
+    gitCustom = call pkgs/git.nix;
+    nerdfonts = call pkgs/nerdfonts;
+    alacritty = call pkgs/alacritty.nix;
     proton-ge = call pkgs/proton-ge.nix;
     lug-helper = call pkgs/lug-helper.nix;
-    gitCustom = call pkgs/git.nix;
-    alacritty = call pkgs/alacritty.nix;
-    rofi = call pkgs/rofi;
-    nerdfonts = call pkgs/nerdfonts;
-    neovim = call pkgs/neovim;
-    i3 = call pkgs/i3;
-    dunst = call pkgs/dunst;
+    omnisharp-roslyn = call pkgs/omnisharp-roslyn;
 })
