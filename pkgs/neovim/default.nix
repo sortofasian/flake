@@ -39,9 +39,10 @@ let
 
             luasnip nvim-cmp cmp-path cmp-emoji cmp_luasnip
             cmp-nvim-lsp lspkind-nvim rust-tools-nvim
+            #nvim-jdtls
 
             gitsigns-nvim lualine-nvim lsp-status-nvim
-            nvim-colorizer-lua trouble-nvim nvim-web-devicons
+            nvim-highlight-colors trouble-nvim nvim-web-devicons
         ] ++ [
             nvim-transparent
         ];
@@ -51,7 +52,7 @@ in symlinkJoin {
     paths = [ neovim pkgs.neovide ];
 
     nvimpath = lib.strings.makeBinPath (with pkgs; [
-        nil taplo clang-tools rust-analyzer
+        nil taplo clang-tools rust-analyzer jdt-language-server
         java-language-server sumneko-lua-language-server
         ripgrep fd
     ] ++ (if pkgs.stdenv.isLinux

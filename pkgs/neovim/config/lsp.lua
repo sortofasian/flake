@@ -14,11 +14,11 @@ vim.diagnostic.config {
     virtual_text = false,
     update_in_insert = true,
     severity_sort = true,
-    float = {source = 'if_many'}
+    float = { source = 'if_many' }
 }
 
 local servers = {
-    'rust_analyzer', 'java_language_server',
+    'rust_analyzer', 'jdtls',--'java_language_server',
     'svelte', 'nil_ls', 'clangd', 'bashls', 'eslint',
     'hls', 'html', 'cssls', 'taplo', 'vimls', 'omnisharp',
     'jsonls', 'yamlls', 'pyright', 'dockerls', 'prismals',
@@ -26,11 +26,27 @@ local servers = {
 }
 
 local override = function(server)
+    if server == 'jdtls' then
+        lspconfig[server].setup {
+            capabilities = capabilities,
+            root_dir = function(_)
+                return vim.fs.find({'.git'}, {upwards=true})[1]
+                or vim.fn.getcwd()
+            end,
+            cmd = { 'jdt-language-server' },
+        }
+        return true
+    end
+
     if server == 'java_language_server' then
         lspconfig[server].setup {
             capabilities = capabilities,
+            single_file_support = true,
+            root_dir = function(_)
+                return vim.fs.find({'.git'}, {upwards=true})[1]
+                or vim.fn.getcwd()
+            end,
             cmd = { 'java-language-server' },
-            root_dir = function(_) return vim.fn.getcwd() end
         }
         return true
     end
@@ -38,7 +54,10 @@ local override = function(server)
     if server == 'omnisharp' then
         lspconfig[server].setup {
             capabilities = capabilities,
-            cmd = { 'OmniSharp', '--languageserver', '--hostPID', tostring(vim.fn.getpid()) }
+            cmd = {
+                'OmniSharp', '--languageserver',
+                '--hostPID', tostring(vim.fn.getpid())
+            }
         }
         return true
     end

@@ -3,16 +3,9 @@ require('nvim-treesitter.configs').setup {
 }
 
 
-require('colorizer').setup {
-    user_default_options = {
-        RGB = true,
-        RRGGBB = true,
-        RRGGBBAA = true,
-        rgb_fn = true,
-        hsl = true,
-        tailwind = true,
-        mode = "foreground"
-    }
+require('nvim-highlight-colors').setup {
+    render = 'background',
+    enable_tailwind = true
 }
 
 
