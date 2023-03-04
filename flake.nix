@@ -1,54 +1,42 @@
 {
     inputs = {
-        nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-22.11";
-        nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
-        nixpkgs-darwin.url = "github:NixOS/nixpkgs/nixpkgs-22.11-darwin";
+        nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
         darwin.url = "github:lnl7/nix-darwin";
-        darwin.inputs.nixpkgs.follows = "nixpkgs-darwin";
+        darwin.inputs.nixpkgs.follows = "nixpkgs";
 
-        hyprland.url = "github:hyprwm/Hyprland";
+        generators.url = "github:nix-community/nixos-generators";
+        generators.inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    outputs = { self, nixpkgs-unstable, nixpkgs-stable, darwin, hyprland, ... } :
+    outputs = { self, nixpkgs, darwin, generators, ... }@inputs: let
+        lib = nixpkgs.lib.extend (final: _: {
+            custom = import ./lib { inherit inputs; lib = final; };
+        });
 
-    let
-        overlays = {pkgs, stable, ...}: { nixpkgs.overlays = [
-            (import ./overlays.nix { inherit stable; inherit (pkgs) system; } )
-        ];};
+        inherit (lib.custom)
+            mkSystems merge;
 
-        inherit (darwin.lib) darwinSystem;
-        inherit (nixpkgs-unstable.lib) nixosSystem;
+        systems = mkSystems;
 
-        commonModules = [ overlays modules/common.nix ];
-        nixosModules = commonModules ++ [ hyprland.nixosModules.default modules/nixos.nix ];
-        darwinModules = commonModules ++ [ modules/darwin.nix ];
+        nixosSystems = merge [
+            (systems.x86_64-linux.mkHost ./hosts/Famine [])
+            (systems.x86_64-linux.mkHost ./hosts/Pestilence [])
+            (systems.x86_64-linux.mkHost ./hosts/Death [])
+        ];
+        nixosInstallers = merge [
+            (systems.x86_64-linux.mkHostIso "Famine")
+            (systems.x86_64-linux.mkHostIso "Pestilence")
+            (systems.x86_64-linux.mkHostIso "Death")
+        ];
+
+        darwinSystems = merge [
+            (systems.aarch64-darwin.mkHost ./hosts/War [])
+        ];
     in {
-        nixosConfigurations = let common = nixosModules; in {
-            Famine = nixosSystem {
-                system = "x86_64-linux";
-                specialArgs = { stable = nixpkgs-stable; };
-                modules = common ++ [
-                    ./hosts/famine/default.nix
-                ];
-            };
-        };
-
-        darwinConfigurations = let common = darwinModules; in {
-            War = darwinSystem {
-                system = "aarch64-darwin";
-                specialArgs = { stable = nixpkgs-stable; };
-                modules = common ++ [
-                    ./hosts/war/default.nix
-                ];
-            };
-        };
-
-        lib = import ./lib;
-
-        templates.dev = {
-            path = ./templates/dev;
-            description = "Flake for use with `nix shell`";
-        };
+        lib = lib.custom;
+        nixosConfigurations = nixosSystems;
+        darwinConfigurations = darwinSystems;
+        packages = nixosInstallers;
     };
 }
