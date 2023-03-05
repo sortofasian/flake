@@ -69,11 +69,6 @@ let finalPackage = buildDotnetModule rec {
 
   dontDotnetFixup = true; # we'll fix it ourselves
   postFixup = lib.optionalString stdenv.isLinux ''
-    # Emulate what .NET 7 does to its binaries while a fix doesn't land in buildDotnetModule
-    patchelf --set-interpreter $(patchelf --print-interpreter ${sdk_6_0}/dotnet) \
-      --set-rpath $(patchelf --print-rpath ${sdk_6_0}/dotnet) \
-      $out/lib/omnisharp-roslyn/OmniSharp
-  '' + ''
         cp ${bundle}/lib/dotnet/SQLitePCLRaw.bundle_green/*.dll $out/lib/omnisharp-roslyn/
         cp ${core}/lib/dotnet/SQLitePCLRaw.core/*.dll $out/lib/omnisharp-roslyn/
         cp ${provider}/lib/dotnet/SQLitePCLRaw.provider.e_sqlite3/*.dll $out/lib/omnisharp-roslyn/
