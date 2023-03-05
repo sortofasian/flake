@@ -53,7 +53,7 @@ in symlinkJoin {
 
     nvimpath = lib.strings.makeBinPath (with pkgs; [
         nil taplo clang-tools rust-analyzer jdt-language-server
-        java-language-server sumneko-lua-language-server
+        java-language-server lua-language-server
         ripgrep fd
     ] ++ (if pkgs.stdenv.isLinux
         then [ xclip ] else [])

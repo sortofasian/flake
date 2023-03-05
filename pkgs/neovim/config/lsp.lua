@@ -22,7 +22,7 @@ local servers = {
     'svelte', 'nil_ls', 'clangd', 'bashls', 'eslint',
     'hls', 'html', 'cssls', 'taplo', 'vimls', 'omnisharp',
     'jsonls', 'yamlls', 'pyright', 'dockerls', 'prismals',
-    'tsserver', 'sumneko_lua', 'tailwindcss', 'cssmodules_ls'
+    'tsserver', 'lua_ls', 'tailwindcss', 'cssmodules_ls'
 }
 
 local override = function(server)
