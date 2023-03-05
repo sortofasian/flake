@@ -6,28 +6,24 @@
         symlinkJoin;
     inherit (lib.strings)
         makeBinPath;
+    inherit (lib.custom)
+        switchSystem;
+    inherit (config.custom.neovim)
+        enable;
 in {
-    options.modules.neovim = {
+    options.custom.neovim = {
         enable = mkOption {
-            type = types.bool;
-            default = false;
-        };
-        full = mkOption {
-            type = types.bool;
-            default = false;
-        };
-        neovide = mkOption {
             type = types.bool;
             default = false;
         };
     };
 
-    config = mkIf config.modules.neovim.enable {
+    config = mkIf enable {
         environment.systemPackages = symlinkJoin {
             name = "neovim";
             paths = [ pkgs.neovim ];
 
-            nvimpath = makeBinPath
+            nvimpath = makeBinPath (
                 (with pkgs; [
                     nil
                     taplo
@@ -38,7 +34,7 @@ in {
                     haskell-language-server
                     fd
                     ripgrep
-            ] ++ (if system == "x86_64-linux" then [xclip] else [])
+                ])
                 ++ (with pkgs.nodePackages; [
                     pyright
                     vim-language-server
@@ -50,10 +46,11 @@ in {
                     typescript-language-server
                 ])
                 ++ [
-                    tailwindcss-language-server
-                    omnisharp-roslyn
-                    prisma-language-server cssmodules-language-server
+                 #  tailwindcss-language-server
+                 #  omnisharp-roslyn
+                 #  prisma-language-server cssmodules-language-server
                 ]
+                ++ (switchSystem system {linux = [pkgs.xclip];})
             );
         };
     };

@@ -4,7 +4,7 @@
     inherit (lib.custom)
         importDir;
 in {
-    imports = importDir ./modules;
+    imports = importDir ./configs;
 
     environment.variables.NIXPKGS_ALLOW_UNFREE = "1";
     nix.gc.automatic = mkDefault true;

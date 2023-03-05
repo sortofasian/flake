@@ -15,11 +15,9 @@
         });
 
         inherit (lib.custom)
-            mkSystems merge;
+            systems merge;
 
-        systems = mkSystems;
-
-        nixosSystems = merge [
+        nixosConfigurations = merge [
             (systems.x86_64-linux.mkHost ./hosts/Famine [])
             (systems.x86_64-linux.mkHost ./hosts/Pestilence [])
             (systems.x86_64-linux.mkHost ./hosts/Death [])
@@ -30,13 +28,17 @@
             (systems.x86_64-linux.mkHostIso "Death")
         ];
 
-        darwinSystems = merge [
+        darwinConfigurations = merge [
             (systems.aarch64-darwin.mkHost ./hosts/War [])
         ];
+        
+        packages = merge [
+            nixosInstallers
+        ];
     in {
-        lib = lib.custom;
-        nixosConfigurations = nixosSystems;
-        darwinConfigurations = darwinSystems;
-        packages = nixosInstallers;
+        lib = lib.custom; # only output custom lib
+        inherit packages;
+        inherit nixosConfigurations;
+        inherit darwinConfigurations;
     };
 }

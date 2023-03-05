@@ -1,9 +1,10 @@
 { inputs, lib, }:
 let
     inherit (lib)
-        filterAttrs
+        nixosSystem
         removeSuffix;
     inherit (lib.custom)
+        sysCopyDir
         flakePath
         switchSystem;
     inherit (builtins)
@@ -12,71 +13,67 @@ let
         listToAttrs;
     inherit (inputs.generators)
         nixosGenerate;
+    inherit (inputs.darwin.lib)
+        darwinSystem;
 
-    systems = [
-        "aarch64-linux"
-        "aarch64-darwin"
-        "x86_64-darwin"
-        "x86_64-linux"
-    ];
-in {
-    mkSystems = let
-        mkSystem = system:
-        let
-            pkgs = import inputs.nixpkgs {
-            inherit system;
-            config.allowUnfree = true;
-            #overlays = self.overlays;
-            };
-
-            copyDir = dir:
-            pkgs.runCommand (baseNameOf dir) { src = dir; }
-            "mkdir $out; cp -r $src/* $out";
-        in filterAttrs (_: v: v != null) {
-            mkHost = path: modules:
-            let
-                name = removeSuffix ".nix" (baseNameOf path);
-                configSystem = switchSystem system {
-                linux = lib.nixosSystem;
-                darwin = inputs.darwin.lib.darwinSystem;
+    systemSpecificLib = lib: listToAttrs
+        (map (system: {
+                name = system;
+                value = lib {
+                    inherit system;
+                    pkgs = import inputs.nixpkgs {
+                        inherit system;
+                        config.allowUnfree = true;
+                    };
                 };
-            in {
-                ${name} = configSystem {
-                inherit system;
-                specialArgs = { inherit lib inputs system; };
-                modules = [
-                    #({ nixpkgs.pkgs = pkgs; })
-                    { networking.hostName = name; }
-                    ../cfg-common.nix
-                    (switchSystem system {
+            })
+        [
+            "aarch64-linux"
+            "aarch64-darwin"
+            "x86_64-darwin"
+            "x86_64-linux"
+        ]);
+in {
+    inherit systemSpecificLib;
+
+    systems = systemSpecificLib ({system, pkgs}: {
+        mkHost = path: modules: let
+            name = removeSuffix ".nix" (baseNameOf path);
+            configSystem = switchSystem system {
+                linux = nixosSystem;
+                darwin = darwinSystem;
+            };
+        in {
+            ${name} = configSystem {
+            inherit system;
+            specialArgs = { inherit lib inputs system; };
+            modules = [
+                { networking.hostName = name; }
+                ../cfg-common.nix
+                (switchSystem system {
                     linux = ../cfg-nixos.nix;
                     darwin = ../cfg-darwin.nix;
-                    })
-                    (import path)
-                ] ++ modules;
-                };
-            };
-
-            mkHostIso = switchSystem system {
-            linux = name: {
-                ${system}.${name} = nixosGenerate {
-                    inherit system;
-                    format = "install-iso";
-                    filename = "${name}.iso";
-                    modules = [({ pkgs, ... }: {
-                        isoImage.squashfsCompression = "lz4";
-                        environment.interactiveShellInit = ''sudo \
-                            ${pkgs.writeScript "installer"
-                            (readFile ../bin/installer.sh)} \
-                            ${name} ${copyDir flakePath}
-                        '';
-                    })];
-                };
-            };
+                })
+                (import path)
+            ] ++ modules;
             };
         };
-    in listToAttrs (map (system: {
-        name = system;
-        value = mkSystem system;
-    }) systems);
+
+        # TODO: Need to figure out how to name isos with hostname
+        mkHostIso = switchSystem system { linux = name: {
+            ${system}.${name} = nixosGenerate {
+                inherit system;
+                format = "install-iso";
+                modules = [({ pkgs, ... }: {
+                    isoImage.squashfsCompression = "lz4";
+                    environment.interactiveShellInit = ''sudo \
+                        ${pkgs.writeScript "installer"
+                        (readFile ../bin/installer.sh)} \
+                        ${name} ${sysCopyDir.${system} flakePath}
+                    '';
+                })];
+            };
+        }; };
+
+    });
 }
