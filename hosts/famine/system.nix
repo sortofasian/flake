@@ -41,7 +41,8 @@
         127.0.0.1 modules-cdn.eac-prod.on.epicgames.com
 
         # Disable miHoYo logging
-        0.0.0.0 public-data-api.mihoyo.com
-        0.0.0.0 log-upload.mihoyo.com
+        0.0.0.0 sg-public-data-api.hoyoverse.com
+        0.0.0.0 log-upload-os.hoyoverse.com
+        0.0.0.0 overseauspider.yuanshen.com
     '';
 }
