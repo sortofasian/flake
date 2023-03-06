@@ -7,6 +7,9 @@
 
         generators.url = "github:nix-community/nixos-generators";
         generators.inputs.nixpkgs.follows = "nixpkgs";
+
+        agenix.url = "github:ryantm/agenix";
+        agenix.inputs.nixpkgs.follows = "nixpkgs";
     };
 
     outputs = { self, nixpkgs, darwin, generators, ... }@inputs: let

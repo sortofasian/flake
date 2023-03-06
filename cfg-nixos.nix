@@ -42,4 +42,6 @@ in {
     };
 
     networking.networkmanager.enable = mkDefault true;
+
+    services.pcscd.enable = true;
 }

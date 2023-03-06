@@ -15,6 +15,8 @@ let
         nixosGenerate;
     inherit (inputs.darwin.lib)
         darwinSystem;
+    inherit (inputs)
+        agenix;
 
     systemSpecificLib = lib: listToAttrs
         (map (system: {
@@ -47,15 +49,42 @@ in {
             ${name} = configSystem {
             inherit system;
             specialArgs = { inherit lib inputs system; };
+
             modules = [
-                { networking.hostName = name; }
                 ../cfg-common.nix
-                (switchSystem system {
-                    linux = ../cfg-nixos.nix;
-                    darwin = ../cfg-darwin.nix;
+                (let rage-yubikey = pkgs.symlinkJoin {
+                        name = "rage-yubikey";
+                        paths = [ pkgs.rage ];
+                        buildInputs = [ pkgs.makeWrapper ];
+                        postBuild = ''
+                            wrapProgram $out/bin/rage \
+                                --prefix PATH : ${lib.makeBinPath [ pkgs.age-plugin-yubikey ]}
+                        '';
+                    };
+                    ageBin = "${rage-yubikey}/bin/rage";
+                in {
+                    nix.nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
+                    networking.hostName = name;
+                    age = { inherit ageBin; };
+                    environment.systemPackages = [(
+                        agenix.packages.${system}.default
+                            .override { inherit ageBin; }
+                    )];
                 })
-                (import path)
-            ] ++ modules;
+            ]
+            ++ (switchSystem system {
+                linux = [
+                    ../cfg-nixos.nix
+                    agenix.nixosModules.default
+                ];
+
+                darwin = [
+                    ../cfg-darwin.nix
+                    agenix.darwinModules.default
+                ];
+            })
+            ++ [(import path)]
+            ++ modules;
             };
         };
 

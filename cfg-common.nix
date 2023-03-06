@@ -1,9 +1,12 @@
-{ lib, ... }: let
+{ pkgs, lib, ... }: let
     inherit (lib)
         mkDefault;
     inherit (lib.custom)
         importDir;
 in {
+
+    age.identityPaths = [ ./secrets/identity ];
+
     imports = importDir ./configs;
 
     environment.variables.NIXPKGS_ALLOW_UNFREE = "1";
