@@ -22,6 +22,7 @@
             (systems.x86_64-linux.mkHost ./hosts/Pestilence [])
             (systems.x86_64-linux.mkHost ./hosts/Death [])
         ];
+
         nixosInstallers = merge [
             (systems.x86_64-linux.mkHostIso "Famine")
             (systems.x86_64-linux.mkHostIso "Pestilence")
