@@ -20,13 +20,14 @@ in {
     config = let
         name = if elem user.name [ "" "root" ]
             then null else user.name;
-    in ({
+    in (mkIf (name != null) ({
         nix.settings = let users = [ "root" name ]; in {
             trusted-users = users;
             allowed-users = users;
         };
-    } // (mkIf (name != null) (switchSystem system  {
+    } //  (switchSystem system  {
         linux = {
+            users.mutableUsers = false;
             users.users.${name} = {
                 uid = 1000;
                 inherit name;
@@ -34,13 +35,9 @@ in {
                 isNormalUser = true;
                 home = "/home/${name}";
                 extraGroups = [ "wheel" ];
-                description = "Primary user";
                 passwordFile = user.passwordFile;
             };
         };
-        darwin = {
-            
-        };
-    }))
-    );
+    })
+    ));
 }
