@@ -33,7 +33,7 @@ in {
     environment.variables.NIXPKGS_ALLOW_UNFREE = "1";
 
     age.ageBin = ageBin;
-    age.identityPaths = [ ./secrets/identity ];
+    age.identityPaths = [ ../secrets/identity ];
     environment.systemPackages = [(
         agenix.packages.${system}.default
             .override { inherit ageBin; }
