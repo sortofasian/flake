@@ -1,44 +1,24 @@
-{ inputs, lib, }:
+{ inputs, lib, ...}:
 let
+    inherit (builtins)
+        readFile
+        baseNameOf;
     inherit (lib)
         nixosSystem
         removeSuffix;
     inherit (lib.custom)
-        sysCopyDir
         flakePath
-        switchSystem;
-    inherit (builtins)
-        readFile
-        baseNameOf
-        listToAttrs;
+        switchSystem
+        systemSpecificLib;
+
+    inherit (inputs)
+        agenix
+        nixpkgs;
     inherit (inputs.generators)
         nixosGenerate;
     inherit (inputs.darwin.lib)
         darwinSystem;
-    inherit (inputs)
-        agenix;
-
-    systemSpecificLib = lib: listToAttrs
-        (map (system: {
-                name = system;
-                value = lib {
-                    inherit system;
-                    pkgs = import inputs.nixpkgs {
-                        inherit system;
-                        config.allowUnfree = true;
-                    };
-                };
-            })
-        [
-            "aarch64-linux"
-            "aarch64-darwin"
-            "x86_64-darwin"
-            "x86_64-linux"
-        ]);
-in {
-    inherit systemSpecificLib;
-
-    systems = systemSpecificLib ({system, pkgs}: {
+in systemSpecificLib ({ system, pkgs, ...}: {
         mkHost = path: modules: let
             name = removeSuffix ".nix" (baseNameOf path);
             configSystem = switchSystem system {
@@ -51,7 +31,7 @@ in {
             specialArgs = { inherit lib inputs system; };
 
             modules = [
-                ../cfg-common.nix
+                ./cfg-common.nix
                 (let rage-yubikey = pkgs.symlinkJoin {
                         name = "rage-yubikey";
                         paths = [ pkgs.rage ];
@@ -63,7 +43,7 @@ in {
                     };
                     ageBin = "${rage-yubikey}/bin/rage";
                 in {
-                    nix.nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
+                    nix.nixPath = [ "nixpkgs=${nixpkgs}" ];
                     networking.hostName = name;
                     age = { inherit ageBin; };
                     environment.systemPackages = [(
@@ -74,12 +54,12 @@ in {
             ]
             ++ (switchSystem system {
                 linux = [
-                    ../cfg-nixos.nix
+                    ./cfg-nixos.nix
                     agenix.nixosModules.default
                 ];
 
                 darwin = [
-                    ../cfg-darwin.nix
+                    ./cfg-darwin.nix
                     agenix.darwinModules.default
                 ];
             })
@@ -90,19 +70,20 @@ in {
 
         # TODO: Need to figure out how to name isos with hostname
         mkHostIso = switchSystem system { linux = name: {
-            ${system}.${name} = nixosGenerate {
+            ${system}.${name} = nixosGenerate (let
+                inherit (lib.custom.systemLib.${system}) copyDir;
+            in {
                 inherit system;
                 format = "install-iso";
                 modules = [({ pkgs, ... }: {
                     isoImage.squashfsCompression = "lz4";
                     environment.interactiveShellInit = ''sudo \
                         ${pkgs.writeScript "installer"
-                        (readFile ../bin/installer.sh)} \
-                        ${name} ${sysCopyDir.${system} flakePath}
+                        (readFile bin/installer.sh)} \
+                        ${name} ${copyDir flakePath}
                     '';
                 })];
-            };
+            });
         }; };
 
-    });
-}
+    })

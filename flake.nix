@@ -13,27 +13,28 @@
     };
 
     outputs = { self, nixpkgs, darwin, generators, ... }@inputs: let
+        system = import ./system.nix { inherit inputs lib; };
         lib = nixpkgs.lib.extend (final: _: {
             custom = import ./lib { inherit inputs; lib = final; };
         });
 
         inherit (lib.custom)
-            systems merge;
+            merge;
 
         nixosConfigurations = merge [
-            (systems.x86_64-linux.mkHost ./hosts/Famine [])
-            (systems.x86_64-linux.mkHost ./hosts/Pestilence [])
-            (systems.x86_64-linux.mkHost ./hosts/Death [])
+            (system.x86_64-linux.mkHost ./hosts/Famine [])
+            (system.x86_64-linux.mkHost ./hosts/Pestilence [])
+            (system.x86_64-linux.mkHost ./hosts/Death [])
         ];
 
         nixosInstallers = merge [
-            (systems.x86_64-linux.mkHostIso "Famine")
-            (systems.x86_64-linux.mkHostIso "Pestilence")
-            (systems.x86_64-linux.mkHostIso "Death")
+            (system.x86_64-linux.mkHostIso "Famine")
+            (system.x86_64-linux.mkHostIso "Pestilence")
+            (system.x86_64-linux.mkHostIso "Death")
         ];
 
         darwinConfigurations = merge [
-            (systems.aarch64-darwin.mkHost ./hosts/War [])
+            (system.aarch64-darwin.mkHost ./hosts/War [])
         ];
         
         packages = merge [

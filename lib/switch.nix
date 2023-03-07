@@ -1,15 +1,9 @@
 { lib, ... }: let
     inherit (lib)
-        fold
         filter
-        hasInfix
         findSingle
         mapAttrsToList;
-    inherit (lib.attrsets)
-        recursiveUpdate;
-    inherit (lib.custom)
-        systemSpecificLib;
-in rec {
+in {
     # WARNING Don't use "null" as a return value as it is
     # used to filter out non-matching cases
     # it was either not using the string null or not using null
@@ -29,14 +23,5 @@ in rec {
                 cases
             )
         )
-    );
-    switchSystem = system: {linux ? null, darwin ? null}:
-        switch system (v: c: hasInfix c v) { inherit linux darwin; };
-
-    merge = sets: fold (x: y: recursiveUpdate x y) {} sets;
-
-    sysCopyDir = systemSpecificLib ({pkgs, ...}: dir:
-        pkgs.runCommand (baseNameOf dir) { inherit dir; }
-            "mkdir $out; cp -r $dir/* $out"
     );
 }

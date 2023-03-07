@@ -1,4 +1,4 @@
-{ inputs, lib }: let
+{ lib, ... }: let
     inherit (lib)
         filter
         flatten
@@ -8,12 +8,8 @@
     inherit (lib.custom)
         importDir;
     inherit (builtins)
-        path
         readDir;
 in {
-    # https://nix.dev/anti-patterns
-    flakePath = path { path = ../.; name = "flake"; };
-
     importDir = dir: flatten (
         filter (v: v != null)
         (mapAttrsToList
