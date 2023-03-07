@@ -13,7 +13,7 @@
     };
 
     outputs = { self, nixpkgs, darwin, generators, ... }@inputs: let
-        system = import ./system.nix { inherit inputs lib; };
+        system = import ./system { inherit inputs lib; };
         lib = nixpkgs.lib.extend (final: _: {
             custom = import ./lib { inherit inputs; lib = final; };
         });

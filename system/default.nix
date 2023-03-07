@@ -31,35 +31,18 @@ in systemSpecificLib ({ system, pkgs, ...}: {
             specialArgs = { inherit lib inputs system; };
 
             modules = [
-                ./cfg-common.nix
-                (let rage-yubikey = pkgs.symlinkJoin {
-                        name = "rage-yubikey";
-                        paths = [ pkgs.rage ];
-                        buildInputs = [ pkgs.makeWrapper ];
-                        postBuild = ''
-                            wrapProgram $out/bin/rage \
-                                --prefix PATH : ${lib.makeBinPath [ pkgs.age-plugin-yubikey ]}
-                        '';
-                    };
-                    ageBin = "${rage-yubikey}/bin/rage";
-                in {
-                    nix.nixPath = [ "nixpkgs=${nixpkgs}" ];
-                    networking.hostName = name;
-                    age = { inherit ageBin; };
-                    environment.systemPackages = [(
-                        agenix.packages.${system}.default
-                            .override { inherit ageBin; }
-                    )];
-                })
+                { networking.hostName = name; }
+                ./common.nix
+                ../secrets
             ]
             ++ (switchSystem system {
                 linux = [
-                    ./cfg-nixos.nix
+                    ./linux.nix
                     agenix.nixosModules.default
                 ];
 
                 darwin = [
-                    ./cfg-darwin.nix
+                    ./darwin.nix
                     agenix.darwinModules.default
                 ];
             })
@@ -79,7 +62,7 @@ in systemSpecificLib ({ system, pkgs, ...}: {
                     isoImage.squashfsCompression = "lz4";
                     environment.interactiveShellInit = ''sudo \
                         ${pkgs.writeScript "installer"
-                        (readFile bin/installer.sh)} \
+                        (readFile ../bin/installer.sh)} \
                         ${name} ${copyDir flakePath}
                     '';
                 })];
