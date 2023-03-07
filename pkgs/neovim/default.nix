@@ -1,4 +1,4 @@
-{ pkgs, stable, lib, symlinkJoin, makeWrapper }:
+{ pkgs, lib, symlinkJoin, makeWrapper }:
 let
     prisma-language-server = pkgs.nodePackages."@prisma/language-server";
     tailwindcss-language-server = pkgs.nodePackages."@tailwindcss/language-server";
@@ -61,8 +61,6 @@ in symlinkJoin {
         pyright vim-language-server bash-language-server
         vscode-langservers-extracted dockerfile-language-server-nodejs
         yaml-language-server svelte-language-server typescript-language-server
-    ]) ++ ( with stable; [
-        haskell-language-server
     ]) ++ [
         tailwindcss-language-server omnisharp-roslyn
         prisma-language-server cssmodules-language-server

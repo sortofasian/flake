@@ -88,6 +88,7 @@
     };
 
     services = {
+        pcscd.enable = true;
         clamav.daemon.enable = true;
         clamav.updater.enable = true;
         gnome.gnome-keyring.enable = true;
