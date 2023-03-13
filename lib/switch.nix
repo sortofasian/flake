@@ -12,7 +12,7 @@ in {
     findSingle
         (_: true)
         (abort "No matching case")
-        (abort "Multiple matching cases") 
+        (abort "Multiple matching cases")
         (filter
             (v: v != "null")
             (mapAttrsToList

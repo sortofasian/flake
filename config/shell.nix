@@ -15,23 +15,21 @@ in {
         default = false;
     };
 
-    config = let
-        shellPackages = with pkgs; [
-            bat
-            exa
-            btop
-            ouch
-            ripgrep
-            gitFull
-            starship
-            tealdeer
-            rm-improved
-            any-nix-shell
-        ];
-    in mkIf shell.enable (mkMerge [
+    config = mkIf shell.enable (mkMerge [
         {
             users.users.${user.name}.shell = pkgs.fish;
-            environment.systemPackages = shellPackages;
+            environment.systemPackages = with pkgs; [
+                bat
+                exa
+                btop
+                ouch
+                ripgrep
+                gitFull
+                starship
+                tealdeer
+                rm-improved
+                any-nix-shell
+            ];
             environment.shellAliases = {
                 la = "ls -a";
                 ta = "tr -a";
@@ -54,9 +52,9 @@ in {
                 };
             };
         }
-        (switchSystem system { darwin = {
+        (switchSystem system { linux = {}; darwin = {
             environment.shells = [ pkgs.fish ];
-            environtment.loginShell = pkgs.fish;
+            environment.loginShell = pkgs.fish;
             programs.fish = {
                 babelfishPackage = pkgs.babelfish;
                 promptInit = ''
