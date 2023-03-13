@@ -2,11 +2,17 @@
 {
     networking.hostName = "Famine";
 
-    imports = [
+    imports = let 
+        aagl = import (builtins.fetchTarball {
+            url = "https://github.com/ezKEa/aagl-gtk-on-nix/archive/main.tar.gz";
+            sha256 = "11a5kmpric1p57ijdy83dhmjq0qn38maab9kcd1kjwzif167mk10";
+        }) { inherit pkgs; };
+    in [
         ./hardware-configuration.nix 
         ./system.nix
+        aagl.module
     ];
-    
+
     users.users.charlie.packages = with pkgs; [
         feh
         playerctl
@@ -47,7 +53,10 @@
     virtualisation.virtualbox.host.enable = true;
     users.extraGroups.vboxusers.members = [ "charlie" ];
 
-    programs.steam.enable = true;
+    programs = {
+        an-anime-game-launcher.enable = true;
+        steam.enable = true;
+    };
     services = {
         udisks2.enable = true;
         blueman.enable = true;
