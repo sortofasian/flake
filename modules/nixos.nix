@@ -3,10 +3,6 @@
     environment.sessionVariables = {
         WINEPREFIX    = "$\{XDG_DATA_HOME}/wine";
         #XAUTHORITY    = "$XDG_RUNTIME_DIR/.Xauthority"; issue with lightdm
-        XCOMPOSECACHE = "$\{XDG_CACHE_HOME}/X11/xcompose";
-        XCOMPOSEFILE  = "$\{XDG_RUNTIME_DIR}/X11/xcompose";
-        ERRFILE       = "$\{XDG_CACHE_HOME}/X11/xsession-errors";
-
     };
 
     time.timeZone = "America/New_York";
@@ -21,24 +17,6 @@
         LC_PAPER = "en_US.UTF-8";
         LC_TELEPHONE = "en_US.UTF-8";
         LC_TIME = "en_US.UTF-8";
-    };
-
-    users = {
-        users.charlie = {
-            isNormalUser = true;
-            extraGroups = [ "wheel" ];
-            shell = pkgs.fish;
-        };
-    };
-
-    fonts = {
-        enableDefaultFonts = false;
-        fontconfig.defaultFonts = {
-            emoji = ["Noto Color Emoji"];
-            serif = ["Noto Serif Nerd Font"];
-            sansSerif = ["Noto Sans Nerd Font"];
-            monospace = ["FiraCode Nerd Font Mono"];
-        };
     };
 
     services = {

@@ -1,12 +1,5 @@
 { pkgs, ... }:
 {
-    networking.hostName = "Famine";
-
-    imports = [
-        ./hardware-configuration.nix 
-        ./system.nix
-    ];
-
     users.users.charlie.packages = with pkgs; [
         orchis-theme
         capitaine-cursors

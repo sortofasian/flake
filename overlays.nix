@@ -17,7 +17,6 @@ in {
     dunst = call pkgs/dunst;
     neovim = call pkgs/neovim;
     gitCustom = call pkgs/git.nix;
-    nerdfonts = call pkgs/nerdfonts;
     alacritty = call pkgs/alacritty.nix;
     proton-ge = call pkgs/proton-ge.nix;
     lug-helper = call pkgs/lug-helper.nix;

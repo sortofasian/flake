@@ -1,11 +1,5 @@
 { pkgs, ... }:
 {
-    networking.hostName = "War";
-
-    imports = [ ./settings.nix ];
-
-    users.users.charlie.shell = pkgs.fish;
-
     homebrew.casks = [
         "utm"
         "steam"
