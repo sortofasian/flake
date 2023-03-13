@@ -1,24 +1,34 @@
 { lib, system, ... }: let
+    inherit (lib)
+        types
+        mkOption;
     inherit (lib.custom)
-        switchSystem;
-in {
-    environment = let
-        sessionVariables = {
-            XDG_CACHE_HOME  = "$HOME/.cache";
-            XDG_CONFIG_HOME = "$HOME/.config";
-            XDG_DATA_HOME   = "$HOME/.local/share";
-            XDG_STATE_HOME  = "$HOME/.local/state";
-            XDG_BIN_HOME    = "$HOME/.local/bin";
-        };
+        xdg
+        user;
 
-        variables = {
-            HISTFILE        = "$XDG_DATA_HOME/bash/history";
-            INPUTRC         = "$XDG_CONFIG_HOME/readline/inputrc";
-            LESSHISTFILE    = "$XDG_CACHE_HOME/lesshst";
-            WGETRC          = "$XDG_CONFIG_HOME/wgetrc";
-        };
-    in switchSystem system {
-        linux = { inherit sessionVariables variables; };
-        darwin = { variables = sessionVariables // variables; };
+    mkPath = default: mkOption { type = types.path; inherit default; };
+in {
+    options.custom.xdg = {
+        cache   = mkPath "${user.home}/.cache";
+        config  = mkPath "${user.home}/.config";
+        local   = mkPath "${user.home}/.local";
+        data    = mkPath "${xdg.local}/store";
+        state   = mkPath "${xdg.local}/state";
+        bin     = mkPath "${xdg.local}/bin";
+        runtime = mkPath "/run/user/${user.uid}";
+    };
+
+    config.environment.variables = {
+        XDG_CACHE_HOME  = xdg.cache;
+        XDG_CONFIG_HOME = xdg.config;
+        XDG_DATA_HOME   = xdg.data;
+        XDG_STATE_HOME  = xdg.state;
+        XDG_BIN_HOME    = xdg.bin;
+        XDG_RUNTIME_DIR = xdg.runtime;
+
+        HISTFILE        = "${xdg.data}/bash/history";
+        INPUTRC         = "${xdg.config}/readline/inputrc";
+        LESSHISTFILE    = "${xdg.state}/lesshst";
+        WGETRC          = "${xdg.config}/wgetrc";
     };
 }

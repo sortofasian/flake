@@ -1,9 +1,7 @@
 { lib, system, config, ... }: let
-    inherit (builtins)
-        elem;
     inherit (lib)
-        mkIf
         types
+        mkMerge
         mkOption;
     inherit (lib.custom)
         switchSystem;
@@ -13,36 +11,42 @@
         secrets;
 in {
     options.custom.user = {
-        # TODO: need to require username
+        # TODO: need to add assertions
         name = mkOption {
-            type = types.nullOr types.str;
-            default = null;
+            type = types.str;
+            default = "";
+        };
+        home = mkOption {
+            type = types.path;
+            default = "/home/${user.name}";
+        };
+        uid = mkOption {
+            type = types.int;
+            default = 1000;
         };
         passwordFile = mkOption {
             type = types.str;
             default = secrets.login.path;
-       };
+        };
     };
 
-    config = let
-        name = if elem user.name [ "" "root" ]
-            then null else user.name;
-    in (mkIf (name != null) ({
-        nix.settings = let users = [ "root" name ]; in {
-            trusted-users = users;
-            allowed-users = users;
-        };
-    } // (switchSystem system  { linux = {
+    config = mkMerge [
+        (switchSystem system  { linux = {
             users.mutableUsers = false;
-            users.users.${name} = {
+            users.users.${user.name} = {
                 uid = 1000;
-                inherit name;
+                inherit (user) name home;
                 group = "users";
                 isNormalUser = true;
-                home = "/home/${name}";
                 extraGroups = [ "wheel" ];
                 passwordFile = user.passwordFile;
             };
         }; })
-    ));
+        {
+            nix.settings = let users = [ "root" user.name ]; in {
+                trusted-users = users;
+                allowed-users = users;
+            };
+        }
+    ];
 }

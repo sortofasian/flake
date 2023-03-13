@@ -7,6 +7,7 @@
     inherit (lib.custom)
         switchSystem;
     inherit (config.custom)
+        xdg
         gpu;
 in switchSystem system { linux = {
     options.custom.gpu = mkOption {
@@ -19,8 +20,8 @@ in switchSystem system { linux = {
             services.xserver.videoDrivers = [ "nvidia" ];
             environment.variables = {
                 __GL_SHADER_DISK_CACHE      = "1";
-                __GL_SHADER_DISK_CACHE_PATH = "$XDG_CACHE_HOME/nv";
-                CUDA_CACHE_PATH = "$XDG_CACHE_HOME/nv";
+                __GL_SHADER_DISK_CACHE_PATH = "${xdg.cache}/nv";
+                CUDA_CACHE_PATH = "${xdg.cache}/nv";
             };
             hardware.nvidia = {
                 modesetting.enable = true;

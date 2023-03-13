@@ -9,6 +9,7 @@
     inherit (lib.custom)
         switchSystem;
     inherit (config.custom)
+        xdg
         user
         desktop;
 
@@ -91,6 +92,11 @@ in switchSystem system { linux = {
                 feh
                 playerctl
             ];
+            environment.variables = {
+                XCOMPOSECACHE = "${xdg.cache}/X11/xcompose";
+                XCOMPOSEFILE  = "${xdg.runtime}/X11/xcompose";
+                ERRFILE       = "${xdg.state}/X11/xsession-errors";
+            };
         })
     ]);
 }; }
