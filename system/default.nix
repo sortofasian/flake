@@ -12,8 +12,7 @@ let
         systemSpecificLib;
 
     inherit (inputs)
-        agenix
-        nixpkgs;
+        agenix;
     inherit (inputs.generators)
         nixosGenerate;
     inherit (inputs.darwin.lib)

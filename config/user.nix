@@ -13,8 +13,15 @@
         secrets;
 in {
     options.custom.user = {
-        name = mkOption { type = types.nullOr types.str; default = null; };
-        passwordFile = mkOption { type = types.str; default = secrets.login.path; };
+        # TODO: need to require username
+        name = mkOption {
+            type = types.nullOr types.str;
+            default = null;
+        };
+        passwordFile = mkOption {
+            type = types.str;
+            default = secrets.login.path;
+       };
     };
 
     config = let
@@ -25,8 +32,7 @@ in {
             trusted-users = users;
             allowed-users = users;
         };
-    } //  (switchSystem system  {
-        linux = {
+    } // (switchSystem system  { linux = {
             users.mutableUsers = false;
             users.users.${name} = {
                 uid = 1000;
@@ -37,7 +43,6 @@ in {
                 extraGroups = [ "wheel" ];
                 passwordFile = user.passwordFile;
             };
-        };
-    })
+        }; })
     ));
 }

@@ -13,13 +13,15 @@
     };
 
     outputs = { self, nixpkgs, darwin, generators, ... }@inputs: let
-        system = import ./system { inherit inputs lib; };
         lib = nixpkgs.lib.extend (final: _: {
             custom = import ./lib { inherit inputs; lib = final; };
         });
 
-        inherit (lib.custom)
-            merge;
+        system = import ./system { inherit inputs lib; };
+        inherit (lib.custom) merge;
+
+    in {
+        lib = lib.custom; # only output custom lib
 
         nixosConfigurations = merge [
             (system.x86_64-linux.mkHost ./hosts/Famine [])
@@ -27,23 +29,19 @@
             (system.x86_64-linux.mkHost ./hosts/Death [])
         ];
 
-        nixosInstallers = merge [
+        darwinConfigurations = merge [
+            (system.aarch64-darwin.mkHost ./hosts/War [])
+        ];
+
+        packages = merge [
             (system.x86_64-linux.mkHostIso "Famine")
             (system.x86_64-linux.mkHostIso "Pestilence")
             (system.x86_64-linux.mkHostIso "Death")
         ];
 
-        darwinConfigurations = merge [
-            (system.aarch64-darwin.mkHost ./hosts/War [])
-        ];
-        
-        packages = merge [
-            nixosInstallers
-        ];
-    in {
-        lib = lib.custom; # only output custom lib
-        inherit packages;
-        inherit nixosConfigurations;
-        inherit darwinConfigurations;
+        templates.shell = {
+            path = ./lib/shellTemplate;
+            description = "Pinned shell";
+        };
     };
 }

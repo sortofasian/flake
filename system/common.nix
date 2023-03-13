@@ -24,6 +24,7 @@
     ageBin = "${rage-yubikey}/bin/rage";
 
 in {
+    nixpkgs.hostPlatform = system;
     nix.nixPath = [ "nixpkgs=${nixpkgs}" ];
     nix.gc.automatic = mkDefault true;
     nix.settings = {
@@ -39,6 +40,5 @@ in {
             .override { inherit ageBin; }
     )];
 
-
-    imports = importDir ../configs;
+    imports = importDir ../config;
 }

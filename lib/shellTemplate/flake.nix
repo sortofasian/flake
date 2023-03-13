@@ -6,9 +6,8 @@
     outputs = { self, nixpkgs, flake, fu }:
     fu.lib.eachDefaultSystem (system: let
         pkgs = import nixpkgs { inherit system; };
-        inherit (import flake.lib { inherit pkgs; }) symlinkJoin;
     in {
-        defaultPackage = symlinkJoin {
+        defaultPackage = pkgs.symlinkJoin {
             name = "shell";
             paths = with pkgs; [ ];
         };

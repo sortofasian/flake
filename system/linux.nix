@@ -5,7 +5,6 @@
         flakePath;
 in {
     system.stateVersion = "22.11";
-
     system.autoUpgrade = {
         enable = mkDefault true;
         flake = "${flakePath}";
@@ -14,6 +13,8 @@ in {
         rebootWindow.lower = "02:00";
         rebootWindow.upper = "06:00";
     };
+
+    hardware.enableRedistributableFirmware = lib.mkDefault true;
 
     fileSystems."/" = mkDefault {
         device = "/dev/disk/by-partlabel/nixos";
@@ -27,21 +28,25 @@ in {
         device = "/dev/disk/by-partlabel/swap";
     }];
 
-    boot = {
-        kernelPackages = mkDefault pkgs.linuxKernel.packages.linux_6_2;
-        loader = {
-            timeout = 1;
-            efi.canTouchEfiVariables = mkDefault true;
-            efi.efiSysMountPoint = mkDefault "/boot/efi";
-            systemd-boot = {
-                enable = mkDefault true;
-                consoleMode = "max";
-                editor = false;
-            };
+    boot.initrd.availableKernelModules = [
+        "nvme"
+        "xhci_pci"
+        "ahci"
+        "usbhid"
+        "sd_mod"
+    ];
+    boot.loader = {
+        timeout = 1;
+        efi.canTouchEfiVariables = mkDefault true;
+        efi.efiSysMountPoint = mkDefault "/boot/efi";
+        systemd-boot = {
+            enable = mkDefault true;
+            consoleMode = "max";
+            editor = false;
         };
     };
 
-    networking.networkmanager.enable = mkDefault true;
-
+    services.journald.extraConfig = "SystemMaxUse=500M";
     services.pcscd.enable = true;
+    services.gnome.gnome-keyring.enable = true;
 }
