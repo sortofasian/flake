@@ -13,7 +13,7 @@ in {
     options.custom.user = {
         # TODO: need to add assertions
         name = mkOption {
-            type = types.path;
+            type = types.str;
             default = "";
         };
         home = mkOption {
@@ -25,7 +25,7 @@ in {
             default = 1000;
         };
         passwordFile = mkOption {
-            type = types.str;
+            type = types.path;
             default = secrets.login.path;
         };
     };
