@@ -60,9 +60,7 @@ in systemSpecificLib ({ system, pkgs, ...}: {
                 modules = [({ pkgs, ... }: {
                     isoImage.squashfsCompression = "lz4";
                     environment.interactiveShellInit = ''sudo \
-                        ${pkgs.writeScript "installer"
-                        (readFile ../bin/installer.sh)} \
-                        ${name} ${copyDir flakePath}
+                        ${import ./installer.nix {inherit pkgs lib name;}}/bin/installer
                     '';
                 })];
             });
