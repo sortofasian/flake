@@ -32,7 +32,7 @@ in switchSystem system { linux = {
             hardware.opengl.enable = true;
             hardware.opengl.extraPackages = with pkgs; [
                 vaapiVdpau
-                libvpdau-va-gl
+                libvdpau-va-gl
             ];
         })
     ];

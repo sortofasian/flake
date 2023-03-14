@@ -17,6 +17,14 @@ in {
 
     config = mkIf shell.enable (mkMerge [
         {
+            programs.fish = {
+                enable = true;
+                useBabelfish = true;
+                promptInit = ''
+                    any-nix-shell fish | source
+                    starship init fish | source
+                '';
+            };
             users.users.${user.name}.shell = pkgs.fish;
             environment.systemPackages = with pkgs; [
                 bat
@@ -34,22 +42,7 @@ in {
                 la = "ls -a";
                 ta = "tr -a";
                 tr = "ls --tree -L 3";
-                ls = ''exa ''\
-                    --long ''\
-                    --binary ''\
-                    --icons ''\
-                    --color=auto ''\
-                    --group-directories-first ''\
-                    --git ''\
-                    --time modified'';
-                programs.fish = {
-                    enable = true;
-                    useBabelfish = true;
-                    promptInit = ''
-                        any-nix-shell fish | source
-                        starship init fish | source
-                    '';
-                };
+                ls = "exa --long --binary --icons --color=auto --group-directories-first --git --time modified";
             };
         }
         (switchSystem system { linux = {}; darwin = {

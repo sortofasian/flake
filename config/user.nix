@@ -13,7 +13,7 @@ in {
     options.custom.user = {
         # TODO: need to add assertions
         name = mkOption {
-            type = types.str;
+            type = types.path;
             default = "";
         };
         home = mkOption {

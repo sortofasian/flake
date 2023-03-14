@@ -1,8 +1,10 @@
-{ lib, system, ... }: let
+{ lib, config, system, ... }: let
+    inherit (builtins)
+        toString;
     inherit (lib)
         types
         mkOption;
-    inherit (lib.custom)
+    inherit (config.custom)
         xdg
         user;
 
@@ -15,7 +17,7 @@ in {
         data    = mkPath "${xdg.local}/store";
         state   = mkPath "${xdg.local}/state";
         bin     = mkPath "${xdg.local}/bin";
-        runtime = mkPath "/run/user/${user.uid}";
+        runtime = mkPath "/run/user/${toString user.uid}";
     };
 
     config.environment.variables = {
