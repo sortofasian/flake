@@ -3,9 +3,11 @@ let
     inherit (builtins)
         baseNameOf;
     inherit (lib)
+        mkForce
         nixosSystem
         removeSuffix;
     inherit (lib.custom)
+        importDir
         switchSystem
         systemSpecificLib;
 
@@ -14,34 +16,20 @@ let
     inherit (inputs.darwin.lib)
         darwinSystem;
 in systemSpecificLib ({ system, pkgs, ...}: {
-        mkHost = path: modules: let
+        mkHost = path: let
             name = removeSuffix ".nix" (baseNameOf path);
             configSystem = switchSystem system {
                 linux = nixosSystem;
                 darwin = darwinSystem;
             };
-        in {
-            ${name} = configSystem {
+        in { ${name} = configSystem {
             inherit system;
             specialArgs = { inherit lib inputs system; };
-
-            modules = [
+            modules = (importDir ../config) ++ [
                 { networking.hostName = name; }
-                ./common.nix
-            ]
-            ++ (switchSystem system {
-                linux = [
-                    ./linux.nix
-                ];
-
-                darwin = [
-                    ./darwin.nix
-                ];
-            })
-            ++ [(import path)]
-            ++ modules;
-            };
-        };
+                (import path)
+            ];
+        }; };
 
         # TODO: Need to figure out how to name isos with hostname
         mkHostIso = switchSystem system { linux = name: {
@@ -49,9 +37,14 @@ in systemSpecificLib ({ system, pkgs, ...}: {
                 inherit system;
                 format = "install-iso";
                 modules = [({ pkgs, config, ... }: {
-                    nix.settings.experimental-features = [ "flakes" "nix-command" ];
-                    services.pcscd.enable = true;
                     isoImage.squashfsCompression = "lz4";
+                    isoImage.isoName = mkForce "${name}.iso";
+
+                    nixpkgs.config.allowUnfree = true;
+                    environment.variables.NIXPKGS_ALLOW_UNFREE = "1";
+                    nix.settings.experimental-features = [ "flakes" "nix-command" ];
+
+                    services.pcscd.enable = true;
                     environment.interactiveShellInit = ''sudo \
                         ${import ./installer.nix {inherit pkgs lib name;}}
                     '';

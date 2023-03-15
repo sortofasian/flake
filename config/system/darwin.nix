@@ -1,8 +1,10 @@
-{ lib, config, ... }: let
+{ lib, config, system, ... }: let
     inherit (lib)
         mkDefault
         mkForce;
-in {
+    inherit (lib.custom)
+        switchSystem;
+in switchSystem system { darwin = {
     system.stateVersion = 4;
 
     homebrew = {
@@ -65,4 +67,4 @@ in {
           SecondClickThreshold = 0;
         };
     };
-}
+}; }

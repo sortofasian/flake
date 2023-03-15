@@ -1,9 +1,10 @@
-{ lib, pkgs, ... }: let
+{ lib, pkgs, system, ... }: let
     inherit (lib)
         mkDefault;
     inherit (lib.custom)
-        flakePath;
-in {
+        flakePath
+        switchSystem;
+in switchSystem system { linux = {
     system.stateVersion = "22.11";
     system.autoUpgrade = {
         enable = mkDefault true;
@@ -49,4 +50,4 @@ in {
     services.journald.extraConfig = "SystemMaxUse=500M";
     services.pcscd.enable = true;
     services.gnome.gnome-keyring.enable = true;
-}
+}; }

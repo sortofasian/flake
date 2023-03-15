@@ -24,13 +24,13 @@
         lib = lib.custom; # only output custom lib
 
         nixosConfigurations = merge [
-            (system.x86_64-linux.mkHost ./hosts/Famine [])
-            (system.x86_64-linux.mkHost ./hosts/Pestilence [])
-            (system.x86_64-linux.mkHost ./hosts/Death [])
+            (system.x86_64-linux.mkHost ./hosts/Famine)
+            (system.x86_64-linux.mkHost ./hosts/Pestilence)
+            (system.x86_64-linux.mkHost ./hosts/Death)
         ];
 
         darwinConfigurations = merge [
-            (system.aarch64-darwin.mkHost ./hosts/War [])
+            (system.aarch64-darwin.mkHost ./hosts/War)
         ];
 
         packages = merge [
