@@ -9,8 +9,6 @@ let
         switchSystem
         systemSpecificLib;
 
-    inherit (inputs)
-        agenix;
     inherit (inputs.generators)
         nixosGenerate;
     inherit (inputs.darwin.lib)
@@ -34,12 +32,10 @@ in systemSpecificLib ({ system, pkgs, ...}: {
             ++ (switchSystem system {
                 linux = [
                     ./linux.nix
-                    agenix.nixosModules.default
                 ];
 
                 darwin = [
                     ./darwin.nix
-                    agenix.darwinModules.default
                 ];
             })
             ++ [(import path)]

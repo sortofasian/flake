@@ -10,6 +10,8 @@
         age-plugin-yubikey;
     inherit (lib)
         makeBinPath;
+    inherit (lib.custom)
+        switchSystem;
     inherit (config.custom)
         age;
     inherit (inputs)
@@ -42,6 +44,11 @@ in {
             default = "/recipient";
         };
     };
+
+    imports = (switchSystem system {
+        linux = [agenix.nixosModules.default];
+        darwin = [agenix.darwinModules.default];
+    });
 
     config = {
         age.ageBin = ageBin;
