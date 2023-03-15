@@ -1,13 +1,11 @@
 { inputs, lib, ...}:
 let
     inherit (builtins)
-        readFile
         baseNameOf;
     inherit (lib)
         nixosSystem
         removeSuffix;
     inherit (lib.custom)
-        flakePath
         switchSystem
         systemSpecificLib;
 
@@ -32,7 +30,6 @@ in systemSpecificLib ({ system, pkgs, ...}: {
             modules = [
                 { networking.hostName = name; }
                 ./common.nix
-                ../secrets
             ]
             ++ (switchSystem system {
                 linux = [
@@ -52,18 +49,18 @@ in systemSpecificLib ({ system, pkgs, ...}: {
 
         # TODO: Need to figure out how to name isos with hostname
         mkHostIso = switchSystem system { linux = name: {
-            ${system}.${name} = nixosGenerate (let
-                inherit (lib.custom.systemLib.${system}) copyDir;
-            in {
+            ${system}.${name} = nixosGenerate {
                 inherit system;
                 format = "install-iso";
-                modules = [({ pkgs, ... }: {
+                modules = [({ pkgs, config, ... }: {
+                    nix.settings.experimental-features = [ "flakes" "nix-command" ];
+                    services.pcscd.enable = true;
                     isoImage.squashfsCompression = "lz4";
                     environment.interactiveShellInit = ''sudo \
-                        ${import ./installer.nix {inherit pkgs lib name;}}/bin/installer
+                        ${import ./installer.nix {inherit pkgs lib name;}}
                     '';
                 })];
-            });
+            };
         }; };
 
     })

@@ -6,6 +6,7 @@
     inherit (lib.custom)
         switchSystem;
     inherit (config.custom)
+        age
         user;
     inherit (config.age)
         secrets;
@@ -25,8 +26,10 @@ in {
             default = 1000;
         };
         passwordFile = mkOption {
-            type = types.path;
-            default = secrets.login.path;
+            type = types.nullOr types.path;
+            default = if age.enable
+                then secrets.login.path
+                else null;
         };
     };
 
