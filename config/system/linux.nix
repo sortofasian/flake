@@ -6,6 +6,7 @@
         switchSystem;
 in switchSystem system { linux = {
     system.stateVersion = "22.11";
+
     system.autoUpgrade = {
         enable = mkDefault true;
         flake = "${flakePath}";
@@ -14,8 +15,6 @@ in switchSystem system { linux = {
         rebootWindow.lower = "02:00";
         rebootWindow.upper = "06:00";
     };
-
-    hardware.enableRedistributableFirmware = lib.mkDefault true;
 
     fileSystems."/" = mkDefault {
         device = "/dev/disk/by-partlabel/nixos";
@@ -48,6 +47,5 @@ in switchSystem system { linux = {
     };
 
     services.journald.extraConfig = "SystemMaxUse=500M";
-    services.pcscd.enable = true;
-    services.gnome.gnome-keyring.enable = true;
+#    services.gnome.gnome-keyring.enable = true;
 }; }

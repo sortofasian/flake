@@ -2,29 +2,19 @@
     inherit (lib)
         mkIf
         types
+        mkMerge
+        mkForce
         mkOption;
     inherit (pkgs)
-        rage
         makeWrapper
-        symlinkJoin
-        age-plugin-yubikey;
+        symlinkJoin;
     inherit (lib)
         makeBinPath;
     inherit (lib.custom)
         switchSystem;
-    inherit (config.custom)
-        age;
     inherit (inputs)
         agenix;
-
-    agenixBin = agenix.packages.${system}.default;
-    ageBin = "${rage-yubikey}/bin/rage";
-    rage-yubikey = symlinkJoin {
-        name = "rage-yubikey"; paths = [ rage ];
-        buildInputs = [makeWrapper];
-        postBuild = ''wrapProgram $out/bin/rage \
-            --prefix PATH : ${makeBinPath [age-plugin-yubikey]}'';
-    };
+    ageConfig = config.custom.age;
 in {
     options.custom.age = {
         enable = mkOption {
@@ -50,17 +40,28 @@ in {
         darwin = [agenix.darwinModules.default];
     });
 
-    config = {
-        age.ageBin = ageBin;
-        environment.systemPackages = [(
-            agenixBin.override {inherit ageBin;}
-        )];
-
-        age = {
-            identityPaths = [ age.identityPath ];
-            secrets = {
-                login.file = ./secrets/login.age;
-            };
+    config = let
+        agenixBin = agenix.packages.${system}.default;
+        ageBin = "${age-yubikey}/bin/age";
+        age-yubikey = symlinkJoin {
+            name = "age-yubikey"; paths = [ pkgs.age ];
+            buildInputs = [ makeWrapper ];
+            postBuild = ''wrapProgram $out/bin/age \
+                --prefix PATH : ${makeBinPath [ pkgs.age-plugin-yubikey ]}'';
         };
-    };
+    in mkMerge [
+        #https://github.com/ryantm/agenix/blob/main/modules/age.nix#L235
+        (mkIf (!ageConfig.enable) { age.secrets = mkForce {}; })
+        (mkIf ageConfig.enable {
+            services.pcscd.enable = true;
+            environment.systemPackages = [(agenixBin.override {inherit ageBin;})];
+            age = {
+                inherit ageBin;
+                identityPaths = [ ageConfig.identityPath ];
+                secrets = {
+                    login.file = ./secrets/login.age;
+                };
+            };
+        })
+    ];
 }
