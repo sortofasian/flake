@@ -25,7 +25,7 @@ in systemSpecificLib ({ system, pkgs, ...}: {
         in { ${name} = configSystem {
             inherit system;
             specialArgs = { inherit lib inputs system; };
-            modules = (importDir ../config) ++ [
+            modules = (importDir ../modules) ++ [
                 { networking.hostName = name; }
                 (import path)
             ];
