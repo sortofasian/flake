@@ -47,5 +47,4 @@ in switchSystem system { linux = {
     };
 
     services.journald.extraConfig = "SystemMaxUse=500M";
-#    services.gnome.gnome-keyring.enable = true;
 }; }

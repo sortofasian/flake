@@ -1,5 +1,7 @@
 { lib, ... }: let
     inherit (lib)
+        mkIf
+        mkMerge
         filter
         findSingle
         mapAttrsToList;
@@ -22,6 +24,15 @@ in {
                     else "null")
                 cases
             )
+        )
+    );
+
+    mkSwitch = (value: pred: cases:
+    mkMerge
+        (mapAttrsToList
+            (case: return:
+                mkIf (pred value case) return)
+            cases
         )
     );
 }
