@@ -5,6 +5,9 @@
         darwin.url = "github:lnl7/nix-darwin";
         darwin.inputs.nixpkgs.follows = "nixpkgs";
 
+        home-manager.url = "github:nix-community/home-manager";
+        home-manager.inputs.nixpkgs.follows = "nixpkgs";
+
         generators.url = "github:nix-community/nixos-generators";
         generators.inputs.nixpkgs.follows = "nixpkgs";
 
@@ -12,14 +15,13 @@
         agenix.inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    outputs = { self, nixpkgs, darwin, generators, ... }@inputs: let
+    outputs = { self, nixpkgs, ... }@inputs: let
         lib = nixpkgs.lib.extend (final: _: {
             custom = import ./lib { inherit inputs; lib = final; };
         });
 
         system = import ./system { inherit inputs lib; };
         inherit (lib.custom) merge;
-
     in {
         lib = lib.custom; # only output custom lib
 
