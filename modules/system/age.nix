@@ -59,7 +59,6 @@ in {
         #https://github.com/ryantm/agenix/blob/main/modules/age.nix#L235
         (mkIf (!ageConfig.enable) { age.secrets = mkForce {}; })
         (mkIf ageConfig.enable {
-            services.pcscd.enable = true;
             environment.systemPackages = [(agenixBin.override {inherit ageBin;})];
             age = {
                 inherit ageBin;
@@ -68,6 +67,9 @@ in {
                     login.file = ../../secrets/login.age;
                 };
             };
+        })
+        (switchSystem system {
+            linux.services.pcscd.enable = mkIf ageConfig.enable true;
         })
     ];
 }

@@ -6,19 +6,20 @@
         switchSystem;
     inherit (config.custom)
         desktop;
+
+    commonConfig = {
+        fontDir.enable = true;
+        fonts = with pkgs; [
+            (nerdfonts.override {fonts = [ "FiraCode" "Noto" ]; })
+            noto-fonts
+            noto-fonts-emoji
+            noto-fonts-cjk-sans
+            noto-fonts-cjk-serif
+        ];
+    };
 in {
-    config.fonts = mkIf desktop.enable (mkMerge [
-        {
-            fontDir.enable = true;
-            fonts = with pkgs; [
-                (nerdfonts.override {fonts = [ "FiraCode" "Noto" ]; })
-                noto-fonts
-                noto-fonts-emoji
-                noto-fonts-cjk-sans
-                noto-fonts-cjk-serif
-            ];
-        }
-        (switchSystem system { linux = {
+    config.fonts = switchSystem system {
+        linux = mkIf desktop.enable commonConfig // {
             enableDefaultFonts = false;
             fontconfig.defaultFonts = {
                 emoji = ["Noto Color Emoji"];
@@ -26,6 +27,7 @@ in {
                 sansSerif = ["Noto Sans Nerd Font"];
                 monospace = ["FiraCode Nerd Font Mono"];
             };
-        }; })
-    ]);
+        };
+        darwin = commonConfig;
+    };
 }

@@ -2,7 +2,8 @@
     inherit (lib)
         mkOption
         types
-        mkIf
+        mkIf;
+    inherit (pkgs)
         symlinkJoin;
     inherit (lib.strings)
         makeBinPath;
@@ -19,7 +20,7 @@ in {
     };
 
     config = mkIf enable {
-        environment.systemPackages = symlinkJoin {
+        environment.systemPackages = [(symlinkJoin {
             name = "neovim";
             paths = [ pkgs.neovim ];
 
@@ -31,7 +32,7 @@ in {
                     rust-analyzer
                     java-language-server
                     lua-language-server
-                    haskell-language-server
+                  # haskell-language-server
                     fd
                     ripgrep
                 ])
@@ -45,13 +46,13 @@ in {
                     svelte-language-server
                     typescript-language-server
                 ])
-                ++ [
+               # ++ [
                  #  tailwindcss-language-server
                  #  omnisharp-roslyn
                  #  prisma-language-server cssmodules-language-server
-                ]
-                ++ (switchSystem system {linux = [pkgs.xclip];})
+               # ]
+                ++ (switchSystem system {linux = [pkgs.xclip]; darwin = [];})
             );
-        };
+        })];
     };
 }

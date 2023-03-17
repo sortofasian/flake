@@ -1,4 +1,4 @@
-{ lib, config, system, ... }: let
+{ lib, pkgs, config, system, ... }: let
     inherit (lib)
         mkDefault
         mkForce;
@@ -25,6 +25,8 @@ in switchSystem system { darwin = {
             cp -Lr "$src" /Applications/Nix\ Apps
         done
     '';
+
+    environment.systemPackages = [pkgs.openssh];
 
     system.defaults = {
         NSGlobalDomain = {

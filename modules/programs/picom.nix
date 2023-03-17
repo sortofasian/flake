@@ -1,5 +1,8 @@
-{
-    services.picom.settings = {
+{ lib, system, ... }: let
+    inherit (lib.custom)
+        switchSystem;
+in switchSystem system {
+    linux.services.picom.settings = {
         backend = "glx";
         vsync = false;
         use-damage = true;
