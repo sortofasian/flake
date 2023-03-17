@@ -11,6 +11,7 @@
     inherit (lib)
         makeBinPath;
     inherit (lib.custom)
+        flakePath
         switchSystem;
     inherit (inputs)
         agenix;
@@ -21,17 +22,22 @@ in {
             type = types.bool;
             default = true;
         };
-        yubikeyPath = mkOption {
+        masterIdentity = mkOption {
             type = types.path;
-            default = ./yubikey.id;
+            default = "${flakePath}/secrets/identities/yubikey.priv";
+            description = "Path to an unencrypted age key for \
+                decrypting the system identity";
         };
-        encryptedIdentity = mkOption {
+        systemIdentity = mkOption {
             type = types.path;
-            default = ./recipient.age;
+            default = "${flakePath}/secrets/identities/recipient.age";
+            description = "Path to an encrypted age key for \
+                decrypting system secrets";
         };
         identityPath = mkOption {
             type = types.path;
             default = "/recipient";
+            description = "Where the decrypted system identity is installed";
         };
     };
 
@@ -59,7 +65,7 @@ in {
                 inherit ageBin;
                 identityPaths = [ ageConfig.identityPath ];
                 secrets = {
-                    login.file = ./secrets/login.age;
+                    login.file = ../../secrets/login.age;
                 };
             };
         })
