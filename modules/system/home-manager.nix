@@ -1,5 +1,6 @@
 { lib, config, system, inputs, ... }: let
     inherit (lib)
+        mkIf
         types
         mkOption;
     inherit (lib.custom)
@@ -30,7 +31,7 @@ in {
         };
     };
 
-    config = {
+    config = mkIf (user.name != "") {
         home-manager.useGlobalPkgs = true;
         home-manager.useUserPackages = true;
 
