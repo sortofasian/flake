@@ -1,6 +1,6 @@
 { pkgs, lib, name }: let
     inherit (pkgs)
-        rage
+        age
         parted
         age-plugin-yubikey
         writeScript;
@@ -9,7 +9,7 @@
     inherit (lib.custom)
         flakePath;
 in writeScript "installer" ''
-    export PATH="${makeBinPath [rage parted age-plugin-yubikey]}:$PATH"
+    export PATH="${makeBinPath [age parted age-plugin-yubikey]}:$PATH"
     set -eu
 
     drive=""
@@ -84,13 +84,13 @@ echo "Creating filesystems"
 
     echo "Installing age recipient ssh key..."
     ageConfig=${flakePath}#nixosConfigurations.${name}.config.custom.age
-    yubikeyPath=$(nix eval --raw "$ageConfig".yubikeyPath)
+    masterIdentity=$(nix eval --raw "$ageConfig".masterIdentity)
+    systemIdentity=$(nix eval --raw "$ageConfig".systemIdentity)
     identityPath=$(nix eval --raw "$ageConfig".identityPath)
-    encryptedIdentity=$(nix eval --raw "$ageConfig".encryptedIdentity)
-    rage -d \
-        -i $yubikeyPath \
+    age -d \
+        -i $masterIdentity \
         -o /mnt$identityPath \
-        "$encryptedIdentity"
+        "$systemIdentity"
     chmod 400 /mnt$identityPath
     chown root:root /mnt$identityPath
 

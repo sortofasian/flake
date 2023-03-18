@@ -3,4 +3,5 @@ let recipient = [
     "age1yubikey1qv83we6cf2k6g5t69sgafv6y4qj59pm05kz6ugyhskncnxye3rnaz0eak0f"
 ]; in {
     "login.age".publicKeys = recipient;
+    "ssh.age".publicKeys = recipient;
 }

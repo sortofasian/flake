@@ -1,7 +1,6 @@
 { lib, system, config, ... }: let
     inherit (lib)
         types
-        mkMerge
         mkOption;
     inherit (lib.custom)
         switchSystem;
@@ -33,10 +32,10 @@ in {
         };
     };
 
-    config = mkMerge [
-        (switchSystem system  { linux = {
-            users.mutableUsers = false;
-            users.users.${user.name} = {
+    config = switchSystem system {
+        linux.users = {
+            mutableUsers = false;
+            users.${user.name} = {
                 uid = 1000;
                 inherit (user) name home;
                 group = "users";
@@ -44,12 +43,6 @@ in {
                 extraGroups = [ "wheel" ];
                 passwordFile = user.passwordFile;
             };
-        }; })
-        {
-            nix.settings = let users = [ "root" user.name ]; in {
-                trusted-users = users;
-                allowed-users = users;
-            };
-        }
-    ];
+        };
+    };
 }

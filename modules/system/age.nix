@@ -64,7 +64,10 @@ in {
                 inherit ageBin;
                 identityPaths = [ ageConfig.identityPath ];
                 secrets = {
-                    login.file = ../../secrets/login.age;
+                    login.file = "${flakePath}/secrets/login.age";
+                    ssh.file = "${flakePath}/secrets/ssh.age";
+                    ssh.mode = "440";
+                    ssh.group = "wheel";
                 };
             };
         })
