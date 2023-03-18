@@ -46,6 +46,7 @@ in {
             };
         }
         (switchSystem system { linux = {}; darwin = {
+            security.pam.enableSudoTouchIdAuth = true;
             environment.shells = [ pkgs.fish ];
             environment.loginShell = pkgs.fish;
             programs.fish = {
