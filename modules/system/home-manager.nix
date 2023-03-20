@@ -37,7 +37,7 @@ in {
 
         home-manager.users.${user.name} = {
             home.file = user.file;
-            home.stateVersion = config.system.stateVersion;
+            home.stateVersion = "22.11";
             xdg.configFile = user.configFile;
             xdg.dataFile = user.dataFile;
         };

@@ -1,8 +1,10 @@
-{ lib, system, config, ... }: let
+{ lib, pkgs, system, ... }: let
     inherit (lib.generators)
         toGitINI;
     inherit (lib.custom)
         switchSystem;
+    inherit (pkgs)
+        writeText;
     inherit (config.age)
         secrets;
     config = {
@@ -29,5 +31,7 @@
     };
 in switchSystem system ({
     linux.programs.git = { inherit config; };
-    darwin.variables.GIT_CONFIG_SYSTEM = toGitINI config;
+    darwin.environment.variables.GIT_CONFIG_SYSTEM = "${writeText
+        "gitconfig"
+        (toGitINI config)}";
 })
