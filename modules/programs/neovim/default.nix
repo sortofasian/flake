@@ -81,6 +81,6 @@ in {
         })];
 
         environment.variables.NEOVIDE_MULTIGRID = "true";
-        environment.variables.EDITOR = lib.mkDefault "nvim";
+        environment.variables.EDITOR = lib.mkOverride 900 "nvim";
     };
 }
