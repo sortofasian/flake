@@ -13,6 +13,9 @@
 
         agenix.url = "github:ryantm/agenix";
         agenix.inputs.nixpkgs.follows = "nixpkgs";
+
+        aagl.url = "github:ezKEa/aagl-gtk-on-nix";
+        aagl.inputs.nixpkgs.follows = "nixpkgs";
     };
 
     outputs = { self, nixpkgs, ... }@inputs: let

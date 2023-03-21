@@ -31,7 +31,6 @@ in systemSpecificLib ({ system, pkgs, ...}: {
             ];
         }; };
 
-        # TODO: Need to figure out how to name isos with hostname
         mkHostIso = switchSystem system { linux = name: {
             ${system}.${name} = nixosGenerate {
                 inherit system;
