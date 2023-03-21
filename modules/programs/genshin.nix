@@ -18,7 +18,7 @@ in switchSystem system { linux = {
     imports = let
         aagl = import (fetchTarball {
             url = "https://github.com/ezKEa/aagl-gtk-on-nix/archive/main.tar.gz";
-            sha256 = "11a5kmpric1p57ijdy83dhmjq0qn38maab9kcd1kjwzif167mk10";
+            sha256 = "1wx7lvy2dzhnzg9n62bmca0yiwk6wzpal4hsr2xx9xnr2z27khxz";
         }) { inherit pkgs; };
     in [ aagl.module ];
 
