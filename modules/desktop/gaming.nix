@@ -30,12 +30,26 @@ in switchSystem system { linux = {
 
         (mkIf steam {
             programs.steam.enable = true;
-            # TODO: add proton-ge STEAM_EXTRA_COMPAT_TOOLS_PATHS = "${pkgs.proton-ge}";
+            environment.variables = {
+                STEAM_EXTRA_COMPAT_TOOLS_PATHS = "${pkgs.stdenv.mkDerivation rec {
+                    pname = "proton-ge";
+                    version = "GE-Proton7-51";
+                    src = builtins.fetchurl {
+                        url = "https://github.com/GloriousEggroll/proton-ge-custom/releases" 
+                            + "/download/${version}/${version}.tar.gz";
+                        sha256 = "1rim2nws5n0jjs1n18vkzlngqkvhzl9hlazkbhdw5zj0cxq06l33";
+                    };
+                    buildCommand = ''
+                        mkdir -p $out
+                        tar -C $out --strip=1 -x -f $src
+                    '';
+                }}";
+            };
         })
 
         {
             programs.gamemode.enable = true;
-            environment.sessionVariables = {
+            environment.variables = {
                 DXVK_ASYNC = "1";
                 VKD3D_CONFIG = "dxr11";
             };

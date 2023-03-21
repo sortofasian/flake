@@ -32,7 +32,6 @@ in {
                 btop
                 ouch
                 ripgrep
-                gitFull
                 starship
                 tealdeer
                 rm-improved
