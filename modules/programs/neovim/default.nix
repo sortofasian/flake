@@ -48,37 +48,39 @@ let
         ];
     });
 in {
-	options.custom.neovim = {
-	    enable = lib.mkOption {
-	        type = lib.types.bool;
-	        default = false;
-	    };
-	};
-	config = lib.mkIf config.custom.neovim.enable {
-		environment.systemPackages = [(pkgs.symlinkJoin {
-		    name = "neovim";
-		    paths = [ neovim ];
+    options.custom.neovim = {
+        enable = lib.mkOption {
+            type = lib.types.bool;
+            default = false;
+        };
+    };
+    config = lib.mkIf config.custom.neovim.enable {
+        environment.systemPackages = [(pkgs.symlinkJoin {
+            name = "neovim";
+            paths = [ neovim ];
 
-		    nvimpath = lib.strings.makeBinPath (with pkgs; [
-			nil taplo clang-tools rust-analyzer jdt-language-server
-			java-language-server lua-language-server
-			ripgrep fd
-		    ] ++ (if pkgs.stdenv.isLinux
-			then [ xclip ] else [])
-		    ++ (with pkgs.nodePackages; [
-			pyright vim-language-server bash-language-server
-			vscode-langservers-extracted dockerfile-language-server-nodejs
-			yaml-language-server svelte-language-server typescript-language-server
-		    ]) ++ [
-			tailwindcss-language-server omnisharp-roslyn
-			prisma-language-server cssmodules-language-server
-		    ]);
+            nvimpath = lib.strings.makeBinPath (with pkgs; [
+            nil taplo clang-tools rust-analyzer jdt-language-server
+            java-language-server lua-language-server
+            ripgrep fd
+            ] ++ (if pkgs.stdenv.isLinux
+            then [ xclip ] else [])
+            ++ (with pkgs.nodePackages; [
+            pyright vim-language-server bash-language-server
+            vscode-langservers-extracted dockerfile-language-server-nodejs
+            yaml-language-server svelte-language-server typescript-language-server
+            ]) ++ [
+            tailwindcss-language-server omnisharp-roslyn
+            prisma-language-server cssmodules-language-server
+            ]);
 
-		    buildInputs = [ pkgs.makeWrapper ];
-		    postBuild = ''
-			wrapProgram $out/bin/nvim --suffix PATH : $nvimpath
-		    '';
-		})];
-		environment.variables.NEOVIDE_MULTIGRID = "true";
-	};
+            buildInputs = [ pkgs.makeWrapper ];
+            postBuild = ''
+            wrapProgram $out/bin/nvim --suffix PATH : $nvimpath
+            '';
+        })];
+
+        environment.variables.NEOVIDE_MULTIGRID = "true";
+        environment.variables.EDITOR = lib.mkDefault "nvim";
+    };
 }
