@@ -1,4 +1,4 @@
-{ lib, pkgs, system, ... }: let
+{ lib, pkgs, config, system, ... }: let
     inherit (lib.generators)
         toGitINI;
     inherit (lib.custom)
@@ -7,7 +7,8 @@
         writeText;
     inherit (config.age)
         secrets;
-    config = {
+
+    systemConfig = {
         url."git@github.com:".insteadOf = [
             "https://github.com/"
             "gh:"
@@ -26,12 +27,15 @@
         email = "charliesyvertsen06@icloud.com";
         signingKey = switchSystem system {
             linux = secrets.ssh.path;
-            darwin = "~/.ssh/identity.pub";
+            darwin = "~/.ssh/identity.pub"; # TODO change to age secret on darwin
         };
     }; };
-    configText = writeText "gitconfig-system" (toGitINI config);
+    systemConfigText = writeText "gitconfig-system" (toGitINI systemConfig);
     userConfigText = writeText "gitconfig-global" (toGitINI userConfig);
 in (switchSystem system ({
     linux.programs.git = { inherit config; };
-    darwin.environment.variables.GIT_CONFIG_SYSTEM = "${configText}";
-})) // { custom.user.configFile."git/config".source = userConfigText; }
+    darwin.environment.variables.GIT_CONFIG_SYSTEM = "${systemConfigText}";
+})) // {
+    environment.systemPackages = [ pkgs.gitFull ];
+    custom.user.configFile."git/config".source = userConfigText;
+}
