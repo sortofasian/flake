@@ -1,6 +1,6 @@
 {
     custom = {
-        age.enable = false;
+        age.identityPath = "/opt/recipient";
         neovim.enable = true;
         shell.enable = true;
         user.name = "charlie";

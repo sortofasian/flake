@@ -3,7 +3,6 @@
         mkIf
         types
         mkMerge
-        mkForce
         mkOption;
     inherit (pkgs)
         makeWrapper
@@ -15,6 +14,8 @@
         switchSystem;
     inherit (inputs)
         agenix;
+    inherit (config.custom)
+        user;
     ageConfig = config.custom.age;
 in {
     options.custom.age = {
@@ -56,8 +57,6 @@ in {
                 --prefix PATH : ${makeBinPath [ pkgs.age-plugin-yubikey ]}'';
         };
     in mkMerge [
-        #https://github.com/ryantm/agenix/blob/main/modules/age.nix#L235
-        (mkIf (!ageConfig.enable) { age.secrets = mkForce {}; })
         (mkIf ageConfig.enable {
             environment.systemPackages = [(agenixBin.override {inherit ageBin;})];
             age = {
@@ -66,8 +65,7 @@ in {
                 secrets = {
                     login.file = "${flakePath}/secrets/login.age";
                     ssh.file = "${flakePath}/secrets/ssh.age";
-                    ssh.mode = "440";
-                    ssh.group = "wheel";
+                    ssh.owner = user.name;
                 };
             };
         })

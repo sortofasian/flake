@@ -25,17 +25,14 @@
     userConfig = { user = {
         name = "Charlie Syvertsen";
         email = "charliesyvertsen06@icloud.com";
-        signingKey = switchSystem system {
-            linux = secrets.ssh.path;
-            darwin = "~/.ssh/identity.pub"; # TODO change to age secret on darwin
-        };
+        signingKey = secrets.ssh.path;
     }; };
-    systemConfigText = writeText "gitconfig-system" (toGitINI systemConfig);
-    userConfigText = writeText "gitconfig-global" (toGitINI userConfig);
 in (switchSystem system ({
     linux.programs.git = { inherit config; };
-    darwin.environment.variables.GIT_CONFIG_SYSTEM = "${systemConfigText}";
+    darwin.environment.variables.GIT_CONFIG_SYSTEM = "${
+        writeText "gitconfig" systemConfig
+    }";
 })) // {
     environment.systemPackages = [ pkgs.gitFull ];
-    custom.user.configFile."git/config".source = userConfigText;
+    custom.user.configFile."git/config".text = toGitINI userConfig;
 }
