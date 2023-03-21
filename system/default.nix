@@ -7,7 +7,6 @@ let
         nixosSystem
         removeSuffix;
     inherit (lib.custom)
-        importDir
         switchSystem
         systemSpecificLib;
 
@@ -25,7 +24,8 @@ in systemSpecificLib ({ system, pkgs, ...}: {
         in { ${name} = configSystem {
             inherit system;
             specialArgs = { inherit lib inputs system; };
-            modules = (importDir ../modules) ++ [
+            modules = [
+                ../modules
                 { networking.hostName = name; }
                 (import path)
             ];
