@@ -81,13 +81,17 @@ in {
                 script = ''
                     if [ -f ${ageConfig.identityPath} ]; then exit 0; fi
                     openvt -sw ${pkgs.writeScript "install-recipient" ''
+                        echo "Recipient key is missing, running install script"
                         age -d \
                             -i ${ageConfig.masterIdentity} \
                             -o ${ageConfig.identityPath} \
                                ${ageConfig.systemIdentity}
                         chmod 400 ${ageConfig.identityPath}
                         chown root:root ${ageConfig.identityPath}
+
+                        echo "Updating system config"
                         nixos-rebuild switch --flake ${flakePath}
+                        echo "Press enter to continue"; read
                     ''}
                 '';
             };
