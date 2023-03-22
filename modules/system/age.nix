@@ -71,9 +71,19 @@ in {
                 };
             };
         })
-        (switchSystem system {
+        (switchSystem system (let recipientInstall = ''
+            echo "Recipient key is missing, running install script"
+            age -d \
+                -i ${ageConfig.masterIdentity} \
+                -o ${ageConfig.identityPath} \
+                ${ageConfig.systemIdentity}
+            chmod 400 ${ageConfig.identityPath}
+            chown root ${ageConfig.identityPath}
+        ''; in {
             linux = {
                 services.pcscd.enable = mkIf ageConfig.enable true;
+                #system.activationScripts._check-recipient.text = "openvt -sw ${pkgs.bash}";
+                #TODO: test switching tty in activation; would it work in terminal emulator?
                 systemd.services.check-recipient = {
                     wantedBy = [ "default.target" ];
                     after = [ "default.target" ];
@@ -82,17 +92,9 @@ in {
                     unitConfig.ConditionPathExists = "!${ageConfig.identityPath}";
                     script = ''
                         openvt -sw ${pkgs.writeScript "install-recipient" ''
-                            echo "Recipient key is missing, running install script"
-                            age -d \
-                                -i ${ageConfig.masterIdentity} \
-                                -o ${ageConfig.identityPath} \
-                                ${ageConfig.systemIdentity}
-                            chmod 400 ${ageConfig.identityPath}
-                            chown root:root ${ageConfig.identityPath}
-
+                            ${recipientInstall}
                             echo "Updating system config"
                             nixos-rebuild switch --flake ${flakePath}
-                            echo "Press enter to continue"; read
                         ''}
                     '';
                 };
@@ -106,18 +108,10 @@ in {
                     ])}:$PATH
 
                     if [ ! -f ${ageConfig.identityPath} ]; then
-                        alacritty -e ${pkgs.writeScript "install-recipient" ''
-                            echo "Recipient key is missing, running install script"
-                            age -d \
-                                -i ${ageConfig.masterIdentity} \
-                                -o ${ageConfig.identityPath} \
-                                ${ageConfig.systemIdentity}
-                            chmod 400 ${ageConfig.identityPath}
-                            chown root:wheel ${ageConfig.identityPath}
-                        ''}
+                        alacritty -e ${pkgs.writeScript "install-recipient" recipientInstall}
                     fi
                 '';
             };
-        })
+        }))
     ];
 }
