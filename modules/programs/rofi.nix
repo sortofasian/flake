@@ -7,7 +7,7 @@ in switchSystem system {
     linux.environment.systemPackages = [ (pkgs.rofi.override {
         plugins = with pkgs; [ rofi-calc rofi-emoji ];
     }) ];
-    linux.custom.home.configFile."rofi/config.rasi".text = ''
+    linux.custom.user.configFile."rofi/config.rasi".text = ''
         configuration {
             terminal: "$TERM";
             modes: [ drun, calc, emoji ];
@@ -37,20 +37,20 @@ in switchSystem system {
 
         window {
             font: "Sans 12";
-            padding: ${theme.gapSize}px;
+            padding: ${builtins.toString theme.gapSize}px;
             border: 2px;
-            border-radius: ${theme.cornerRadius}px;
+            border-radius: ${builtins.toString theme.cornerRadius}px;
             border-color: @white;
             background-color: @black;
             children: [ inputbar, listview, message ];
         }
-        error-message { padding: ${theme.gapSize}px; }
+        error-message { padding: ${builtins.toString theme.gapSize}px; }
         scrollbar { handle-width: 0px; }
 
         inputbar {
-            padding: ${theme.gapSize};
-            margin: 0px 0px ${theme.gapSize}px;
-            border-radius: ${theme.cornerRadius * 0.8}px;
+            padding: ${builtins.toString theme.gapSize};
+            margin: 0px 0px ${builtins.toString theme.gapSize}px;
+            border-radius: ${builtins.toString (theme.cornerRadius * 0.8)}px;
             background-color: @brightblack;
             color: @brightred;
             prompt: "";
@@ -70,8 +70,8 @@ in switchSystem system {
             columns: 10;
         }
         element {
-            padding: ${theme.gapSize * 0.3}px;
-            border-radius: ${theme.cornerRadius * 0.4}px;
+            padding: ${builtins.toString (theme.gapSize * 0.3)}px;
+            border-radius: ${builtins.toString (theme.cornerRadius * 0.4)}px;
             color: @foreground;
             font:inherit;
         }

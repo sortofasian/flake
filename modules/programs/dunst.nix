@@ -10,15 +10,15 @@
     inherit (config.custom)
         dunst
         theme;
-in mkIf dunst.enable (switchSystem system {
+in switchSystem system {
     linux.options.custom.dunst = {
         enable = mkOption {
             type = types.bool; default = false;
         };
     };
-    linux.config = {
+    linux.config = mkIf dunst.enable {
         environment.systemPackages = [ pkgs.dunst ];
-        custom.home.configFile."dunst/dunstrc".text = toINI {} {
+        custom.user.configFile."dunst/dunstrc".text = toINI {} {
             global = {
                 follow = "keyboard";
                 notification_limit = 3;
@@ -76,4 +76,4 @@ in mkIf dunst.enable (switchSystem system {
             };
         };
     };
-})
+}
