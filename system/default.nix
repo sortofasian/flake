@@ -27,7 +27,7 @@ in systemSpecificLib ({ system, pkgs, ...}: {
             modules = [
                 ../modules
                 { networking.hostName = name; }
-                (import path)
+                path
             ];
         }; };
 

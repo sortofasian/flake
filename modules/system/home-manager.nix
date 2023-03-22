@@ -29,6 +29,10 @@ in {
             type = types.attrs;
             default = {};
         };
+        mkOutOfStoreSymlink = mkOption {
+            type = types.functionTo types.path;
+            default = config.home-manager.users.${user.name}.lib.file.mkOutOfStoreSymlink;
+        };
     };
 
     config = mkIf (user.name != "") {
@@ -41,6 +45,5 @@ in {
             xdg.configFile = user.configFile;
             xdg.dataFile = user.dataFile;
         };
-
     };
 }

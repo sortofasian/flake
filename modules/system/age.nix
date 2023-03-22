@@ -1,4 +1,4 @@
-{ pkgs, lib, inputs, system, config, ... }: let
+{ pkgs, lib, inputs, system, config, name, ... }: let
     inherit (lib)
         mkIf
         types
@@ -64,6 +64,8 @@ in {
                 identityPaths = [ ageConfig.identityPath ];
                 secrets = {
                     login.file = "${flakePath}/secrets/login.age";
+                    pam-u2f.file = "${flakePath}/secrets/ssh.age";
+                    pam-u2f.owner = user.name;
                     ssh.file = "${flakePath}/secrets/ssh.age";
                     ssh.owner = user.name;
                 };
@@ -71,6 +73,24 @@ in {
         })
         (switchSystem system {
             linux.services.pcscd.enable = mkIf ageConfig.enable true;
+            linux.systemd.services.check-recipient = {
+                wantedBy = [ "default.target" ];
+                after = [ "default.target" ];
+                path = [ pkgs.age-plugin-yubikey pkgs.kbd pkgs.age pkgs.nixos-rebuild ];
+                serviceConfig.Restart = "on-failure";
+                script = ''
+                    if [ -f ${ageConfig.identityPath} ]; then exit 0; fi
+                    openvt -sw ${pkgs.writeScript "install-recipient" ''
+                        age -d \
+                            -i ${ageConfig.masterIdentity} \
+                            -o ${ageConfig.identityPath} \
+                               ${ageConfig.systemIdentity}
+                        chmod 400 ${ageConfig.identityPath}
+                        chown root:root ${ageConfig.identityPath}
+                        nixos-rebuild switch --flake ${flakePath}
+                    ''}
+                '';
+            };
         })
     ];
 }

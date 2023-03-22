@@ -82,25 +82,14 @@ echo "Creating filesystems"
         swapon "$drive"3
     fi
 
-    echo "Installing age recipient ssh key..."
-    ageConfig=${flakePath}#nixosConfigurations.${name}.config.custom.age
-    masterIdentity=$(nix eval --raw "$ageConfig".masterIdentity)
-    systemIdentity=$(nix eval --raw "$ageConfig".systemIdentity)
-    identityPath=$(nix eval --raw "$ageConfig".identityPath)
-    age -d \
-        -i $masterIdentity \
-        -o /mnt$identityPath \
-        "$systemIdentity"
-    chmod 400 /mnt$identityPath
-    chown root:root /mnt$identityPath
-
     echo "Installing NixOS"
+    mkdir -p /mnt/etc/nixos
+    cp -r ${flakePath}/* /mnt/etc/nixos
     nixos-install \
         --flake ${flakePath}#${name} \
         --no-channel-copy \
         --cores 0 \
         #--no-root-password
-    cp -r ${flakePath} /mnt/etc/nixos
 
     echo "Done! Rebooting in 5"
     sleep 5
