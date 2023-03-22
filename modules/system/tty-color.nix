@@ -1,26 +1,28 @@
-{ lib, system, ... }: let
+{ lib, config, system, ... }: let
     inherit (lib.custom)
         switchSystem;
+    inherit (config.custom.theme)
+        colors;
 in switchSystem system {
     linux.boot.initrd.preDeviceCommands = let
         color = number: color: ''printf "\e]P${number + color}"'';
     in ''
-        ${color "0" "32344a" } # black
-        ${color "1" "f7768e" } # red
-        ${color "2" "9ece6a" } # green
-        ${color "3" "e0af68" } # yellow
-        ${color "4" "7aa2f7" } # blue
-        ${color "5" "ad8ee6" } # magenta
-        ${color "6" "449dab" } # cyan
-        ${color "7" "9699a8" } # white
-        ${color "8" "444b6a" } # bright black
-        ${color "9" "ff7a93" } # bright red
-        ${color "A" "b9f27c" } # bright green
-        ${color "B" "ff9e64" } # bright yellow
-        ${color "C" "7da6ff" } # bright blue
-        ${color "D" "bb9af7" } # bright magenta
-        ${color "E" "0db9d7" } # bright cyan
-        ${color "F" "acb0d0" } # bright white
+        ${ color "0" colors.black }
+        ${ color "1" colors.red }
+        ${ color "2" colors.green }
+        ${ color "3" colors.yellow }
+        ${ color "4" colors.blue }
+        ${ color "5" colors.magenta }
+        ${ color "6" colors.cyan }
+        ${ color "7" colors.white }
+        ${ color "8" colors.brightblack }
+        ${ color "9" colors.brightred }
+        ${ color "A" colors.brightgreen }
+        ${ color "B" colors.brightyellow }
+        ${ color "C" colors.brightblue }
+        ${ color "D" colors.brightmagenta }
+        ${ color "E" colors.brightcyan }
+        ${ color "F" colors.brightwhite }
         clear
     '';
 }
