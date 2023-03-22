@@ -72,27 +72,50 @@ in {
             };
         })
         (switchSystem system {
-            linux.services.pcscd.enable = mkIf ageConfig.enable true;
-            linux.systemd.services.check-recipient = {
-                wantedBy = [ "default.target" ];
-                after = [ "default.target" ];
-                path = [ pkgs.age-plugin-yubikey pkgs.kbd pkgs.age pkgs.nixos-rebuild ];
-                serviceConfig.Restart = "on-failure";
-                script = ''
-                    if [ -f ${ageConfig.identityPath} ]; then exit 0; fi
-                    openvt -sw ${pkgs.writeScript "install-recipient" ''
-                        echo "Recipient key is missing, running install script"
-                        age -d \
-                            -i ${ageConfig.masterIdentity} \
-                            -o ${ageConfig.identityPath} \
-                               ${ageConfig.systemIdentity}
-                        chmod 400 ${ageConfig.identityPath}
-                        chown root:root ${ageConfig.identityPath}
+            linux = {
+                services.pcscd.enable = mkIf ageConfig.enable true;
+                systemd.services.check-recipient = {
+                    wantedBy = [ "default.target" ];
+                    after = [ "default.target" ];
+                    path = with pkgs; [ age-plugin-yubikey kbd age nixos-rebuild ];
+                    serviceConfig.Restart = "on-failure";
+                    unitConfig.ConditionPathExists = "!${ageConfig.identityPath}";
+                    script = ''
+                        openvt -sw ${pkgs.writeScript "install-recipient" ''
+                            echo "Recipient key is missing, running install script"
+                            age -d \
+                                -i ${ageConfig.masterIdentity} \
+                                -o ${ageConfig.identityPath} \
+                                ${ageConfig.systemIdentity}
+                            chmod 400 ${ageConfig.identityPath}
+                            chown root:root ${ageConfig.identityPath}
 
-                        echo "Updating system config"
-                        nixos-rebuild switch --flake ${flakePath}
-                        echo "Press enter to continue"; read
-                    ''}
+                            echo "Updating system config"
+                            nixos-rebuild switch --flake ${flakePath}
+                            echo "Press enter to continue"; read
+                        ''}
+                    '';
+                };
+            };
+
+            darwin = {
+                system.activationScripts.preActivation.text = ''
+                    echo "installing recipient age key..."
+                    export PATH=${makeBinPath (with pkgs; [
+                        alacritty age age-plugin-yubikey
+                    ])}:$PATH
+
+                    if [ ! -f ${ageConfig.identityPath} ]; then
+                        alacritty -e ${pkgs.writeScript "install-recipient" ''
+                            echo "Recipient key is missing, running install script"
+                            age -d \
+                                -i ${ageConfig.masterIdentity} \
+                                -o ${ageConfig.identityPath} \
+                                ${ageConfig.systemIdentity}
+                            chmod 400 ${ageConfig.identityPath}
+                            chown root:wheel ${ageConfig.identityPath}
+                        ''}
+                    fi
                 '';
             };
         })
