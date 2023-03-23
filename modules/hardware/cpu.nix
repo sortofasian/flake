@@ -13,5 +13,5 @@ in switchSystem system { linux = {
         default = null;
     };
 
-    config = mkMerge [{ hardware.cpu.${cpu}.updatemicrocode = true; }];
+    config = mkMerge [{ hardware.cpu.${cpu}.updateMicrocode = true; }];
 }; }

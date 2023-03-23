@@ -4,12 +4,13 @@
     inherit (lib)
         types
         mkOption
+        removeSuffix
         mapAttrsToList;
 in {
     options.custom.theme = {
         colorscheme = mkOption {
             type = types.nullOr (types.enum (mapAttrsToList
-                (name: _: name)
+                (name: _: removeSuffix ".nix" name)
                 (readDir ./colorschemes)
             ));
             default = null;

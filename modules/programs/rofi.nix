@@ -13,7 +13,7 @@ in switchSystem system {
             modes: [ drun, calc, emoji ];
             scroll-method: 0;
             drun-match-fields: [ name, generic, exec ];
-            drun-display-format: "{name}"
+            drun-display-format: "{name}";
         }
 
         * {
@@ -44,6 +44,7 @@ in switchSystem system {
             background-color: @black;
             children: [ inputbar, listview, message ];
         }
+
         error-message { padding: ${builtins.toString theme.gapSize}px; }
         scrollbar { handle-width: 0px; }
 
@@ -57,11 +58,13 @@ in switchSystem system {
             font: "Mono 12";
             children: [ entry ];
         }
+
         entry {
             placeholder: "";
             font:  inherit;
             color: inherit;
-        };
+        }
+
         listview {
             border: 0px;
             background-color: @black;
@@ -80,11 +83,11 @@ in switchSystem system {
             text-color:       inherit;
             highlight: bold;
             horizontal-align: 0.5;
-        };
+        }
         message {
             border: 0px;
             background-color: @brightblack
             font: "Sans 8";
-        };
+        }
     '';
 }

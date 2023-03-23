@@ -1,40 +1,14 @@
 { pkgs, lib, config, system, ... }: let
-    inherit (builtins)
-        elem;
     inherit (lib)
         mkIf
         types
         mkMerge
         mkOption;
     inherit (lib.custom)
-        mkSwitch
         switchSystem;
     inherit (config.custom)
         xdg
-        user
         desktop;
-    xConfig = {
-        services.xserver = {
-            enable = true;
-            updateDbusEnvironment = true;
-            excludePackages = [ pkgs.dmenu ];
-
-            layout = "us";
-            xkbVariant = ""; # ?
-            autoRepeatDelay = 250;
-            autoRepeatInterval = 20;
-            libinput.enable = true;
-            libinput.mouse = {
-                accelProfile = "flat";
-                accelSpeed = "0";
-            };
-        };
-        environment.variables = {
-            XCOMPOSECACHE = "${xdg.cache}/X11/xcompose";
-            XCOMPOSEFILE  = "${xdg.runtime}/X11/xcompose";
-            ERRFILE       = "${xdg.state}/X11/xsession-errors";
-        };
-    };
 in switchSystem system { linux = {
     options.custom.desktop = {
         enable = mkOption {
@@ -53,16 +27,36 @@ in switchSystem system { linux = {
     };
 
     config = mkIf desktop.enable (mkMerge [
-        { programs.dconf.enable = true; }
+        {
+            programs.dconf.enable = true;
+            services.xserver = {
+                enable = true;
+                updateDbusEnvironment = true;
+                excludePackages = [ pkgs.dmenu ];
 
-        (let
-            xWM = config: xConfig // config;
-        in mkSwitch desktop.wm (v: c: v == c) {
-            i3 = xWM { services.xserver.windowManager.i3.enable = true; };
+                layout = "us";
+                xkbVariant = ""; # ?
+                autoRepeatDelay = 250;
+                autoRepeatInterval = 20;
+                libinput.enable = true;
+                libinput.mouse = {
+                    accelProfile = "flat";
+                    accelSpeed = "0";
+                };
+            };
+            environment.variables = {
+                XCOMPOSECACHE = "${xdg.cache}/X11/xcompose";
+                XCOMPOSEFILE  = "${xdg.runtime}/X11/xcompose";
+                ERRFILE       = "${xdg.state}/X11/xsession-errors";
+            };
+        }
+
+        (mkIf (desktop.wm == "i3") {
+            services.xserver.windowManager.i3.enable = true;
         })
 
-        (mkSwitch desktop.compositor (v: c: v == c) {
-            picom = { services.picom.enable = true; };
+        (mkIf (desktop.compositor == "picom") {
+            services.picom.enable = true;
         })
 
     ]);

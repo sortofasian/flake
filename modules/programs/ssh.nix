@@ -3,13 +3,15 @@
         switchSystem;
     inherit (config.age)
         secrets;
-in (switchSystem system {
+in switchSystem system {
     linux.config = {
         programs.ssh.extraConfig = "IdentityFile = ${secrets.ssh.path}";
         programs.ssh.startAgent = true;
     };
     darwin.config = {
-        config.environment.etc."ssh/ssh_config".text = "IdentityFile = ${secrets.ssh.path}";
+        environment.systemPackages = [ pkgs.openssh ];
+        environment.etc."ssh/ssh_config".text =
+            "IdentityFile = ${secrets.ssh.path}";
         # TODO: test ssh-agent on darwin
         #launchd.user.agents.ssh-agent.command = "${pkgs.openssh}/bin/ssh-agent "
         #        + "-a ${config.environment.variables.XDG_RUNTIME_DIR}/ssh-agent";
@@ -17,6 +19,4 @@ in (switchSystem system {
         #    RunAtLoad = true;
         #};
     };
-}) // {
-    config.environment.systemPackages = [ pkgs.openssh ];
 }
