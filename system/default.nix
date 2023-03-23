@@ -36,7 +36,6 @@ in systemSpecificLib ({ system, pkgs, ...}: {
                 inherit system;
                 format = "install-iso";
                 modules = [({ pkgs, config, ... }: {
-                    isoImage.squashfsCompression = "lz4";
                     isoImage.isoName = mkForce "${name}.iso";
 
                     nixpkgs.config.allowUnfree = true;
