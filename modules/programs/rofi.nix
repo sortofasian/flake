@@ -17,22 +17,22 @@ in switchSystem system {
         }
 
         * {
-            red:           ${theme.colors.red};
-            yellow:        ${theme.colors.yellow};
-            green:         ${theme.colors.green};
-            cyan:          ${theme.colors.cyan};
-            blue:          ${theme.colors.blue};
-            magenta:       ${theme.colors.magenta};
-            white:         ${theme.colors.white};
-            black:         ${theme.colors.black};
-            brightred:     ${theme.colors.brightred};
-            brightyellow:  ${theme.colors.brightyellow};
-            brightgreen:   ${theme.colors.brightgreen};
-            brightcyan:    ${theme.colors.brightcyan};
-            brightblue:    ${theme.colors.brightblue};
-            brightmagenta: ${theme.colors.brightmagenta};
-            brightwhite:   ${theme.colors.brightwhite};
-            brightblack:   ${theme.colors.brightblack};
+            red:           #${theme.colors.red};
+            yellow:        #${theme.colors.yellow};
+            green:         #${theme.colors.green};
+            cyan:          #${theme.colors.cyan};
+            blue:          #${theme.colors.blue};
+            magenta:       #${theme.colors.magenta};
+            white:         #${theme.colors.white};
+            black:         #${theme.colors.black};
+            brightred:     #${theme.colors.brightred};
+            brightyellow:  #${theme.colors.brightyellow};
+            brightgreen:   #${theme.colors.brightgreen};
+            brightcyan:    #${theme.colors.brightcyan};
+            brightblue:    #${theme.colors.brightblue};
+            brightmagenta: #${theme.colors.brightmagenta};
+            brightwhite:   #${theme.colors.brightwhite};
+            brightblack:   #${theme.colors.brightblack};
         }
 
         window {
@@ -86,7 +86,7 @@ in switchSystem system {
         }
         message {
             border: 0px;
-            background-color: @brightblack
+            background-color: @brightblack;
             font: "Sans 8";
         }
     '';
