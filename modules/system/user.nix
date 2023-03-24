@@ -34,7 +34,7 @@ in {
 
     config = switchSystem system {
         linux.users = {
-            mutableUsers = false;
+            mutableUsers = !age.enable;
             users.${user.name} = {
                 uid = 1000;
                 inherit (user) name home;

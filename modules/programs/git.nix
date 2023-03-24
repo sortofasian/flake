@@ -24,11 +24,12 @@
         init.defaultBranch = "main";
         status.short = true;
     };
-    userConfig = { user = {
-        name = "Charlie Syvertsen";
-        email = "charliesyvertsen06@icloud.com";
-        signingKey = secrets.ssh.path;
-    }; };
+    userConfig = {
+        user.name = "Charlie Syvertsen";
+        user.email = "charliesyvertsen06@icloud.com";
+        alias.yk5 = "config user.signingkey ${secrets.ssh-yubikey-5.path}";
+        alias.yk5c = "config user.signingkey ${secrets.ssh-yubikey-5c.path}";
+    };
 in mkMerge [
     (switchSystem system {
         linux.programs.git = {
@@ -39,7 +40,7 @@ in mkMerge [
         darwin.environment = {
             systemPackages = [ pkgs.gitFull ];
             variables.GIT_CONFIG_SYSTEM = "${
-                writeText "gitconfig" systemConfig
+                writeText "gitconfig" (toGitINI systemConfig)
             }";
         };
     })

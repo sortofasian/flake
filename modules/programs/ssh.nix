@@ -10,8 +10,10 @@ in switchSystem system {
     };
     darwin.config = {
         environment.systemPackages = [ pkgs.openssh ];
-        environment.etc."ssh/ssh_config".text =
-            "IdentityFile = ${secrets.ssh.path}";
+        environment.etc."ssh/ssh_config".text = ''
+            IdentityFile = ${secrets.ssh-yubikey-5.path}
+            IdentityFile = ${secrets.ssh-yubikey-5c.path}
+        '';
         # TODO: test ssh-agent on darwin
         #launchd.user.agents.ssh-agent.command = "${pkgs.openssh}/bin/ssh-agent "
         #        + "-a ${config.environment.variables.XDG_RUNTIME_DIR}/ssh-agent";

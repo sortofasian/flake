@@ -7,5 +7,6 @@
 
     custom = {
         user.name = "charlie";
+        age.enable = false;
     };
 }

@@ -1,6 +1,6 @@
 {
     custom = {
-        age.identityPath = "/opt/recipient";
+        age.systemIdentity.file = ./systemIdentity.age;
         neovim.enable = true;
         shell.enable = true;
         user.name = "charlie";
@@ -14,6 +14,7 @@
         "obsidian"
 
         "unity-hub"
+        "dotnet-sdk"
         "visual-studio-code"
     ];
 }
