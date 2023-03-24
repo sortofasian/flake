@@ -16,7 +16,7 @@
 
         bluetooth.enable = true;
         cpu = "amd";
-   #     gpu = "nvidia";
+        gpu = "nvidia";
 
         neovim.enable = true;
         # alacritty.enable = true;
