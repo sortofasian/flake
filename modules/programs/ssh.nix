@@ -5,7 +5,10 @@
         secrets;
 in switchSystem system {
     linux.config = {
-        programs.ssh.extraConfig = "IdentityFile = ${secrets.ssh.path}";
+        programs.ssh.extraConfig = ''
+            IdentityFile = ${secrets.ssh-yubikey-5.path}
+            IdentityFile = ${secrets.ssh-yubikey-5c.path}
+        '';
         programs.ssh.startAgent = true;
     };
     darwin.config = {
