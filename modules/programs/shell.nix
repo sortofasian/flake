@@ -17,6 +17,8 @@ in {
 
     config = mkIf shell.enable (mkMerge [
         {
+            programs.command-not-found.enable = false;
+            programs.nix-index.enable = true;
             programs.fish = {
                 enable = true;
                 useBabelfish = true;
@@ -41,7 +43,14 @@ in {
                 la = "ls -a";
                 ta = "tr -a";
                 tr = "ls --tree -L 3";
-                ls = "exa --long --binary --icons --color=auto --group-directories-first --git --time modified";
+                ls = "exa "
+                    + "--long "
+                    + "--binary "
+                    + "--icons "
+                    + "--color=auto "
+                    + "--group-directories-first "
+                    + "--git "
+                    + "--time modified";
             };
         }
         (switchSystem system { linux = {}; darwin = {

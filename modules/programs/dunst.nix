@@ -35,7 +35,7 @@ in switchSystem system {
                 horizontal_padding = theme.gapSize;
                 width = 500;
                 height = 200;
-                frame_width = 0;
+                frame_width = theme.borderWidth;
                 corner_radius = theme.cornerRadius;
 
                 transparency = 100 - theme.opacity * 100;
@@ -46,7 +46,7 @@ in switchSystem system {
                 vertical_alignment = "center";
                 word_wrap = true;
                 markup = "full";
-                format = ''"<b>%s</b>\\n<span font='8'>%b</span>"'';
+                format = ''"<b>%s</b>\n<span font='8'>%b</span>"'';
 
                 enable_recursive_icon_lookup = true;
                 icon_position = "left";
@@ -54,24 +54,24 @@ in switchSystem system {
                 max_icon_size = 64;
             };
             urgency_low = {
-                background  = ''"#${theme.colors.black}"'';
-                foreground  = ''"#${theme.colors.white}"'';
+                background  = ''"#${theme.colors.bg}"'';
+                foreground  = ''"#${theme.colors.fg}"'';
                 highlight   = ''"#${theme.colors.blue}"'';
-                frame_color = ''"#${theme.colors.brightblack}"'';
+                frame_color = ''"#${theme.colors.fg}"'';
                 timeout = 3;
             };
             urgency_normal = {
-                background  = ''"#${theme.colors.black}"'';
-                foreground  = ''"#${theme.colors.white}"'';
+                background  = ''"#${theme.colors.bg}"'';
+                foreground  = ''"#${theme.colors.fg}"'';
                 highlight   = ''"#${theme.colors.blue}"'';
-                frame_color = ''"#${theme.colors.brightblack}"'';
+                frame_color = ''"#${theme.colors.fg}"'';
                 timeout = 5;
             };
             urgency_critical = {
-                background  = ''"#${theme.colors.blue}ff"'';
-                foreground  = ''"#${theme.colors.black}"'';
-                highlight   = ''"#${theme.colors.red}"'';
-                frame_color = ''"#${theme.colors.magenta}"'';
+                background  = ''"#${theme.colors.bg}ff"'';
+                foreground  = ''"#${theme.colors.fg}"'';
+                highlight   = ''"#${theme.colors.blue}"'';
+                frame_color = ''"#${theme.colors.brightred}"'';
                 timeout = 0;
             };
         };

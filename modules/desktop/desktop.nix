@@ -23,7 +23,6 @@ in switchSystem system { linux = {
             type = types.nullOr (types.enum [ "picom" ]);
             default = "picom";
         };
-        # TODO: add assertion requiring wm & desktop.enable
     };
 
     config = mkIf desktop.enable (mkMerge [
@@ -35,7 +34,6 @@ in switchSystem system { linux = {
                 excludePackages = [ pkgs.dmenu ];
 
                 layout = "us";
-                xkbVariant = ""; # ?
                 autoRepeatDelay = 250;
                 autoRepeatInterval = 20;
                 libinput.enable = true;
@@ -50,14 +48,5 @@ in switchSystem system { linux = {
                 ERRFILE       = "${xdg.state}/X11/xsession-errors";
             };
         }
-
-        (mkIf (desktop.wm == "i3") {
-            services.xserver.windowManager.i3.enable = true;
-        })
-
-        (mkIf (desktop.compositor == "picom") {
-            services.picom.enable = true;
-        })
-
     ]);
 }; }

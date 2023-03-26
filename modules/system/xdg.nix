@@ -14,7 +14,7 @@ in {
         cache   = mkPath "${user.home}/.cache";
         config  = mkPath "${user.home}/.config";
         local   = mkPath "${user.home}/.local";
-        data    = mkPath "${xdg.local}/store";
+        data    = mkPath "${xdg.local}/share";
         state   = mkPath "${xdg.local}/state";
         bin     = mkPath "${xdg.local}/bin";
         runtime = mkPath "/run/user/${toString user.uid}";
