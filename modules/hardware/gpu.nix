@@ -28,7 +28,7 @@ in switchSystem system { linux = {
                 open = true;
             };
         })
-        ({
+        (mkIf (gpu != null) {
             hardware.opengl.enable = true;
             hardware.opengl.extraPackages = with pkgs; [
                 vaapiVdpau

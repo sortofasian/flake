@@ -1,5 +1,6 @@
 { pkgs, lib, config, system, ... }: let
     inherit (lib)
+        mkIf
         types
         mkMerge
         mkOption;
@@ -13,5 +14,5 @@ in switchSystem system { linux = {
         default = null;
     };
 
-    config = mkMerge [{ hardware.cpu.${cpu}.updateMicrocode = true; }];
+    config = mkMerge [(mkIf (cpu != null) { hardware.cpu.${cpu}.updateMicrocode = true; })];
 }; }

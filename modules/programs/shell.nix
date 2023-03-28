@@ -12,7 +12,7 @@
 in {
     options.custom.shell.enable = mkOption {
         type = types.bool;
-        default = false;
+        default = true;
     };
 
     config = mkIf shell.enable (mkMerge [
