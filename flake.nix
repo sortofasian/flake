@@ -18,7 +18,7 @@
         aagl.inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    outputs = { self, nixpkgs, ... }@inputs: let
+    outputs = { nixpkgs, ... }@inputs: let
         lib = nixpkgs.lib.extend (final: _: {
             custom = import ./lib { inherit inputs; lib = final; };
         });
@@ -43,10 +43,5 @@
             (system.x86_64-linux.mkHostIso "Pestilence")
             (system.x86_64-linux.mkHostIso "Death")
         ];
-
-        templates.shell = {
-            path = ./lib/shellTemplate;
-            description = "Pinned shell";
-        };
     };
 }
