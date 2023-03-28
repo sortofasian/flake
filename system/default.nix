@@ -23,7 +23,7 @@ in systemSpecificLib ({ system, pkgs, ...}: {
             };
         in { ${name} = configSystem {
             inherit system;
-            specialArgs = { inherit lib inputs system; };
+            specialArgs = { inherit lib name inputs system; };
             modules = [
                 ../modules
                 { networking.hostName = name; }

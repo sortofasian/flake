@@ -13,4 +13,7 @@ in {
     "pam-yubikeys.age".publicKeys   = allSystems;
     "ssh-yubikey-5.age".publicKeys  = allSystems;
     "ssh-yubikey-5c.age".publicKeys = allSystems;
+
+    "vpn-privkey.age".publicKeys  = [ Pestilence ] ++ masterKeys;
+    "vpn-password.age".publicKeys = [ Pestilence ] ++ masterKeys;
 }

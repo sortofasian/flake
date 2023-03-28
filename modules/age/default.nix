@@ -14,9 +14,10 @@
         agenix;
     ageConfig = config.custom.age;
 
-    inherit (import ./secrets.nix config.custom.user)
-        secrets
-        masterIdentities;
+    masterIdentities = [
+        ./age-yubikey-5
+        ./age-yubikey-5c
+    ];
 in {
     options.custom.age = {
         enable = mkOption {
@@ -26,11 +27,10 @@ in {
         systemIdentity = {
             file = mkOption {
                 type = types.path;
-                description = "Path to an encrypted age key";
             };
             dest = mkOption {
-                type = types.path; default = "/etc/system-age-key";
-                description = "Where the decrypted key is installed";
+                type = types.path;
+                default = "/etc/system-age-key";
             };
         };
     };
@@ -38,10 +38,9 @@ in {
     imports = (switchSystem system {
         linux = [agenix.nixosModules.default];
         darwin = [agenix.darwinModules.default];
-    });
+    }) ++ [ ./secrets.nix ];
 
     config = mkIf ageConfig.enable (mkMerge [
-        { age.secrets = secrets; }
         { age.identityPaths = [ ageConfig.systemIdentity.dest ]; }
         (switchSystem system (let recipientInstall = ''
             echo "Recipient key is missing, running install script"
