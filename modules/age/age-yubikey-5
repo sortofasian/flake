@@ -1,0 +1,7 @@
+#       Serial: 19830800, Slot: 1
+#         Name: Age
+#      Created: Sun, 26 Mar 2023 19:34:39 +0000
+#   PIN policy: Never  (A PIN is NOT required to decrypt)
+# Touch policy: Always (A physical touch is required for every decryption)
+#    Recipient: age1yubikey1qfxcffqt85khf3s0ysdw8cuqxqll777hj3uv87edglnff09yxxmqwwrtcvt
+AGE-PLUGIN-YUBIKEY-1ZZVZUQVZ8Y3X0UCHHFDPD
