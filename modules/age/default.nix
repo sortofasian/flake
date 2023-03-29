@@ -17,6 +17,7 @@
     masterIdentities = [
         ./age-yubikey-5
         ./age-yubikey-5c
+        "/backup-identity"
     ];
 in {
     options.custom.age = {
@@ -36,18 +37,20 @@ in {
     };
 
     imports = (switchSystem system {
-        linux = [agenix.nixosModules.default];
-        darwin = [agenix.darwinModules.default];
+        linux = [agenix.nixosModules.default ./secrets.nix];
+        darwin = [agenix.darwinModules.default ./secrets.nix];
     }) ++ [ ./secrets.nix ];
 
     config = mkIf ageConfig.enable (mkMerge [
         { age.identityPaths = [ ageConfig.systemIdentity.dest ]; }
         (switchSystem system (let recipientInstall = ''
             echo "Recipient key is missing, running install script"
-            age -d \
-                -i ${concatStringsSep " -i " masterIdentities} \
-                -o ${ageConfig.systemIdentity.dest} \
-                ${ageConfig.systemIdentity.file}
+            for id in ${concatStringsSep " " masterIdentities}; do
+                age -d \
+                    -i $id \
+                    -o ${ageConfig.systemIdentity.dest} \
+                    ${ageConfig.systemIdentity.file}
+            done
             chmod 400 ${ageConfig.systemIdentity.dest}
             chown root ${ageConfig.systemIdentity.dest}
         ''; in {

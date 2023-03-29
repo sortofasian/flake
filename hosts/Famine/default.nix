@@ -2,7 +2,6 @@
 {
     custom = {
         user.name = "charlie";
-        age.systemIdentity.file = ./systemIdentity.age;
         desktop = {
             enable = true;
             wm = "i3";

@@ -2,6 +2,8 @@
     inherit (lib)
         mkIf
         mkMerge;
+    inherit (lib.custom)
+        switch;
     inherit (config.custom)
         age
         user;
@@ -33,4 +35,11 @@ in mkIf age.enable {
             };
         })
     ];
+
+    custom.age.systemIdentity.file = switch name (c: v: c==v) {
+        "War"        = ./secrets/key-war.age;
+        "Death"      = ./secrets/key-death.age;
+        "Famine"     = ./secrets/key-famine.age;
+        "Pestilence" = ./secrets/key-pestilence.age;
+    };
 }
