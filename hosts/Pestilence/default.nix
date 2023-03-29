@@ -19,16 +19,16 @@
             "8.8.8.8"
         ];
         interfaces = let
-        defaultIp.ipv4.address = "10.10.1.100";
-        defaultIp.ipv4.prefixLength = 24;
+            defaultIp.address = "10.10.1.100";
+            defaultIp.prefixLength = 24;
         in {
-            enp7s0.addresses = [ defaultIp ];
-            enp8s0.addresses = [ defaultIp ];
-            enp12s0f0.addresses = [ defaultIp ];
-            enp12s0f1.addresses = [ defaultIp ];
+            enp7s0.ipv4.addresses = [ defaultIp ];
+            enp8s0.ipv4.addresses = [ defaultIp ];
+            enp12s0f0.ipv4.addresses = [ defaultIp ];
+            enp12s0f1.ipv4.addresses = [ defaultIp ];
 
-            enp15s0f0.addresses = [ defaultIp ];
-            enp15s0f1.addresses = [ defaultIp ];
+            enp15s0f0.ipv4.addresses = [ defaultIp ];
+            enp15s0f1.ipv4.addresses = [ defaultIp ];
         };
     };
 
