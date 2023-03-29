@@ -21,6 +21,11 @@
         '';
     };
 in {
+    networking.firewall = {
+        allowedTCPPorts = [ 994 ];
+        allowedUDPPorts = [ 994 ];
+    };
+
     systemd.services.shadowsocks = let
         ckconfig = {
             ProxyBook.shadowsocks = ["tcp" "127.0.0.1"];
