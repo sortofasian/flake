@@ -2,7 +2,8 @@
     inherit (lib.custom)
         systemSpecificLib;
 in {
-    systemLib = systemSpecificLib (args: {}
+    system = systemSpecificLib (args: {}
         // (import ./copyDir.nix args)
+        // (import ./mkHost.nix args)
     );
 }
