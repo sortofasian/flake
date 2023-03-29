@@ -17,7 +17,6 @@ in {
 
     config = mkIf shell.enable (mkMerge [
         {
-            programs.command-not-found.enable = false;
             programs.nix-index.enable = true;
             programs.fish = {
                 enable = true;
@@ -53,22 +52,27 @@ in {
                     + "--time modified";
             };
         }
-        (switchSystem system { linux = {}; darwin = {
-            security.pam.enableSudoTouchIdAuth = true;
-            environment.shells = [ pkgs.fish ];
-            environment.loginShell = pkgs.fish;
-            programs.fish = {
-                babelfishPackage = pkgs.babelfish;
-                promptInit = ''
-                    fish_add_path --prepend --global \
-                        "$HOME/.nix-profile/bin" \
-                        /nix/var/nix/profiles/default/bin \
-                        /run/current-system/sw/bin
-
-                    any-nix-shell fish | source
-                    starship init fish | source
-                '';
+        (switchSystem system {
+            linux = {
+                programs.command-not-found.enable = false;
             };
-        }; })
+            darwin = {
+                security.pam.enableSudoTouchIdAuth = true;
+                environment.shells = [ pkgs.fish ];
+                environment.loginShell = pkgs.fish;
+                programs.fish = {
+                    babelfishPackage = pkgs.babelfish;
+                    promptInit = ''
+                        fish_add_path --prepend --global \
+                            "$HOME/.nix-profile/bin" \
+                            /nix/var/nix/profiles/default/bin \
+                            /run/current-system/sw/bin
+
+                        any-nix-shell fish | source
+                        starship init fish | source
+                    '';
+                };
+            };
+        })
     ]);
 }

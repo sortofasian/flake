@@ -9,6 +9,8 @@
         writeText;
     inherit (config.age)
         secrets;
+    inherit (config.custom)
+        age;
 
     systemConfig = {
         url."git@github.com:".insteadOf = [
@@ -27,9 +29,10 @@
     userConfig = {
         user.name = "Charlie Syvertsen";
         user.email = "charliesyvertsen06@icloud.com";
+    } // (if age.enable then {
         alias.yk5 = "config user.signingkey ${secrets.ssh-yubikey-5.path}";
         alias.yk5c = "config user.signingkey ${secrets.ssh-yubikey-5c.path}";
-    };
+    } else {});
 in mkMerge [
     (switchSystem system {
         linux.programs.git = {
