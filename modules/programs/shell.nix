@@ -1,21 +1,12 @@
 { pkgs, lib, config, system, ... }: let
     inherit (lib)
-        mkIf
-        types
-        mkMerge
-        mkOption;
+        mkMerge;
     inherit (lib.custom)
         switchSystem;
     inherit (config.custom)
-        user
-        shell;
+        user;
 in {
-    options.custom.shell.enable = mkOption {
-        type = types.bool;
-        default = true;
-    };
-
-    config = mkIf shell.enable (mkMerge [
+    config = mkMerge [
         {
             programs.nix-index.enable = true;
             programs.fish = {
@@ -74,5 +65,5 @@ in {
                 };
             };
         })
-    ]);
+    ];
 }

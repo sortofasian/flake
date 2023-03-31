@@ -8,5 +8,6 @@
     custom = {
         user.name = "charlie";
         age.enable = false;
+        direnv.enable = true;
     };
 }

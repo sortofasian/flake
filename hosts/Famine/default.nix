@@ -24,7 +24,7 @@
         genshin.enable = true;
         # git.enable = true;
         # rofi.enable = true;
-        shell.enable = true;
+        direnv.enable = true;
         star-citizen.enable = true;
         networkmanager.enable = true;
         audio.enable = true;
