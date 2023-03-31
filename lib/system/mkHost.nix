@@ -105,7 +105,7 @@ in {
                                     $parted mkpart nixos ext4 512MB 100%;
                                 fi
 
-                                mkfs.fat -F32 -n boot "$loop"p1
+                                mkfs.fat -F32 -n BOOT "$loop"p1
                                 mkfs.ext4 -F -L nixos "$loop"p2
 
                                 losetup -d $loop

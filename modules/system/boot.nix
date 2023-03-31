@@ -23,7 +23,7 @@ in switchSystem system { linux = {
 
     config = {
         fileSystems."/boot/efi" = mkIf (bootMode == "uefi") (mkDefault {
-            device = "/dev/disk/by-label/boot";
+            device = "/dev/disk/by-label/BOOT";
             fsType = "vfat";
         });
         fileSystems."/" = mkDefault {
