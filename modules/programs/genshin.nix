@@ -19,6 +19,7 @@ in switchSystem system {
 
     linux.config = mkIf genshin.enable {
         programs.an-anime-game-launcher.enable = true;
-        nix.settings = aagl.nixConfig;
+        nix.settings.substituters = ["https://ezkea.cachix.org"];
+        nix.settings.trusted-public-keys = ["ezkea.cachix.org-1:ioBmUbJTZIKsHmWWXPe1FSFbeVe+afhfgqgTSNd34eI="];
     };
 }
