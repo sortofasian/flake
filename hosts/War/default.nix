@@ -1,7 +1,6 @@
 {
     custom = {
         neovim.enable = true;
-        shell.enable = true;
         user.name = "charlie";
         user.home = "/Users/charlie";
     };

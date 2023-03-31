@@ -1,17 +1,19 @@
-{ lib, pkgs, config, ... }: let
+{ lib, pkgs, config, system, ... }: let
     inherit (lib)
         mkIf
         types
         mkOption;
+    inherit (lib.custom)
+        switchSystem;
     inherit (config.custom)
         gpu;
 
-in {
-    options.custom.cuda.enable = mkOption {
+in switchSystem system {
+    linux.options.custom.cuda.enable = mkOption {
         type = types.bool;
         default = false;
     };
-    config = mkIf (gpu == "nvidia") {
+    linux.config = mkIf (gpu == "nvidia") {
         nix.settings = {
             substituters = [ "https://cuda-maintainers.cachix.org" ];
             trusted-public-keys = [(
