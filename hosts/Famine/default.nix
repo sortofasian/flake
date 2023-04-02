@@ -47,6 +47,7 @@
         blender
         obsidian
         unityhub
+        prismlauncher
     ];
 
     qt = {
