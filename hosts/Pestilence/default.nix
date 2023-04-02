@@ -34,8 +34,12 @@
 
 
     imports = [
-        ./sshd.nix
         ./fail2ban.nix
+
+        ./sshd.nix
         ./shadowsocks.nix
+
+        ./atm8.nix
+        ./velocity.nix
     ];
 }
