@@ -13,7 +13,8 @@
     in pkgs.fetchurl {
         sha256 = "e75becc4bf9f9426d9daa6b801eb6cb46025c98bc11e4f99ad1ddedf9e3fd0f3";
         url = "https://api.papermc.io/v2/projects/velocity"
-        + "/versions/${version}/builds/${build}/velocity-${version}-${build}.jar";
+        + "/versions/${version}/builds/${build}"
+        + "/downloads/velocity-${version}-${build}.jar";
     };
 
     velocityConfig = pkgs.writeText "velocity.toml" ''
