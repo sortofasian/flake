@@ -58,14 +58,14 @@ in switchSystem system {
                 foreground  = ''"#${theme.colors.fg}"'';
                 highlight   = ''"#${theme.colors.blue}"'';
                 frame_color = ''"#${theme.colors.fg}"'';
-                timeout = 3;
+                timeout = 5;
             };
             urgency_normal = {
                 background  = ''"#${theme.colors.bg}"'';
                 foreground  = ''"#${theme.colors.fg}"'';
                 highlight   = ''"#${theme.colors.blue}"'';
                 frame_color = ''"#${theme.colors.fg}"'';
-                timeout = 5;
+                timeout = 10;
             };
             urgency_critical = {
                 background  = ''"#${theme.colors.bg}ff"'';

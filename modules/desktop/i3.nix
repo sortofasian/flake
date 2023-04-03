@@ -80,7 +80,8 @@ in mkIf (desktop.wm == "i3") (switchSystem system {
         bindsym Shift+XF86AudioPlay exec ${playerctl}/bin/playerctl shuffle toggle
 
         bindsym $mod+d exec dunstctl close
-        bindsym $mod+o exec dunstctl history-pop; dunstctl action
+        bindsym $mod+Shift+d exec dunstctl history-pop
+        bindsym $mod+o exec dunstctl action
 
         bindsym $mod+q exec $kill
 
