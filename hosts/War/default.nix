@@ -1,6 +1,7 @@
 {
     custom = {
         neovim.enable = true;
+        direnv.enable = true;
         user.name = "charlie";
         user.home = "/Users/charlie";
     };
