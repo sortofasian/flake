@@ -32,9 +32,9 @@ in mkIf (desktop.wm == "i3") (switchSystem system {
         exec --no-startup-id udiskie --tray
         exec --no-startup-id discord --start-minimized
         exec --no-startup-id ${pkgs.feh}/bin/feh ~/Images/Wallpapers --no-fehbg --bg-max --randomize
-        exec_always --no-startup-id autotiling
+        exec_always --no-startup-id ${pkgs.autotiling}/bin/autotiling
         exec_always xset dpms 0 0 300
-        exec_always xss-lock --transfer-sleep-lock -- i3lock -n
+        exec_always ${pkgs.xss-lock}/bin/xss-lock --transfer-sleep-lock -- i3lock -n
 
         gaps inner ${toString (theme.gapSize * 3)}
         font pango:sans 10
@@ -72,15 +72,15 @@ in mkIf (desktop.wm == "i3") (switchSystem system {
         && $refresh_i3status
         bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5% \
         && $refresh_i3status
-        bindsym Shift+XF86AudioRaiseVolume exec playerctl volume 0.05+
-        bindsym Shift+XF86AudioLowerVolume exec playerctl volume 0.05-
-        bindsym XF86AudioPlay exec playerctl play-pause
-        bindsym XF86AudioNext exec playerctl next
-        bindsym XF86AudioPrev exec playerctl previous
-        bindsym Shift+XF86AudioPlay exec playerctl shuffle toggle
+        bindsym Shift+XF86AudioRaiseVolume exec ${playerctl}/bin/playerctl volume 0.05+
+        bindsym Shift+XF86AudioLowerVolume exec ${playerctl}/bin/playerctl volume 0.05-
+        bindsym XF86AudioPlay exec ${playerctl}/bin/playerctl play-pause
+        bindsym XF86AudioNext exec ${playerctl}/bin/playerctl next
+        bindsym XF86AudioPrev exec ${playerctl}/bin/playerctl previous
+        bindsym Shift+XF86AudioPlay exec ${playerctl}/bin/playerctl shuffle toggle
 
         bindsym $mod+d exec dunstctl close
-        bindsym $mod+o exec dunstctl action
+        bindsym $mod+o exec dunstctl history-pop; dunstctl action
 
         bindsym $mod+q exec $kill
 
