@@ -2,8 +2,9 @@
     inherit (lib)
         types
         mkOption;
-    inherit (config.custom.mc)
-        forwardingSecret;
+    inherit (config.custom)
+        mc
+        ports;
 
     velocityDir = "/srv/velocity";
 
@@ -19,7 +20,7 @@
 
     velocityConfig = pkgs.writeText "velocity.toml" ''
         config-version = "2.6"
-        bind = "0.0.0.0:25565"
+        bind = "127.0.0.1:${builtins.toString ports.velocity}"
         motd = "<#ffb8f0>sortofasian.io"
         show-max-players = 0
 
@@ -29,13 +30,13 @@
         kick-existing-players = false
 
         player-info-forwarding-mode = "modern"
-        forwarding-secret-file = "${pkgs.writeText "forwarding.secret" forwardingSecret}"
+        forwarding-secret-file = "${pkgs.writeText "forwarding.secret" mc.forwardingSecret}"
         announce-forge = true
         ping-passthrough = "disabled"
 
         [servers]
-        lobby = "127.0.0.1:30000"
-        atm8  = "127.0.0.1:30001"
+        lobby = "127.0.0.1:${builtins.toString ports.lobby}"
+        atm8  = "127.0.0.1:${builtins.toString ports.atm8}"
 
         try = [ "lobby" ]
 
@@ -48,7 +49,7 @@
         login-ratelimit = 3000
         connection-timeout = 5000
         read-timeout = 30000
-        haproxy-protocol = false
+        haproxy-protocol = true
         tcp-fast-open = true
         bungee-plugin-message-channel = true
         show-ping-requests = true
@@ -67,7 +68,6 @@
         sha256 = "sha256-atvcl6fVQa1Ormn4JThNEWBL9RRXv5z1wEcPPrlBtmQ=";
     };
 in {
-    config.networking.firewall.allowedTCPPorts = [ 25565 ];
     config.systemd = {
         sockets.velocity = {
             bindsTo = ["velocity.service"];

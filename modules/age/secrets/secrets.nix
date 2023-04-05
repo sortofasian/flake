@@ -15,11 +15,12 @@ in {
     "ssh-yubikey-5.age".publicKeys  = allSystems;
     "ssh-yubikey-5c.age".publicKeys = allSystems;
 
-    "key-pestilence.age".publicKeys   = Pestilence;
-    "vpn-privkey.age".publicKeys  = Pestilence;
-    "vpn-password.age".publicKeys = Pestilence;
+    "key-pestilence.age".publicKeys  = Pestilence;
+    "vpn-privkey.age".publicKeys     = Pestilence;
+    "vpn-password.age".publicKeys    = Pestilence;
+    "acme-cloudflare.age".publicKeys = Pestilence;
 
-    "key-war.age".publicKeys = War;
-    "key-death.age".publicKeys = Death;
+    "key-war.age".publicKeys    = War;
+    "key-death.age".publicKeys  = Death;
     "key-famine.age".publicKeys = Famine;
 }

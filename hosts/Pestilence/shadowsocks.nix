@@ -5,6 +5,8 @@
         writeText;
     inherit (config.age)
         secrets;
+    inherit (config.custom)
+        ports;
     cloak = pkgs.stdenv.mkDerivation rec {
         name = "cloak"; version = "2.6.1";
         src = pkgs.fetchurl {
@@ -21,21 +23,16 @@
         '';
     };
 in {
-    networking.firewall = {
-        allowedTCPPorts = [ 994 ];
-        allowedUDPPorts = [ 994 ];
-    };
-
     systemd.services.shadowsocks = let
         ckconfig = {
             ProxyBook.shadowsocks = ["tcp" "127.0.0.1"];
-            BindAddr = [":994"];
+            BindAddr = [":${builtins.toString ports.shadowsocks}"];
             RedirAddr = "204.79.197.200:443";
             BypassUID = ["AAAAAAAAAAAAAAAAAAAAAA=="];
         };
         ssconfig = {
             server = "0.0.0.0";
-            server_port = 994;
+            server_port = ports.shadowsocks;
             method = "none";
             mode = "tcp_and_udp";
             nameserver = "1.1.1.1";

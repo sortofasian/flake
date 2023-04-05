@@ -1,6 +1,7 @@
 { lib, pkgs, config, ... }: let
-    inherit (config.custom.mc)
-        forwardingSecret;
+    inherit (config.custom)
+        mc
+        ports;
     dataDir = "/srv/atm8";
 
     atm8 = fetchFromCurseforge {
@@ -28,14 +29,14 @@
         max-world-size=29999984
         online-mode=false
         op-permission-level=4
-        server-port=30001
+        server-port=${builtins.toString ports.atm8}
         sync-chunk-writes=true
         use-native-transport=true
     '';
 
     forwarding = pkgs.writeText "pcf-common.toml" ''
         [modernForwarding]
-            forwardingSecret = "${forwardingSecret}"
+            forwardingSecret = "${mc.forwardingSecret}"
     '';
 
     fetchFromCurseforge = { filename, id, sha256 }: let args =  {

@@ -34,12 +34,15 @@
 
 
     imports = [
+        ./ports.nix
+        ./ssl.nix
+        ./haproxy.nix
         ./fail2ban.nix
 
-        ./sshd.nix
-        ./shadowsocks.nix
-
         ./atm8.nix
+        ./sshd.nix
         ./velocity.nix
+        ./shadowsocks.nix
+        ./vaultwarden.nix
     ];
 }
