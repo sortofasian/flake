@@ -48,7 +48,7 @@
             + "/${filename}";
             inherit sha256;
         };
-    in (if lib.hasSuffix ".zip" filename 
+    in (if lib.hasSuffix ".zip" filename
         then pkgs.fetchzip args
         else pkgs.fetchurl args
     );
@@ -56,8 +56,8 @@ in {
     config.users.users.atm8 = {
         isSystemUser = true;
         group = "minecraft";
-	home = dataDir;
-	createHome = true;
+        home = dataDir;
+        createHome = true;
     };
     config.systemd = {
         sockets.atm8 = {
@@ -74,27 +74,29 @@ in {
             requires    = [ "atm8.socket" ];
             after       = [ "network.target" "atm8.socket" ];
 
-            path = [pkgs.jdk17 pkgs.curl];
+            path = with pkgs; [jdk17 curl gawk];
 
             script = ''
                 mkdir -p ${dataDir}/config
                 mkdir -p ${dataDir}/mods
 
                 cp -nR ${atm8}/* ${dataDir}/
+                find ${dataDir}/ -type f -exec chmod 644 {} \;
+                find ${dataDir}/ -type d -exec chmod 755 {} \;
                 chmod +x ${dataDir}/startserver.sh
 
-                ln -sf ${pcf} ${dataDir}/mods/
+                cp -f ${pcf} ${dataDir}/mods/
 
                 echo "eula=true" > ${dataDir}/eula.txt
                 cp -f ${forwarding} ${dataDir}/config/pcf-common.toml
                 ln -sf ${serverProperties} ${dataDir}/server.properties
 
-	    	${dataDir}/startserver.sh
-	    '';
+            ${dataDir}/startserver.sh
+       '';
 
             serviceConfig = {
                 User = "atm8";
-		Group = "minecraft";
+                Group = "minecraft";
 
                 Restart   = "always";
                 WorkingDirectory = "${dataDir}";
