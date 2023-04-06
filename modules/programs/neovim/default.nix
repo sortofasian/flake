@@ -28,7 +28,10 @@ let
                     builtins.readFile f
             else "")
             # get all files in the config dir
-            (filesystem.listFilesRecursive ./config);
+            ((filesystem.listFilesRecursive ./config/general)
+            ++ (if neovimCfg.dev
+                then filesystem.listFilesRecursive ./config/dev
+            else []));
 
         configure.packages.neovimPlugins.start = with pkgs.vimPlugins; [
             plenary-nvim

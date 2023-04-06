@@ -9,14 +9,15 @@
         enable-command-block=true
         online-mode=false
         server-port=${builtins.toString ports.bbb}
+        spawn-protection=0
     '';
 
     paperGlobal = pkgs.writeText "paper-global.yml" (lib.generators.toYAML {} {
-    	proxies.velocity = {
-		enabled = true;
-		online-mode = true;
-		secret = mc.forwardingSecret;
-	};
+        proxies.velocity = {
+            enabled = true;
+            online-mode = true;
+            secret = mc.forwardingSecret;
+        };
     });
 in {
     config.users.users.bbb = {
