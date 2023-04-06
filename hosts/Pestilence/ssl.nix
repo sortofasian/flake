@@ -17,24 +17,27 @@ in {
                 -m charliesyvertsen06@icloud.com \
                 -d sortofasian.io -d *.sortofasian.io \
                 --dns cloudflare \
-                --path /srv \
+                --path /srv/ssl \
                 --filename sortofasian.io --pem \
         '';
+	unitConfig.After = "network-online.target";
         serviceConfig = {
             Type = "oneshot";
-            After = "network-online.target";
-            EnvironmentFile = secrets.acme-cloudflare;
+            EnvironmentFile = secrets.acme-cloudflare.path;
+	    User = "haproxy";
+	    Group = "root";
         };
     in {
         "lego-register" = {
             script = "${lego} run";
-            serviceConfig = serviceConfig
-            // { ConditionPathExists = "!/srv/.lego/accounts/*/charliesyvertsen06@icloud.com"; };
+            inherit serviceConfig;
+            unitConfig = unitConfig
+            // {ConditionPathExists = "!/srv/ssl/accounts/*/charliesyvertsen06@icloud.com";};
         };
         "lego" = {
             script = "${lego} renew";
-            requires = [ "lego.register.service" ];
-            inherit serviceConfig;
+            requires = [ "lego-register.service" ];
+            inherit serviceConfig unitConfig;
         };
     };
 }

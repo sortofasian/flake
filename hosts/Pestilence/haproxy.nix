@@ -11,8 +11,8 @@ in {
             ssl-default-server-ciphersuites TLS_AES_128_GCM_SHA256:TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256
             ssl-default-server-options no-sslv3 no-tlsv10 no-tlsv11 no-tlsv12 no-tls-tickets
 
-            ca-base /srv/.lego/certificates
-            crt-base /srv/.lego/certificates
+            ca-base /srv/ssl/certificates
+            crt-base /srv/ssl/certificates
 
         frontend http
             mode http
@@ -28,16 +28,6 @@ in {
             bind :22
             default_backend ssh
 
-        frontend minecraft
-            mode tcp
-            bind :25565
-            default_backend velocity
-
-        frontend shadowsocks
-            mode tcp
-            bind :994
-            default_backend shadowsocks
-
         backend nginx
             mode http
             server main 127.0.0.1:${builtins.toString ports.nginx} check
@@ -47,22 +37,11 @@ in {
         backend ssh
             mode tcp
             server main 127.0.0.1:${builtins.toString ports.sshd}
-
-        backend shadowsocks
-            mode tcp
-            server main 127.0.0.1:${builtins.toString ports.shadowsocks} check
-        backend velocity
-            mode tcp
-            server main 127.0.0.1:${builtins.toString ports.velocity} check send-proxy
     '';
     networking.firewall.allowedTCPPorts = [
         22
         80
         443
         994
-    ];
-    networking.firewall.allowedUDPPorts = [
-        994
-        25565
     ];
 }

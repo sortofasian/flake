@@ -39,6 +39,7 @@
         ./haproxy.nix
         ./fail2ban.nix
 
+        ./bbb.nix
         ./atm8.nix
         ./sshd.nix
         ./velocity.nix

@@ -6,7 +6,7 @@
         mc
         ports;
 
-    velocityDir = "/srv/velocity";
+    velocityDir = "/srv/minecraft/velocity";
 
     velocity = let
         version = "3.2.0-SNAPSHOT";
@@ -20,7 +20,7 @@
 
     velocityConfig = pkgs.writeText "velocity.toml" ''
         config-version = "2.6"
-        bind = "127.0.0.1:${builtins.toString ports.velocity}"
+        bind = "0.0.0.0:${builtins.toString ports.velocity}"
         motd = "<#ffb8f0>sortofasian.io"
         show-max-players = 0
 
@@ -37,11 +37,13 @@
         [servers]
         lobby = "127.0.0.1:${builtins.toString ports.lobby}"
         atm8  = "127.0.0.1:${builtins.toString ports.atm8}"
+	bbb   = "127.0.0.1:${builtins.toString ports.bbb}"
 
         try = [ "lobby" ]
 
         [forced-hosts]
         "atm8.sortofasian.io" = [ "atm8" ]
+	"bbb.sortofasian.io" = [ "bbb" ]
 
         [advanced]
         compression-threshold = 256
@@ -49,7 +51,7 @@
         login-ratelimit = 3000
         connection-timeout = 5000
         read-timeout = 30000
-        haproxy-protocol = true
+        haproxy-protocol = false
         tcp-fast-open = true
         bungee-plugin-message-channel = true
         show-ping-requests = true
@@ -68,6 +70,15 @@
         sha256 = "sha256-atvcl6fVQa1Ormn4JThNEWBL9RRXv5z1wEcPPrlBtmQ=";
     };
 in {
+    config.users.groups.minecraft = {
+    	name = "minecraft";
+    };
+    config.users.users.velocity = {
+        isSystemUser = true;
+        group = "minecraft";
+	home = velocityDir;
+	createHome = true;
+    };
     config.systemd = {
         sockets.velocity = {
             bindsTo = ["velocity.service"];
@@ -83,13 +94,11 @@ in {
             requires    = [ "velocity.socket" ];
             after       = [ "network.target" "velocity.socket" ];
 
-            preStart = ''
+            script = ''
                 mkdir -p ${velocityDir}/plugins
                 ln -sf ${ambassador} ${velocityDir}/plugins/
                 ln -sf ${velocityConfig} ${velocityDir}/velocity.toml
-            '';
 
-            script = ''
                 ${pkgs.jre}/bin/java \
                     -Xms512M -Xmx512M \
                     -XX:+UseG1GC \
@@ -102,6 +111,8 @@ in {
             '';
 
             serviceConfig = {
+	    	User = "velocity";
+		Group = "minecraft";
                 Restart   = "always";
                 WorkingDirectory = "${velocityDir}";
 

@@ -2,7 +2,7 @@
     inherit (config.custom)
         mc
         ports;
-    dataDir = "/srv/atm8";
+    dataDir = "/srv/minecraft/atm8";
 
     atm8 = fetchFromCurseforge {
         filename = "Server-Files-1.0.15.zip";
@@ -53,6 +53,12 @@
         else pkgs.fetchurl args
     );
 in {
+    config.users.users.atm8 = {
+        isSystemUser = true;
+        group = "minecraft";
+	home = dataDir;
+	createHome = true;
+    };
     config.systemd = {
         sockets.atm8 = {
             bindsTo = ["atm8.service"];
@@ -70,7 +76,7 @@ in {
 
             path = [pkgs.jdk17 pkgs.curl];
 
-            preStart = ''
+            script = ''
                 mkdir -p ${dataDir}/config
                 mkdir -p ${dataDir}/mods
 
@@ -82,11 +88,14 @@ in {
                 echo "eula=true" > ${dataDir}/eula.txt
                 cp -f ${forwarding} ${dataDir}/config/pcf-common.toml
                 ln -sf ${serverProperties} ${dataDir}/server.properties
-            '';
 
-            script = "${dataDir}/startserver.sh";
+	    	${dataDir}/startserver.sh
+	    '';
 
             serviceConfig = {
+                User = "atm8";
+		Group = "minecraft";
+
                 Restart   = "always";
                 WorkingDirectory = "${dataDir}";
 
