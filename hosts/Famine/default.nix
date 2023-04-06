@@ -19,6 +19,7 @@
         cuda.enable = true;
 
         neovim.enable = true;
+        neovim.dev = true;
         # alacritty.enable = true;
         dunst.enable = true;
         genshin.enable = true;
@@ -35,7 +36,7 @@
 
     # Remnants of old config
 
-    users.users.charlie.packages = with pkgs; [
+    environment.systemPackages = with pkgs; [
         orchis-theme
         capitaine-cursors
         lxappearance
@@ -46,9 +47,41 @@
         firefox
         blender
         obsidian
-        unityhub
         prismlauncher
+
+        unityhub
+        jdk8
+        (
+            (callPackage
+                (import
+                    (pkgs.fetchFromGitHub {
+                        owner = "tadfisher"; repo = "android-nixpkgs";
+                        rev = "6e695622737d6068f4f6a3bfbb9a87ee738b47ab";
+                        sha256 = "sha256-OCxvI6rxfHS4FpfXu6YDfO9FTFiz4E6iDk6pGvhnvas=";
+                    })
+                )
+            { channel = "stable"; })
+            .sdk (sdkPkgs: with sdkPkgs; [
+                cmdline-tools-latest
+                build-tools-33-0-2
+                platform-tools
+            ])
+        )
+        (vscode-with-extensions.override {
+            vscodeExtensions = with vscode-extensions; [
+                vscodevim.vim
+                ms-dotnettools.csharp
+            ]++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
+                {
+                    name = "tokyo-hack";
+                    publisher = "ajshortt";
+                    version = "0.3.2";
+                    sha256 = "sha256-++ue0yAd/rnljsNPf++vsptoVxsKqyEgPVNDGWsA69o=";
+                }
+            ];
+        })
     ];
+    hardware.steam-hardware.enable = true;
 
     qt = {
         enable = true;

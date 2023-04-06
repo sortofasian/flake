@@ -7,6 +7,8 @@ let
 
     inherit (pkgs.vimUtils) buildVimPlugin;
 
+    neovimCfg = config.custom.neovim;
+
     nvim-transparent = buildVimPlugin {
         name = "nvim-transparent";
         src = pkgs.fetchFromGitHub {
@@ -32,24 +34,28 @@ let
             plenary-nvim
 
             alpha-nvim tokyonight-nvim neoformat
-            nvim-lspconfig nvim-treesitter.withAllGrammars
+            nvim-treesitter.withAllGrammars
 
             telescope-nvim telescope-fzf-native-nvim
             telescope-file-browser-nvim
 
+            gitsigns-nvim lualine-nvim
+            nvim-highlight-colors trouble-nvim nvim-web-devicons
+            nvim-transparent
+        ] ++ (if neovimCfg.dev then [
+            nvim-lspconfig lsp-status-nvim
             luasnip nvim-cmp cmp-path cmp-emoji cmp_luasnip
             cmp-nvim-lsp lspkind-nvim rust-tools-nvim
             #nvim-jdtls
-
-            gitsigns-nvim lualine-nvim lsp-status-nvim
-            nvim-highlight-colors trouble-nvim nvim-web-devicons
-        ] ++ [
-            nvim-transparent
-        ];
+        ] else []);
     });
 in {
     options.custom.neovim = {
         enable = lib.mkOption {
+            type = lib.types.bool;
+            default = false;
+        };
+        dev = lib.mkOption {
             type = lib.types.bool;
             default = false;
         };
@@ -60,27 +66,24 @@ in {
             paths = [ neovim ];
 
             nvimpath = lib.strings.makeBinPath (with pkgs; [
-            nil taplo clang-tools rust-analyzer jdt-language-server
-            java-language-server lua-language-server
-            ripgrep fd
-            ] ++ (if pkgs.stdenv.isLinux
-            then [ xclip ] else [])
-            ++ (with pkgs.nodePackages; [
-            pyright vim-language-server bash-language-server
-            vscode-langservers-extracted dockerfile-language-server-nodejs
-            yaml-language-server svelte-language-server typescript-language-server
+                ripgrep fd
+            ] ++ (if neovimCfg.dev then with pkgs; [
+                nil taplo clang-tools rust-analyzer jdt-language-server
+                java-language-server lua-language-server
+            ] ++ (with pkgs.nodePackages; [
+                pyright vim-language-server bash-language-server
+                vscode-langservers-extracted dockerfile-language-server-nodejs
+                yaml-language-server svelte-language-server typescript-language-server
             ]) ++ [
-            tailwindcss-language-server omnisharp-roslyn
-            prisma-language-server cssmodules-language-server
-            ]);
+                tailwindcss-language-server omnisharp-roslyn
+                prisma-language-server cssmodules-language-server
+            ] else [])
+            ++ (if pkgs.stdenv.isLinux then [ pkgs.xclip ] else []));
 
             buildInputs = [ pkgs.makeWrapper ];
-            postBuild = ''
-            wrapProgram $out/bin/nvim --suffix PATH : $nvimpath
-            '';
+            postBuild = "wrapProgram $out/bin/nvim --suffix PATH : $nvimpath";
         })];
 
-        environment.variables.NEOVIDE_MULTIGRID = "true";
         environment.variables.EDITOR = lib.mkOverride 900 "nvim";
     };
 }

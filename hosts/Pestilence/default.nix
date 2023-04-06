@@ -3,6 +3,7 @@
         user.name = "charlie";
         bootMode = "legacy";
         swapSize = "32G";
+        neovim.enable = true;
     };
 
     users.users.charlie.openssh.authorizedKeys.keys = [
