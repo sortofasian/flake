@@ -12,6 +12,8 @@
         switchSystem;
     inherit (inputs)
         agenix;
+    inherit (config.environment.variables)
+        TERM;
     ageConfig = config.custom.age;
 
     masterIdentities = [
@@ -41,6 +43,7 @@ in {
         darwin = [agenix.darwinModules.default ./secrets.nix];
     }) ++ [ ./secrets.nix ];
 
+    #ERROR: Does not update key when master key is outdated
     config = mkIf ageConfig.enable (mkMerge [
         { age.identityPaths = [ ageConfig.systemIdentity.dest ]; }
         (switchSystem system (let recipientInstall = ''
@@ -75,12 +78,11 @@ in {
             darwin.system.activationScripts.preActivation.text = ''
                 echo "installing recipient age key..."
                 export PATH=${makeBinPath (with pkgs; [
-                    alacritty age age-plugin-yubikey
+                    age age-plugin-yubikey
                 ])}:$PATH
 
                 if [ ! -f ${ageConfig.systemIdentity.dest} ]; then
-                    #TODO: find way to make this terminal agnostic
-                    alacritty -e ${pkgs.writeScript "install-recipient" recipientInstall}
+                    ${TERM} -e ${pkgs.writeScript "install-recipient" recipientInstall}
                 fi
             '';
         }))

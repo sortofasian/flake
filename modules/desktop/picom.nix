@@ -22,6 +22,9 @@ in mkIf (desktop.compositor == "picom") (switchSystem system {
         shadow-exclude  = [
             "window_type = 'dock'"
             "window_type = 'toolbar'"
+            "window_type = 'popup_menu'"
+            "window_type = 'dropdown_menu'"
+            "window_type = 'tooltip'"
         ];
 
         blur-background       = false;#theme.blur.enable;
@@ -30,14 +33,18 @@ in mkIf (desktop.compositor == "picom") (switchSystem system {
         blur-background-frame = true;
         blur-method           = "dual_kawase";
         blur-background-exclude = [
-            "class_g ?= 'xborders'"
-            "class_g ?= 'xborder'"
+            "window_type = 'popup_menu'"
+            "window_type = 'dropdown_menu'"
+            "window_type = 'tooltip'"
         ];
 
         corner-radius = theme.cornerRadius;
         rounded-corners-exclude = [
             "window_type = 'dock'"
             "window_type = 'toolbar'"
+            "window_type = 'popup_menu'"
+            "window_type = 'dropdown_menu'"
+            "window_type = 'tooltip'"
         ];
     };
 })
