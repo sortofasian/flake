@@ -4,6 +4,7 @@
 in {
     environment.systemPackages = [ pkgs.kitty ];
     environment.variables.TERM = "kitty";
+    environment.variables.TERMINAL = "kitty";
     custom.user.configFile."kitty/kitty.conf".text = ''
         font_family Fira Code Medium Nerd Font Complete
         font_size 13.0

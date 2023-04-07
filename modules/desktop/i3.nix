@@ -61,7 +61,7 @@ in mkIf (desktop.wm == "i3") (switchSystem system {
         bindsym $mod+Shift+r restart
         bindsym $mod+Shift+e exec "i3-msg exit"
 
-        bindsym $mod+Return exec alacritty
+        bindsym $mod+Return exec $TERM
         bindsym $mod+space exec rofi -show drun
         bindsym $mod+c exec rofi -show calc
         bindsym $mod+e exec rofi -show emoji

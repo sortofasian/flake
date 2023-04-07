@@ -9,7 +9,6 @@ in switchSystem system {
     }) ];
     linux.custom.user.configFile."rofi/config.rasi".text = ''
         configuration {
-            terminal: "$TERM";
             modes: [ drun, calc, emoji ];
             scroll-method: 0;
             drun-match-fields: [ name, generic, exec ];
