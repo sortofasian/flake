@@ -22,12 +22,11 @@ in switchSystem system { linux = {
             "net.ipv4.neigh.default.gc_thresh3" = 131072;
         };
 
-        networking.extraHosts = '' 
-            # EAC Workaround for Star Citizen
-            127.0.0.1 modules-cdn.eac-prod.on.epicgames.com
-        '';
-
-        users.users.${user.name}.packages = [(pkgs.stdenv.mkDerivation (let
+        users.users.${user.name}.packages = [
+        pkgs.winePackages.stableFull
+        pkgs.winetricks
+        pkgs.protontricks
+        (pkgs.stdenv.mkDerivation (let
             inherit (pkgs)
                 makeWrapper
                 makeDesktopItem
@@ -44,13 +43,13 @@ in switchSystem system { linux = {
                 makeBinPath;
         in rec {
             pname = "lug-helper";
-            version = "v2.5";
+            version = "v2.6.1";
             name = "${pname}-${version}";
             src = fetchFromGitHub {
                 owner = "starcitizen-lug";
                 repo = pname;
                 rev = version;
-                sha256 = "sha256-2ikuPqtClkvnC5dCSsf8Jt0HBKI26WY78kI+1o5w4p8=";
+                sha256 = "sha256-FPvwkUnQrknW46S9SGxdjB2EiYoylAkktza0WC+xFr4=";
             };
 
             desktopItem = makeDesktopItem {
@@ -76,8 +75,8 @@ in switchSystem system { linux = {
 
                 install -Dm755 "$src/lug-logo.png" \
                     "$out/share/pixmaps/$pname.png"
-                install -Dm755 "$src/lug-lutris-install.json" \
-                    "$out/share/$pname/lug-lutris-install.json"
+                install -Dm755 "$src/lutris-sc-install.json" \
+                    "$out/share/$pname/lutris-sc-install.json"
                 install -Dm755 "$desktopItem/share/applications/$pname.desktop" \
                     "$out/share/applications/$pname.desktop"
 
