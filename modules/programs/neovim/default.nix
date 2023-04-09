@@ -34,22 +34,31 @@ let
             else []));
 
         configure.packages.neovimPlugins.start = with pkgs.vimPlugins; [
+            neoformat
+            alpha-nvim
             plenary-nvim
-
-            alpha-nvim tokyonight-nvim neoformat
-            nvim-treesitter.withAllGrammars
-
-            telescope-nvim telescope-fzf-native-nvim
-            telescope-file-browser-nvim
-
-            gitsigns-nvim lualine-nvim
-            nvim-highlight-colors trouble-nvim nvim-web-devicons
+            trouble-nvim
+            nvim-autopairs
+            telescope-nvim
+            nvim-ts-autotag
+            tokyonight-nvim
             nvim-transparent
+            nvim-web-devicons
+            nvim-highlight-colors
+            telescope-fzf-native-nvim
+            gitsigns-nvim lualine-nvim
+            telescope-file-browser-nvim
+            nvim-treesitter.withAllGrammars
         ] ++ (if neovimCfg.dev then [
-            nvim-lspconfig lsp-status-nvim
-            luasnip nvim-cmp cmp-path cmp-emoji cmp_luasnip
-            cmp-nvim-lsp lspkind-nvim rust-tools-nvim
-            #nvim-jdtls
+            luasnip
+            nvim-cmp
+            cmp-path
+            cmp-emoji
+            cmp_luasnip
+            cmp-nvim-lsp
+            lspkind-nvim
+            nvim-lspconfig
+            rust-tools-nvim
         ] else []);
     });
 in {
