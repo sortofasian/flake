@@ -22,6 +22,9 @@ in switchSystem system { linux = {
     };
 
     config = {
+        hardware.enableAllFirmware = true;
+        hardware.enableRedistributableFirmware = true;
+
         fileSystems."/boot/efi" = mkIf (bootMode == "uefi") (mkDefault {
             device = "/dev/disk/by-label/BOOT";
             fsType = "vfat";
