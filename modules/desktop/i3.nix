@@ -31,10 +31,12 @@ in mkIf (desktop.wm == "i3") (switchSystem system {
         exec --no-startup-id blueman-applet
         exec --no-startup-id udiskie --tray
         exec --no-startup-id discord --start-minimized
-        exec --no-startup-id ${pkgs.feh}/bin/feh ~/Images/Wallpapers --no-fehbg --bg-max --randomize
+        exec --no-startup-id ${pkgs.feh}/bin/feh ~/Images/Wallpapers \
+            --no-fehbg --bg-max --randomize
         exec_always --no-startup-id ${pkgs.autotiling}/bin/autotiling
         exec_always xset dpms 0 0 300
-        exec_always ${pkgs.xss-lock}/bin/xss-lock --transfer-sleep-lock -- i3lock -n
+        exec_always ${pkgs.xss-lock}/bin/xss-lock --transfer-sleep-lock --\
+            i3lock -n -c ${theme.colors.bg}
 
         gaps inner ${toString (theme.gapSize * 3)}
         font pango:sans 10
@@ -48,11 +50,16 @@ in mkIf (desktop.wm == "i3") (switchSystem system {
         focus_wrapping no
         focus_on_window_activation focus
     ''
-    + (with theme.colors;     ''#border       bg            text   indicator     child_border
-        client.focused          #${main}      #${main}      #${bg} #${main}      #${main}
-        client.urgent           #${brightred} #${brightred} #${bg} #${brightred} #${brightred}
-        client.focused_inactive #${fg}        #${fg}        #${bg} #${fg}        #${fg}
-        client.unfocused        #${fg}        #${fg}        #${bg} #${fg}        #${fg}
+    + (with theme.colors; ''
+            #border       bg            text   indicator     child_border
+        client.focused \
+            #${main}      #${main}      #${bg} #${main}      #${main}
+        client.urgent \
+            #${brightred} #${brightred} #${bg} #${brightred} #${brightred}
+        client.focused_inactive \
+            #${fg}        #${fg}        #${bg} #${fg}        #${fg}
+        client.unfocused \
+            #${fg}        #${fg}        #${bg} #${fg}        #${fg}
     '')
     + ''
         set $mod Mod4
@@ -61,23 +68,29 @@ in mkIf (desktop.wm == "i3") (switchSystem system {
         bindsym $mod+Shift+r restart
         bindsym $mod+Shift+e exec "i3-msg exit"
 
-        bindsym $mod+Return exec $TERM
+        bindsym $mod+Return exec i3-sensible-terminal
         bindsym $mod+space exec rofi -show drun
         bindsym $mod+c exec rofi -show calc
         bindsym $mod+e exec rofi -show emoji
         bindsym $mod+b exec rofi-bluetooth -show emoji
 
         set $refresh_i3status killall -SIGUSR1 i3status
-        bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5% \
-        && $refresh_i3status
-        bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5% \
-        && $refresh_i3status
-        bindsym Shift+XF86AudioRaiseVolume exec ${playerctl}/bin/playerctl volume 0.05+
-        bindsym Shift+XF86AudioLowerVolume exec ${playerctl}/bin/playerctl volume 0.05-
-        bindsym XF86AudioPlay exec ${playerctl}/bin/playerctl play-pause
-        bindsym XF86AudioNext exec ${playerctl}/bin/playerctl next
-        bindsym XF86AudioPrev exec ${playerctl}/bin/playerctl previous
-        bindsym Shift+XF86AudioPlay exec ${playerctl}/bin/playerctl shuffle toggle
+        bindsym XF86AudioRaiseVolume exec \
+            pactl set-sink-volume @DEFAULT_SINK@ +5% && $refresh_i3status
+        bindsym XF86AudioLowerVolume exec \
+            pactl set-sink-volume @DEFAULT_SINK@ -5% && $refresh_i3status
+        bindsym Shift+XF86AudioRaiseVolume exec \
+            ${playerctl}/bin/playerctl volume 0.05+
+        bindsym Shift+XF86AudioLowerVolume exec \
+            ${playerctl}/bin/playerctl volume 0.05-
+        bindsym XF86AudioPlay exec \
+            ${playerctl}/bin/playerctl play-pause
+        bindsym XF86AudioNext exec \
+            ${playerctl}/bin/playerctl next
+        bindsym XF86AudioPrev exec \
+            ${playerctl}/bin/playerctl previous
+        bindsym Shift+XF86AudioPlay exec \
+            ${playerctl}/bin/playerctl shuffle toggle
 
         bindsym $mod+d exec dunstctl close
         bindsym $mod+Shift+d exec dunstctl history-pop
