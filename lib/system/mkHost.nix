@@ -118,8 +118,8 @@ in {
                                 mkdir -p /mnt/boot/efi
 
                                 if [[ "$drive" == *"nvme"* ]];
-                                    then mount "$drive"p1 /mnt;
-                                    else mount "$drive"1 /mnt;
+                                    then mount "$drive"p1 /mnt/boot/efi;
+                                    else mount "$drive"1 /mnt/boot/efi;
                                 fi
                                 ;;
                         esac
