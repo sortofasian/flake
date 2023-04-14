@@ -43,13 +43,13 @@ in switchSystem system { linux = {
                 makeBinPath;
         in rec {
             pname = "lug-helper";
-            version = "v2.6.1";
+            version = "v2.6.3";
             name = "${pname}-${version}";
             src = fetchFromGitHub {
                 owner = "starcitizen-lug";
                 repo = pname;
                 rev = version;
-                sha256 = "sha256-FPvwkUnQrknW46S9SGxdjB2EiYoylAkktza0WC+xFr4=";
+                sha256 = "sha256-9joiAxK0wuklwzWX+A//8Rjw7FheuOQy92v3fJxz7Lk=";
             };
 
             desktopItem = makeDesktopItem {
