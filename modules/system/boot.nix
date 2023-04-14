@@ -33,9 +33,9 @@ in switchSystem system { linux = {
             device = "/dev/disk/by-label/nixos";
             fsType = "ext4";
         };
-        swapDevices = mkDefault [{
-            device = "/dev/disk/by-label/swap";
-        }];
+        #swapDevices = mkDefault [{
+        #    device = "/dev/disk/by-label/swap";
+        #}];
 
         boot.initrd.availableKernelModules = [
             "nvme"
