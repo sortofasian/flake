@@ -17,6 +17,9 @@
             "https://github.com/"
             "gh:"
         ];
+        url."https://github.com/rust-lang/crates.io-index".insteadOf = [
+            "https://github.com/rust-lang/crates.io-index"
+        ];
         gpg.format = "ssh";
         tag.gpgSign = true;
         commit.gpgSign = true;
