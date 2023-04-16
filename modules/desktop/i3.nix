@@ -27,16 +27,16 @@ in mkIf (desktop.wm == "i3") (switchSystem system {
     linux.services.xserver.windowManager.i3.enable = true;
     linux.custom.user.configFile."i3/config".text = with pkgs; ''
         exec --no-startup-id nm-applet
-        exec --no-startup-id steam -silent
         exec --no-startup-id blueman-applet
         exec --no-startup-id udiskie --tray
-        exec --no-startup-id discord --start-minimized
+        exec --no-startup-id steam -silent
+        exec --no-startup-id "sleep 2 && discord --start-minimized"
         exec --no-startup-id ${pkgs.feh}/bin/feh ~/Images/Wallpapers \
             --no-fehbg --bg-max --randomize
         exec_always --no-startup-id ${pkgs.autotiling}/bin/autotiling
-        exec_always xset dpms 0 0 300
-        exec_always ${pkgs.xss-lock}/bin/xss-lock --transfer-sleep-lock --\
-            i3lock -n -c ${theme.colors.bg}
+        exec_always --no-startup-id xset dpms 0 0 300
+        exec_always --no-startup-id ${pkgs.xss-lock}/bin/xss-lock \
+            --transfer-sleep-lock -- i3lock -n -c ${theme.colors.bg}
 
         gaps inner ${toString (theme.gapSize * 3)}
         font pango:sans 10

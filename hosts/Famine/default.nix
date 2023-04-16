@@ -40,17 +40,11 @@
 
         cider
         lutris
-        discord
         firefox
         blender
         obsidian
         prismlauncher
-
-        unityhub
-        jetbrains.rider
-        jdk8
-        mono
-        dotnet-sdk
+        (discord.override { withOpenASAR = true; })
     ];
 
     qt = {
