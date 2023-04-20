@@ -33,8 +33,8 @@
         user.name = "Charlie Syvertsen";
         user.email = "charliesyvertsen06@icloud.com";
     } // (if age.enable then {
-        alias.yk5 = "config user.signingkey ${secrets.ssh-yubikey-5.path}";
-        alias.yk5c = "config user.signingkey ${secrets.ssh-yubikey-5c.path}";
+        alias.yk5 = "config --replace-all user.signingkey ${secrets.ssh-yubikey-5.path}";
+        alias.yk5c = "config --replace-all user.signingkey ${secrets.ssh-yubikey-5c.path}";
     } else {});
 in mkMerge [
     (switchSystem system {
