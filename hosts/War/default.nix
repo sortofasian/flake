@@ -1,4 +1,4 @@
-{
+{ pkgs, ... }: {
     custom = {
         neovim.enable = true;
         neovim.dev = true;
@@ -14,7 +14,11 @@
         "obsidian"
 
         "unity-hub"
-        "dotnet-sdk"
         "visual-studio-code"
+    ];
+    environment.systemPackages = with pkgs; [
+        jetbrains.rider
+        dotnet-sdk
+        mono
     ];
 }
