@@ -13,7 +13,7 @@
     inherit (inputs)
         agenix;
     inherit (config.environment.variables)
-        TERM;
+        TERMINAL;
     ageConfig = config.custom.age;
 
     masterIdentities = [
@@ -82,7 +82,7 @@ in {
                 ])}:$PATH
 
                 if [ ! -f ${ageConfig.systemIdentity.dest} ]; then
-                    ${TERM} -e ${pkgs.writeScript "install-recipient" recipientInstall}
+                    ${TERMINAL} -e ${pkgs.writeScript "install-recipient" recipientInstall}
                 fi
             '';
         }))
