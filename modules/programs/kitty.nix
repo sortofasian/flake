@@ -1,6 +1,7 @@
-{ pkgs, config, ... }: let
+{ lib, pkgs, config, system, ... }: let
     inherit (config.custom.theme)
         colors;
+    inherit (lib.custom) switchSystem;
 in {
     environment.systemPackages = [ pkgs.kitty ];
     environment.variables.TERMINAL = "kitty";
@@ -12,8 +13,10 @@ in {
             sha256 = "sha256-IyX100UVkSimqFAm/MqgkuUjwnaIrAaCUmK1AkWBme0=";
         }}/whiskers-tokyo.png";
 
-        "kitty/kitty.conf".text = ''
-            font_family Fira Code Medium Nerd Font Complete
+        "kitty/kitty.conf".text = switchSystem system {
+            linux = "font_family Fira Code Medium Nerd Font Complete";
+            darwin = "font_family FiraCode Nerd Font Mono Medium";
+        } + ''
             font_size 13.0
             undercurl_style thick-sparse
             cursor none
@@ -48,8 +51,6 @@ in {
             color13 #${colors.brightmagenta}
             color14 #${colors.brightcyan}
             color15 #${colors.brightwhite}
-
-            background_opacity 0.85
         '';
     };
 }
