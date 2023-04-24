@@ -14,8 +14,14 @@ in {
         }}/whiskers-tokyo.png";
 
         "kitty/kitty.conf".text = switchSystem system {
-            linux = "font_family Fira Code Medium Nerd Font Complete";
-            darwin = "font_family FiraCode Nerd Font Mono Medium";
+            linux = ''
+                font_family Fira Code Medium Nerd Font Complete
+                background_opacity 0.95
+            '';
+            darwin = ''
+                font_family FiraCode Nerd Font Mono Medium
+                macos_titlebar_color #${colors.bg}
+            '';
         } + ''
             font_size 13.0
             undercurl_style thick-sparse
@@ -26,7 +32,6 @@ in {
 
             mouse_hide_wait 3.0
 
-            macos_titlebar_color #${colors.bg}
             window_margin_width 5
 
             foreground #${colors.fg}

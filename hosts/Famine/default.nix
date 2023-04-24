@@ -30,7 +30,7 @@
         networkmanager.enable = true;
         audio.enable = true;
         udisks.enable = true;
-        theme.colorscheme = "tokyonight";
+        theme.colorscheme = "shadotheme";
     };
 
     environment.systemPackages = with pkgs; [
@@ -38,11 +38,15 @@
         capitaine-cursors
         lxappearance
 
+        imv
+        mpv
+        sioyek
         cider
         lutris
         firefox
         blender
-        obsidian
+        #obsidian
+        kicad
         prismlauncher
         (discord.override { withOpenASAR = true; })
     ];
