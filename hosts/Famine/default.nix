@@ -40,13 +40,14 @@
 
         imv
         mpv
-        sioyek
         cider
+        kicad
         lutris
+        sioyek
         firefox
         blender
+        clockify
         #obsidian
-        kicad
         prismlauncher
         (discord.override { withOpenASAR = true; })
     ];
