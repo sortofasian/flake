@@ -57,7 +57,7 @@ in {
             rust-analyzer
             jdt-language-server
             lua-language-server
-            java-language-server
+            #java-language-server
         ]) ++ (with pkgs.nodePackages; [
             pyright
             vim-language-server
@@ -68,7 +68,7 @@ in {
             vscode-langservers-extracted
             dockerfile-language-server-nodejs
         ]) ++ (with (pkgs.callPackage ./customBins.nix {}); [
-            omnisharp-roslyn
+            #omnisharp-roslyn
             prisma-language-server
             cssmodules-language-server
             tailwindcss-language-server
