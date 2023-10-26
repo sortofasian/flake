@@ -35,12 +35,15 @@ in {
     config = switchSystem system {
         linux.users = {
             mutableUsers = !age.enable;
+            groups = {
+                "plugdev" = {};
+            };
             users.${user.name} = {
                 uid = 1000;
                 inherit (user) name home;
                 group = "users";
                 isNormalUser = true;
-                extraGroups = [ "wheel" ];
+                extraGroups = [ "wheel" "dialout" "plugdev" ];
                 passwordFile = user.passwordFile;
             };
         };
