@@ -9,8 +9,9 @@
 
     commonConfig = {
         fontDir.enable = true;
-        fonts = with pkgs; [
+        packages = with pkgs; [
             (nerdfonts.override {fonts = [ "FiraCode" "Noto" ]; })
+            corefonts
             noto-fonts
             noto-fonts-emoji
             noto-fonts-cjk-sans

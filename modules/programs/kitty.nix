@@ -15,8 +15,8 @@ in {
 
         "kitty/kitty.conf".text = switchSystem system {
             linux = ''
-                font_family Fira Code Medium Nerd Font Complete
-                background_opacity 0.95
+                font_family FiraCode Nerd Font Reg
+                background_opacity 0.85
             '';
             darwin = ''
                 font_family FiraCode Nerd Font Mono Medium
@@ -47,7 +47,6 @@ in {
             color5  #${colors.magenta}
             color6  #${colors.cyan}
             color7  #${colors.white}
-
             color8  #${colors.brightblack}
             color9  #${colors.brightred}
             color10 #${colors.brightgreen}
