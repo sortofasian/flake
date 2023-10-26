@@ -16,7 +16,7 @@ in switchSystem system { linux = {
             default = false;
         };
         wm = mkOption {
-            type = types.nullOr (types.enum [ "i3" ]);
+            type = types.nullOr (types.enum [ "i3" "hyprland" ]);
             default = null;
         };
         compositor = mkOption {
@@ -41,11 +41,36 @@ in switchSystem system { linux = {
                     accelProfile = "flat";
                     accelSpeed = "0";
                 };
+                displayManager.gdm = {
+                    enable = true;
+                    wayland = true;
+                };
             };
-            environment.variables = {
+            environment.sessionVariables = {
                 XCOMPOSECACHE = "${xdg.cache}/X11/xcompose";
                 XCOMPOSEFILE  = "${xdg.runtime}/X11/xcompose";
                 ERRFILE       = "${xdg.state}/X11/xsession-errors";
+                WLR_NO_HARDWARE_CURSORS = "1";
+            };
+
+            xdg.sounds.enable = true;
+            xdg.portal.enable = true;
+
+            security.polkit.enable = true;
+            systemd = {
+                user.services.polkit-gnome-authentication-agent-1 = {
+                    description = "polkit-gnome-authentication-agent-1";
+                    wantedBy = [ "graphical-session.target" ];
+                    wants = [ "graphical-session.target" ];
+                    after = [ "graphical-session.target" ];
+                    serviceConfig = {
+                        Type = "simple";
+                        ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
+                        Restart = "on-failure";
+                        RestartSec = 1;
+                        TimeoutStopSec = 10;
+                    };
+                };
             };
         }
     ]);
