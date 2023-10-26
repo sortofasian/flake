@@ -17,6 +17,6 @@ in switchSystem system { linux = {
 
     config = mkIf udisks.enable {
         services.udisks2.enable = true;
-        users.users.${user.name}.packages = mkIf desktop.enable [ pkgs.udiskie ];
+        #users.users.${user.name}.packages = mkIf desktop.enable [ pkgs.udiskie ];
     };
 }; }
