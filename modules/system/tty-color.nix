@@ -7,7 +7,7 @@ in switchSystem system {
     linux.boot.initrd.preDeviceCommands = let
         color = number: color: ''printf "\e]P${number + color}"'';
     in ''
-        ${ color "0" colors.black }
+        ${ color "0" colors.bg }
         ${ color "1" colors.red }
         ${ color "2" colors.green }
         ${ color "3" colors.yellow }
@@ -22,7 +22,7 @@ in switchSystem system {
         ${ color "C" colors.brightblue }
         ${ color "D" colors.brightmagenta }
         ${ color "E" colors.brightcyan }
-        ${ color "F" colors.brightwhite }
+        ${ color "F" colors.fg }
         clear
     '';
 }
