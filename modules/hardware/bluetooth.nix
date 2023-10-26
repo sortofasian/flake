@@ -19,7 +19,7 @@ in switchSystem system { linux = {
 
     config = mkIf bluetooth.enable {
         hardware.bluetooth.enable = true;
-        hardware.bluetooth.package = pkgs.bluezFull;
+        hardware.bluetooth.package = pkgs.bluez;
         services.blueman.enable = true;
         users.users.${user.name}.packages = mkIf desktop.enable [ pkgs.rofi-bluetooth ];
     };
