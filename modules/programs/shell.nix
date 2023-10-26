@@ -20,7 +20,7 @@ in {
             users.users.${user.name}.shell = pkgs.fish;
             environment.systemPackages = with pkgs; [
                 bat
-                exa
+                eza
                 btop
                 ouch
                 ripgrep
@@ -33,7 +33,7 @@ in {
                 la = "ls -a";
                 ta = "tr -a";
                 tr = "ls --tree -L 3";
-                ls = "exa "
+                ls = "eza "
                     + "--long "
                     + "--binary "
                     + "--icons "
