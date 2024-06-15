@@ -31,12 +31,12 @@
         theme.colorscheme = "shadotheme";
 
         neovim.enable = true;
-        neovim.dev = true;
+        #neovim.dev = true;
         # alacritty.enable = false;
         # kitty.enable = true;
         dunst.enable = true;
         # rofi.enable = true;
-        direnv.enable = true;
+        #direnv.enable = true;
         networkmanager.enable = true;
         audio.enable = true;
         udisks.enable = true;
@@ -44,14 +44,21 @@
         gaming.enable = true;
         steam = true;
         star-citizen.enable = true;
-        genshin.enable = true;
+        #genshin.enable = true;
     };
 
+    programs.dconf.enable = true;
     environment.systemPackages = with pkgs; [
+        gcc
+        clang
+        protontricks
+        gnome.nautilus
         orchis-theme
         capitaine-cursors
         lxappearance
 
+        prusa-slicer
+        gparted
         ledger-live-desktop
         protonup-qt
         protonvpn-gui
@@ -69,13 +76,13 @@
         libreoffice
         google-chrome
         blender
-        obsidian
-        dolphin-emu
+        #obsidian
         swww
-        eww-wayland
+        eww
         prismlauncher
-        yuzu-early-access
+        #yuzu-early-access
         (discord.override { withVencord = true; })
+        vesktop
         inputs.np-master.legacyPackages.${system}.xwaylandvideobridge
 
         rustup

@@ -28,22 +28,26 @@ in switchSystem system { linux = {
     config = mkIf desktop.enable (mkMerge [
         {
             programs.dconf.enable = true;
-            services.xserver = {
-                enable = true;
-                updateDbusEnvironment = true;
-                excludePackages = [ pkgs.dmenu ];
-
-                layout = "us";
-                autoRepeatDelay = 250;
-                autoRepeatInterval = 20;
-                libinput.enable = true;
-                libinput.mouse = {
-                    accelProfile = "flat";
-                    accelSpeed = "0";
-                };
-                displayManager.gdm = {
+            services = {
+                xserver = {
                     enable = true;
-                    wayland = true;
+                    updateDbusEnvironment = true;
+                    excludePackages = [ pkgs.dmenu ];
+
+                    xkb.layout = "us";
+                    autoRepeatDelay = 250;
+                    autoRepeatInterval = 20;
+                    displayManager.gdm = {
+                        enable = true;
+                        wayland = true;
+                    };
+                };
+                libinput = {
+                    enable = true;
+                    mouse = {
+                        accelProfile = "flat";
+                        accelSpeed = "0";
+                    };
                 };
             };
             environment.sessionVariables = {
