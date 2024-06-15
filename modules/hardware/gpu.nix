@@ -44,7 +44,7 @@ in switchSystem system { linux = {
                 nvidiaSettings = true;
                 modesetting.enable = true;
             };
-            boot.kernelParams = [ "module_blacklist=amdgpu" ];
+            boot.blacklistedKernelModules = [ "amdgpu" "nouveau" ];
         })
         (mkIf (gpu != null) {
             hardware.opengl = {

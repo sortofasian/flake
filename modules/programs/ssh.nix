@@ -6,6 +6,7 @@
 in switchSystem system {
     linux.config = {
         programs.ssh.extraConfig = ''
+            ForwardAgent yes
             IdentityFile = ${secrets.ssh-yubikey-5.path}
             IdentityFile = ${secrets.ssh-yubikey-5c.path}
         '';

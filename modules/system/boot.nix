@@ -57,7 +57,7 @@ in switchSystem system { linux = {
             })
             (mkIf (bootMode == "legacy") {
                 grub.enable = true;
-                grub.devices = [ "/dev/sda" ];
+                grub.devices = [ "/dev/sdd" ];
             })
         ];
 

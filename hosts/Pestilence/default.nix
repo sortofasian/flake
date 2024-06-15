@@ -1,10 +1,22 @@
-{
+{lib, config, pkgs, ...}: {
     custom = {
         user.name = "charlie";
         bootMode = "legacy";
         swapSize = "32G";
         neovim.enable = true;
     };
+
+    hardware.opengl = {
+        enable = true;
+        extraPackages = with pkgs; [
+            vaapiVdpau
+            libvdpau-va-gl
+        ];
+    };
+
+    boot.supportedFilesystems = [ "zfs" ];
+    boot.zfs.forceImportRoot = false;
+    networking.hostId = "3a82b05e";
 
     users.users.charlie.openssh.authorizedKeys.keys = [
         "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIGAZ20Nex1SQQIT0kMZK9mH8GN+kqiMvvShf+iVX+QRMAAAABHNzaDo="
@@ -33,17 +45,28 @@
         };
     };
 
+    fileSystems."/mutable" = {
+        device = "mutable";
+        fsType = "zfs";
+    };
+    boot.zfs.extraPools = [ "mutable" ];
+
 
     imports = [
         ./ports.nix
         ./ssl.nix
         ./haproxy.nix
         ./fail2ban.nix
+        ./grafana.nix
 
+        ./servarr.nix
         ./bbb.nix
         ./atm8.nix
+        ./valhelsia.nix
+        ./blehmc.nix
         ./sshd.nix
         ./velocity.nix
+#        ./node.nix
         ./shadowsocks.nix
         ./vaultwarden.nix
     ];

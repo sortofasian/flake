@@ -15,9 +15,9 @@ in {
         lego = ''
             ${pkgs.lego}/bin/lego -a \
                 -m charliesyvertsen06@icloud.com \
-                -d sortofasian.io -d *.sortofasian.io \
+                -d sortofasian.io -d *.sortofasian.io -d *.arr.sortofasian.io \
                 --dns cloudflare \
-                --path /srv/ssl \
+                --path /mutable/ssl \
                 --filename sortofasian.io --pem \
         '';
 	unitConfig.After = "network-online.target";
@@ -32,7 +32,7 @@ in {
             script = "${lego} run";
             inherit serviceConfig;
             unitConfig = unitConfig
-            // {ConditionPathExists = "!/srv/ssl/accounts/*/charliesyvertsen06@icloud.com";};
+            // {ConditionPathExists = "!/mutable/ssl/accounts/*/charliesyvertsen06@icloud.com";};
         };
         "lego" = {
             script = "${lego} renew";

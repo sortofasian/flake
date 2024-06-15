@@ -2,13 +2,13 @@
     inherit (config.custom)
         mc
         ports;
-    dataDir = "/mutable/minecraft/bbb";
+    dataDir = "/mutable/minecraft/blehmc";
 
     serverProperties = pkgs.writeText "server.properties" ''
         difficulty=hard
         enable-command-block=true
         online-mode=false
-        server-port=${builtins.toString ports.bbb}
+        server-port=${builtins.toString ports.blehmc}
         spawn-protection=0
     '';
 
@@ -20,31 +20,31 @@
         };
     });
 in {
-    config.users.users.bbb = {
+    config.users.users.blehmc = {
         isSystemUser = true;
         group = "minecraft";
-	home = dataDir;
-	createHome = true;
+    home = dataDir;
+    createHome = true;
     };
     config.systemd = {
-        sockets.bbb = {
-            bindsTo = ["bbb.service"];
+        sockets.blehmc = {
+            bindsTo = ["blehmc.service"];
             socketConfig = {
-                ListenFIFO = "${dataDir}/bbb.stdin";
+                ListenFIFO = "${dataDir}/blehmc.stdin";
                 RemoveOnStop = true;
                 FlushPending = true;
             };
         };
-        services.bbb = {
-            description = "BBB Minecraft Server";
+        services.blehmc = {
+            description = "BLEH Minecraft Server";
             wantedBy    = [ "multi-user.target" ];
-            requires    = [ "bbb.socket" ];
-            after       = [ "network.target" "bbb.socket" ];
+            requires    = [ "blehmc.socket" ];
+            after       = [ "network.target" "blehmc.socket" ];
 
             path = [pkgs.jdk17];
 
             script = ''
-	    	echo $USER
+                echo $USER
                 mkdir -p ${dataDir}/config
 
                 echo "eula=true" > ${dataDir}/eula.txt
@@ -55,8 +55,8 @@ in {
 	    '';
 
             serviceConfig = {
-                User = "bbb";
-		Group = "minecraft";
+                User = "blehmc";
+                Group = "minecraft";
 
                 Restart   = "always";
                 WorkingDirectory = "${dataDir}";

@@ -6,21 +6,22 @@
         mc
         ports;
 
-    velocityDir = "/srv/minecraft/velocity";
+    velocityDir = "/mutable/minecraft/velocity";
 
     velocity = let
-        version = "3.2.0-SNAPSHOT";
-        build = "247";
+        version = "3.3.0-SNAPSHOT";
+        build = "390";
     in pkgs.fetchurl {
-        sha256 = "e75becc4bf9f9426d9daa6b801eb6cb46025c98bc11e4f99ad1ddedf9e3fd0f3";
+        sha256 = "sha256-1Kb++n9olAzCIRrlDNwE1wFV3z2Nf9QbVplQDwsdNQw=";
         url = "https://api.papermc.io/v2/projects/velocity"
         + "/versions/${version}/builds/${build}"
         + "/downloads/velocity-${version}-${build}.jar";
     };
 
     velocityConfig = pkgs.writeText "velocity.toml" ''
-        config-version = "2.6"
-        bind = "0.0.0.0:${builtins.toString ports.velocity}"
+        config-version = "2.7"
+
+        bind = "0.0.0.0:25565"
         motd = "<#ffb8f0>sortofasian.io"
         show-max-players = 0
 
@@ -30,20 +31,24 @@
         kick-existing-players = false
 
         player-info-forwarding-mode = "modern"
-        forwarding-secret-file = "${pkgs.writeText "forwarding.secret" mc.forwardingSecret}"
+        forwarding-secret-file = "/nix/store/af7lr7f2jpl3m04n8av1p0yq9l0fynz0-forwarding.secret"
         announce-forge = true
         ping-passthrough = "disabled"
 
         [servers]
-        lobby = "127.0.0.1:${builtins.toString ports.lobby}"
-        atm8  = "127.0.0.1:${builtins.toString ports.atm8}"
-	bbb   = "127.0.0.1:${builtins.toString ports.bbb}"
+        lobby = "127.0.0.1:42100"
+        atm8  = "127.0.0.1:42101"
+        bbb   = "127.0.0.1:42102"
+        val   = "127.0.0.1:42103"
+        blehmc = "127.0.0.1:42104"
 
         try = [ "lobby" ]
 
         [forced-hosts]
+        "blehmc.sortofasian.io" = [ "blehmc" ]
         "atm8.sortofasian.io" = [ "atm8" ]
-	"bbb.sortofasian.io" = [ "bbb" ]
+        "bbb.sortofasian.io" = [ "bbb" ]
+        "val.sortofasian.io" = [ "val" ]
 
         [advanced]
         compression-threshold = 256
@@ -54,11 +59,12 @@
         haproxy-protocol = false
         tcp-fast-open = true
         bungee-plugin-message-channel = true
-        show-ping-requests = true
+        show-ping-requests = false
         failover-on-unexpected-server-disconnect = true
         announce-proxy-commands = true
         log-command-executions = true
         log-player-connections = true
+        accepts-transfers = false
 
         [query]
         enabled = false
@@ -66,18 +72,18 @@
     ambassador = pkgs.fetchurl {
         url = "https://github.com/adde0109"
         + "/Ambassador/releases/download"
-        + "/v1.3.0-beta/Ambassador-Velocity-1.3.0-beta-all.jar";
-        sha256 = "sha256-atvcl6fVQa1Ormn4JThNEWBL9RRXv5z1wEcPPrlBtmQ=";
+        + "/v1.4.4/Ambassador-Velocity-1.4.4-all.jar";
+        sha256 = "sha256-q6F//UswFRAtBZ2dPpFJj+mnsAsPDjO86O5sShkQSlQ=";
     };
 in {
     config.users.groups.minecraft = {
-    	name = "minecraft";
+        name = "minecraft";
     };
     config.users.users.velocity = {
         isSystemUser = true;
         group = "minecraft";
-	home = velocityDir;
-	createHome = true;
+    home = velocityDir;
+    createHome = true;
     };
     config.systemd = {
         sockets.velocity = {
@@ -111,8 +117,8 @@ in {
             '';
 
             serviceConfig = {
-	    	User = "velocity";
-		Group = "minecraft";
+                User = "velocity";
+                Group = "minecraft";
                 Restart   = "always";
                 WorkingDirectory = "${velocityDir}";
 

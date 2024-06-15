@@ -2,20 +2,20 @@
     inherit (config.custom)
         mc
         ports;
-    dataDir = "/mutable/minecraft/atm8";
+    dataDir = "/mutable/minecraft/valhelsia";
 
-    atm8 = fetchFromCurseforge {
-        filename = "Server-Files-1.0.15.zip";
-        id = "4461196";
-        sha256 = "sha256-jiQq3imoLCtZbv95usIlpFVezfUPKKgDhuHFbpH+Bxs=";
+    valhelsia = fetchFromCurseforge {
+        filename = "Valhelsia+3-3.5.1-SERVER.zip";
+        id = "3707304";
+        sha256 = "sha256-ia2BcMBpF0jW74U0s9YbYYZN4vR3UTXaiPwZQsuOjQQ=";
     };
 
     pcf = pkgs.fetchurl {
         url = "https://github.com/adde0109"
         + "/Proxy-Compatible-Forge"
-        + "/releases/download/1.1.0"
-        + "/proxy-compatible-forge-1.19.2-1.1.0.jar";
-        sha256 = "sha256-D3IqAFBoQ3NWZJTRF8NLNryFX/WWIjNEJosfWrFjfS4=";
+        + "/releases/download/1.1.3"
+        + "/proxy-compatible-forge-1.16.5-1.1.3.jar";
+        sha256 = "sha256-KGSQqrJF/0YdWK2MJQ3P4JqITixrRJfYrhdQrc8yqAs=";
     };
 
     serverProperties = pkgs.writeText "server.properties" ''
@@ -29,73 +29,84 @@
         max-world-size=29999984
         online-mode=false
         op-permission-level=4
-        server-port=${builtins.toString ports.atm8}
+        server-port=${builtins.toString ports.valhelsia}
         sync-chunk-writes=true
         use-native-transport=true
+
+        level-name=world
+        level-type=biomesoplenty
+        motd="Valhelsia 3 bitch"
+        network-compression-threshold=256
+        snooper-enabled=true
+        spawn-animals=true
+        spawn-monsters=true
+        spawn-npcs=true
+        spawn-protection=0
     '';
 
-    forwarding = pkgs.writeText "pcf-common.toml" ''
+    forwarding = pkgs.writeScript "pcf-common.toml" ''
         [modernForwarding]
             forwardingSecret = "${mc.forwardingSecret}"
     '';
 
-    fetchFromCurseforge = { filename, id, sha256 }: let args =  {
+    fetchFromCurseforge = { filename, id, sha256, stripRoot ? false }: let args =  {
             url = "https://media.forgecdn.net/files"
             + "/" + (lib.concatStrings (lib.flatten (lib.imap1
                     (i: c: if i == 4 then [c "/"] else c)
                     (lib.stringToCharacters id)
                 )))
             + "/${filename}";
-            inherit sha256;
+            inherit sha256 stripRoot;
         };
     in (if lib.hasSuffix ".zip" filename
         then pkgs.fetchzip args
         else pkgs.fetchurl args
     );
 in {
-    config.users.users.atm8 = {
+    config.users.users.valhelsia = {
         isSystemUser = true;
         group = "minecraft";
         home = dataDir;
         createHome = true;
     };
     config.systemd = {
-        sockets.atm8 = {
-            bindsTo = ["atm8.service"];
+        sockets.valhelsia = {
+            bindsTo = ["valhelsia.service"];
             socketConfig = {
-                ListenFIFO = "${dataDir}/atm8.stdin";
+                ListenFIFO = "${dataDir}/valhelsia.stdin";
                 RemoveOnStop = true;
                 FlushPending = true;
             };
         };
-        services.atm8 = {
-            description = "ATM8 Minecraft Server";
+        services.valhelsia = {
+            description = "Valhelsia Minecraft Server";
             wantedBy    = [ "multi-user.target" ];
-            requires    = [ "atm8.socket" ];
-            after       = [ "network.target" "atm8.socket" ];
+            requires    = [ "valhelsia.socket" ];
+            after       = [ "network.target" "valhelsia.socket" ];
 
-            path = with pkgs; [jdk17 curl gawk];
+            path = with pkgs; [jdk11 curl gawk];
 
             script = ''
                 mkdir -p ${dataDir}/config
                 mkdir -p ${dataDir}/mods
 
-                cp -nR ${atm8}/* ${dataDir}/
+                cp -R --update ${valhelsia}/* ${dataDir}/
                 find ${dataDir}/ -type f -exec chmod 644 {} \;
                 find ${dataDir}/ -type d -exec chmod 755 {} \;
-                chmod +x ${dataDir}/startserver.sh
+                chmod +x ${dataDir}/ServerStart.sh
 
                 cp -f ${pcf} ${dataDir}/mods/
 
                 echo "eula=true" > ${dataDir}/eula.txt
                 cp -f ${forwarding} ${dataDir}/config/pcf-common.toml
+                chmod +w ${dataDir}/config/pcf-common.toml
                 ln -sf ${serverProperties} ${dataDir}/server.properties
 
-            ${dataDir}/startserver.sh
+            ${dataDir}/ServerStart.sh
        '';
 
             serviceConfig = {
-                User = "atm8";
+                User = "valhelsia";
                 Group = "minecraft";
 
                 Restart   = "always";
