@@ -15,6 +15,9 @@
         agenix.url = "github:ryantm/agenix";
         agenix.inputs.nixpkgs.follows = "nixpkgs";
 
+        apple-silicon.url = "github:tpwrules/nixos-apple-silicon";
+        apple-silicon.inputs.nixpkgs.follows = "nixpkgs";
+
         aagl.url = "github:ezKEa/aagl-gtk-on-nix";
         aagl.inputs.nixpkgs.follows = "nixpkgs";
 
@@ -31,6 +34,7 @@
             (lib.system.x86_64-linux.mkHost ./hosts/Famine)
             (lib.system.x86_64-linux.mkHost ./hosts/Pestilence)
             (lib.system.x86_64-linux.mkHost ./hosts/Death)
+            (lib.system.aarch64-linux.mkHost ./hosts/Miniserver)
         ];
 
         darwinConfigurations = lib.merge [
