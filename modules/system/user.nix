@@ -44,7 +44,7 @@ in {
                 group = "users";
                 isNormalUser = true;
                 extraGroups = [ "wheel" "dialout" "plugdev" ];
-                passwordFile = user.passwordFile;
+                hashedPasswordFile = user.passwordFile;
             };
         };
     };

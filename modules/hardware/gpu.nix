@@ -43,6 +43,7 @@ in switchSystem system { linux = {
                 open = true;
                 nvidiaSettings = true;
                 modesetting.enable = true;
+                package = config.boot.kernelPackages.nvidiaPackages.beta;
             };
             boot.kernelParams = [ "module_blacklist=amdgpu" ];
         })
