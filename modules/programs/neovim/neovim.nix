@@ -53,13 +53,13 @@ in {
         [
             nil
             taplo
+            pyright
             clang-tools
             rust-analyzer
             jdt-language-server
             lua-language-server
             #java-language-server
         ]) ++ (with pkgs.nodePackages; [
-            pyright
             vim-language-server
             bash-language-server
             yaml-language-server
