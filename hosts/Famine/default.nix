@@ -3,6 +3,7 @@
     networking.firewall.enable = false;
     boot.extraModulePackages = with config.boot.kernelPackages; [v4l2loopback];
     boot.supportedFilesystems = ["ntfs"];
+    boot.kernelParams = [ "nvidia_drm.fbdev=1" ];
 
     qt = {
         enable = true;
@@ -31,7 +32,7 @@
         theme.colorscheme = "shadotheme";
 
         neovim.enable = true;
-        #neovim.dev = true;
+        neovim.dev = true;
         # alacritty.enable = false;
         # kitty.enable = true;
         dunst.enable = true;
@@ -81,7 +82,8 @@
         eww
         prismlauncher
         #yuzu-early-access
-        (discord.override { withVencord = true; })
+        #(discord.override { withVencord = true; })
+        discord
         vesktop
         inputs.np-master.legacyPackages.${system}.xwaylandvideobridge
 
