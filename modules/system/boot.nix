@@ -4,6 +4,7 @@
         types
         mkMerge
         mkOption
+	mkOverride
         mkDefault;
     inherit (lib.custom)
         switchSystem;
@@ -25,11 +26,12 @@ in switchSystem system { linux = {
         hardware.enableAllFirmware = true;
         hardware.enableRedistributableFirmware = true;
 
-        fileSystems."/boot/efi" = mkIf (bootMode == "uefi") (mkDefault {
-            device = "/dev/disk/by-label/BOOT";
-            fsType = "vfat";
-        });
-        fileSystems."/" = mkDefault {
+        fileSystems."/boot/efi" = mkIf (bootMode == "uefi") {
+            device  = "/dev/disk/by-label/BOOT";
+            fsType  = "vfat";
+            options = [ "umask=0022" ];
+        };
+        fileSystems."/" = {
             device = "/dev/disk/by-label/nixos";
             fsType = "ext4";
         };
@@ -37,7 +39,7 @@ in switchSystem system { linux = {
         #    device = "/dev/disk/by-label/swap";
         #}];
 
-        boot.initrd.availableKernelModules = [
+        boot.initrd.availableKernelModules = mkDefault [
             "nvme"
             "xhci_pci"
             "ahci"
@@ -46,15 +48,15 @@ in switchSystem system { linux = {
         ];
         boot.loader = mkMerge [
             { timeout = 1; }
-            (mkIf (bootMode == "uefi") {
-                efi.canTouchEfiVariables = mkDefault true;
-                efi.efiSysMountPoint = mkDefault "/boot/efi";
+            (mkIf (bootMode == "uefi") (mkDefault {
+                efi.canTouchEfiVariables = true;
+                efi.efiSysMountPoint = "/boot/efi";
                 systemd-boot = {
                     enable = true;
                     consoleMode = "max";
                     editor = false;
                 };
-            })
+            }))
             (mkIf (bootMode == "legacy") {
                 grub.enable = true;
                 grub.devices = [ "/dev/sdd" ];

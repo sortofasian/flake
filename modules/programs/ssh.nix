@@ -2,10 +2,10 @@
     inherit (lib.custom)
         switchSystem;
     inherit (config.age)
-        secrets;
+        secrets enable;
 in switchSystem system {
     linux.config = {
-        programs.ssh.extraConfig = ''
+        programs.ssh.extraConfig = lib.mkIf config.custom.age.enable ''
             ForwardAgent yes
             IdentityFile = ${secrets.ssh-yubikey-5.path}
             IdentityFile = ${secrets.ssh-yubikey-5c.path}

@@ -11,7 +11,7 @@
 in switchSystem system { linux = {
     options.custom.star-citizen.enable = mkOption {
         type = types.bool;
-        default = true;
+        default = false;
     };
 
     config = mkIf star-citizen.enable {
