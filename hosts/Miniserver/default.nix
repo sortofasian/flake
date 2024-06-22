@@ -3,12 +3,11 @@
 
     imports = [inputs.apple-silicon.nixosModules.default];
 
-    config = {
-        nixpkgs.hostPlatform = "aarch64-linux";
-        hardware.asahi.peripheralFirmwareDirectory = ./firmware;
+    nixpkgs.hostPlatform = "aarch64-linux";
+    hardware.asahi.peripheralFirmwareDirectory = ./firmware;
 
-        custom.user.name = "charlie";
-        custom.age.enable = false;
+    custom.user.name = "charlie";
+    custom.age.enable = false;
     custom.neovim.enable = true;
 
     boot.zfs.forceImportRoot = false;
@@ -26,6 +25,5 @@
         isNormalUser = true;
         extraGroups = ["wheel" "dialout" ];
         password = "01261461";
-       	};
     };
 }

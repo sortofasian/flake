@@ -16,6 +16,7 @@ in {
             else []));
 
         configure.packages.neovimPlugins.start = with pkgs.vimPlugins; [
+            nvim-cmp
             neoformat
             alpha-nvim
             plenary-nvim
@@ -35,7 +36,6 @@ in {
 #           nvim-transparent
         ]) ++ (if neovimCfg.dev then [
             luasnip
-            nvim-cmp
             cmp-path
             cmp-emoji
             cmp_luasnip

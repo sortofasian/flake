@@ -15,7 +15,7 @@
         agenix.url = "github:ryantm/agenix";
         agenix.inputs.nixpkgs.follows = "nixpkgs";
 
-        apple-silicon.url = "github:tpwrules/nixos-apple-silicon";
+        apple-silicon.url = "github:tpwrules/nixos-apple-silicon?ref=refs/tags/release-2024-06-16";
         apple-silicon.inputs.nixpkgs.follows = "nixpkgs";
 
         aagl.url = "github:ezKEa/aagl-gtk-on-nix";

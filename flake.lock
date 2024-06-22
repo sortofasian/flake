@@ -62,6 +62,7 @@
       },
       "original": {
         "owner": "tpwrules",
+        "ref": "refs/tags/release-2024-06-16",
         "repo": "nixos-apple-silicon",
         "type": "github"
       }
@@ -550,11 +551,11 @@
     },
     "np-master": {
       "locked": {
-        "lastModified": 1719032024,
-        "narHash": "sha256-ZwpOpBUvQe8ijV/NHhbFRzZtWOZNf79eoD/fkoKioeY=",
+        "lastModified": 1719032805,
+        "narHash": "sha256-/O3/Rmhp6lNcWJOvKpzmMZ13m7nNCJ8C271B6w/I+cM=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "38558849a18384f995fad7223f7043c4e3cfc590",
+        "rev": "edda7efc2f2c532371124067d229a63cf47fa180",
         "type": "github"
       },
       "original": {
