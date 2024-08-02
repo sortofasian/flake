@@ -30,6 +30,7 @@ in switchSystem system { linux = {
 
         (mkIf steam {
             programs.steam.enable = true;
+            hardware.steam-hardware.enable = true;
             environment.variables = {
                 STEAM_EXTRA_COMPAT_TOOLS_PATHS = "${pkgs.stdenv.mkDerivation rec {
                     pname = "proton-ge";

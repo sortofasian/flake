@@ -1,11 +1,6 @@
-{ pkgs, lib, config, system, ... }: let
-    inherit (lib)
-        mkIf
-        mkMerge;
+{ pkgs, lib, system, ... }: let
     inherit (lib.custom)
         switchSystem;
-    inherit (config.custom)
-        desktop;
 
     commonConfig = {
         fontDir.enable = true;
@@ -20,8 +15,8 @@
     };
 in {
     config.fonts = switchSystem system {
-        linux = mkIf desktop.enable commonConfig // {
-            enableDefaultFonts = false;
+        linux = commonConfig // {
+            enableDefaultPackages = false;
             fontconfig.defaultFonts = {
                 emoji = ["Noto Color Emoji"];
                 serif = ["Noto Serif Nerd Font"];

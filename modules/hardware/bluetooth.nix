@@ -9,7 +9,6 @@
         switchSystem;
     inherit (config.custom)
         user
-        desktop
         bluetooth;
 in switchSystem system { linux = {
     options.custom.bluetooth.enable = mkOption {
@@ -21,6 +20,6 @@ in switchSystem system { linux = {
         hardware.bluetooth.enable = true;
         hardware.bluetooth.package = pkgs.bluez;
         services.blueman.enable = true;
-        users.users.${user.name}.packages = mkIf desktop.enable [ pkgs.rofi-bluetooth ];
+        users.users.${user.name}.packages = [ pkgs.rofi-bluetooth ];
     };
 }; }

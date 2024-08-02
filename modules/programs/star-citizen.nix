@@ -33,7 +33,7 @@ in switchSystem system { linux = {
                 fetchFromGitHub
                 curl
                 bash
-                gnome
+                zenity
                 gnused
                 polkit
                 gnugrep
@@ -63,7 +63,7 @@ in switchSystem system { linux = {
 
             binPath = makeBinPath [
                 bash coreutils curl polkit
-                gnused gnome.zenity findutils gnugrep
+                gnused zenity findutils gnugrep
             ];
 
             installPhase = ''

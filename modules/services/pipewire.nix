@@ -7,12 +7,11 @@
         switchSystem;
     inherit (config.custom)
         user
-        audio
-        desktop;
+        audio;
 in switchSystem system { linux = {
     options.custom.audio.enable = mkOption {
         type = types.bool;
-        default = desktop.enable;
+        default = true;
     };
 
     config = mkIf audio.enable {

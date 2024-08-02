@@ -1,21 +1,20 @@
-{ lib, pkgs, config, inputs, system, ... }: let
+{ lib, pkgs, config, ... }: let
     inherit (lib)
         mkIf
         types
         mkOption;
     inherit (config.custom)
         direnv;
-    inherit (inputs) devenv;
 in {
     options.custom.direnv.enable = mkOption {
         type = types.bool;
         default = false;
     };
     config = mkIf direnv.enable {
-        environment.systemPackages = [
-            pkgs.direnv
-            pkgs.nix-direnv
-            devenv.packages.${system}.default
+        environment.systemPackages = with pkgs; [
+            direnv
+            nix-direnv
+            devenv
         ];
         nix.settings = {
             keep-outputs = true;

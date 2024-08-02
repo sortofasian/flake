@@ -48,10 +48,8 @@ in switchSystem system { linux = {
             boot.blacklistedKernelModules = [ "amdgpu" "nouveau" ];
         })
         (mkIf (gpu != null) {
-            hardware.opengl = {
+            hardware.graphics = {
                 enable = true;
-                driSupport = true;
-                driSupport32Bit = true;
                 extraPackages = with pkgs; [
                     vaapiVdpau
                     libvdpau-va-gl

@@ -2,6 +2,7 @@
     inputs = {
         nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
         np-master.url = "github:NixOS/nixpkgs/master";
+        np-stable.url = "github:NixOS/nixpkgs/nixos-24.05";
 
         darwin.url = "github:lnl7/nix-darwin";
         darwin.inputs.nixpkgs.follows = "nixpkgs";
@@ -20,9 +21,6 @@
 
         aagl.url = "github:ezKEa/aagl-gtk-on-nix";
         aagl.inputs.nixpkgs.follows = "nixpkgs";
-
-        devenv.url = "github:cachix/devenv";
-        devenv.inputs.nixpkgs.follows = "nixpkgs";
     };
 
     outputs = { nixpkgs, ... }@inputs: rec {

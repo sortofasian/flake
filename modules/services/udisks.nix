@@ -7,8 +7,7 @@
         switchSystem;
     inherit (config.custom)
         user
-        udisks
-        desktop;
+        udisks;
 in switchSystem system { linux = {
     options.custom.udisks.enable = mkOption {
         type = types.bool;

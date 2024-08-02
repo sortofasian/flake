@@ -7,7 +7,6 @@
         switchSystem;
     inherit (config.custom)
         user
-        desktop
         networkmanager;
 in switchSystem system { linux = {
     options.custom.networkmanager.enable = mkOption {
@@ -17,8 +16,8 @@ in switchSystem system { linux = {
 
     config = mkIf networkmanager.enable {
         networking.networkmanager.enable = true;
-        users.users.${user.name}.packages = mkIf desktop.enable (with pkgs; [
+        users.users.${user.name}.packages = with pkgs; [
             networkmanagerapplet
-        ]);
+        ];
     };
 }; }
