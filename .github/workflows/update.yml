@@ -1,0 +1,27 @@
+name: Update
+permissions:
+  contents: write
+on:
+  schedule:
+    - cron: 0 4 * * * # 00:00 EST
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: cachix/install-nix-action@v27
+      
+      - name: Update flake
+        run: nix flake update
+
+      - name: Check flake
+        run: nix flake check
+
+      - name: Commit & push
+        run: |
+          git config --global user.name 'Github Action: Update'
+          git config --global user.email '<>'
+          git commit -am "Actions: Update flake"
+          git push
