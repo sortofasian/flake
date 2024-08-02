@@ -11,10 +11,10 @@ in {
         default = false;
     };
     config = mkIf direnv.enable {
-        environment.systemPackages = with pkgs; [
-            direnv
-            nix-direnv
-            devenv
+        environment.systemPackages = [
+            pkgs.direnv
+            pkgs.nix-direnv
+            pkgs.devenv
         ];
         nix.settings = {
             keep-outputs = true;

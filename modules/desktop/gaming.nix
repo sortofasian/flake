@@ -34,11 +34,11 @@ in switchSystem system { linux = {
             environment.variables = {
                 STEAM_EXTRA_COMPAT_TOOLS_PATHS = "${pkgs.stdenv.mkDerivation rec {
                     pname = "proton-ge";
-                    version = "GE-Proton8-21";
+                    version = "GE-Proton9-11";
                     src = builtins.fetchurl {
                         url = "https://github.com/GloriousEggroll/proton-ge-custom/releases" 
                             + "/download/${version}/${version}.tar.gz";
-                        sha256 = "12iv2m85jw1qcmssq6k9xyqhkkccwwy2440w2yina5j6qyjv2yfx";
+                        sha256 = "18k442wlcrzn9xhhdqskw8y52hp6awx8ms7adxb3dvc8al6zi6my";
                     };
                     buildCommand = ''
                         mkdir -p $out
