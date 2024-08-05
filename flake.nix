@@ -21,6 +21,8 @@
 
         aagl.url = "github:ezKEa/aagl-gtk-on-nix";
         aagl.inputs.nixpkgs.follows = "nixpkgs";
+
+        madness.url = "github:antithesishq/madness";
     };
 
     outputs = { nixpkgs, ... }@inputs: rec {
