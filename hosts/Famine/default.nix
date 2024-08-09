@@ -73,6 +73,7 @@ in {
         spotify
         libreoffice
         google-chrome
+        firefox
         blender
         #obsidian
         eww
